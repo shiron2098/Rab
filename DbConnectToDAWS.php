@@ -1,0 +1,124 @@
+<?php
+/*
+$ad  = $aa->__getFunctions();*/
+
+class DbConnectToDAWS
+{
+    const WSDL = "http://web-server:8083/vmodataaccessws.asmx?WSDL";
+    const HeadersLocation = "http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2";
+    const UrlNamespace = "http://tempuri.org/";
+    const NameZip = 'code.zip';
+    const PathToDbConfigurations =__DIR__;
+    protected $SqlParam;
+    protected $ParamsToAuthenticateUser = [];
+    protected $SqlParamToExecuteDbStatement = [];
+    protected $ResponseDB;
+    protected $boolean = 2;
+    private $HeaderLocal;
+
+    protected $timestamp;
+
+    public function __construct($SqlParam,$HeadersLocal)
+    {
+        ini_set('session.gc_maxlifetime', 315619200);
+        ini_set('session.cookie_lifetime', 315619200);
+
+
+        $this->SqlParam=$SqlParam;
+        $this->HeaderLocal = $HeadersLocal;
+
+
+        /** @var array ParamsForAuthenticateUser */
+        $this->ParamsToAuthenticateUser = array(
+            'userName' => 'admin',
+            'userPassword' => "00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466",
+            'sid' => 1,
+        );
+
+
+        /** @var array SqlParamForExecuteDbStatement */
+        $this->SqlParamToExecuteDbStatement = array("listOfRequests"=>array("ServiceCallInfo"=>array("CallType"=>"SQL","Sql"=>$this->SqlParam ,
+            'Parameters'=> array('OfPairOfString' =>array('PairOfString' =>  'true')),
+            'ProcessResultToXml'=> True,'HasResult' => true,'CompressResult'=> false,
+            'accept-encoding' => 'deflate',"Sid"=>1)));
+
+
+        $this->timestamp = strtotime('now');
+
+    }
+    public function Db_Connect(){
+
+        /** @var array $connect */
+
+        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToDAWS::UrlNamespace,
+            'trace' => TRUE,
+            'exceptions' => false));
+
+         /**AuthenticateUser @Param array  @response Object(Status,LoginType) */
+
+        $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
+
+        /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
+        $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
+        $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
+        if(!empty($this->ResponseDB)){
+            $this->ResponseDB;
+            $this->boolean = 1;
+        }
+        else
+        {
+            $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response;
+            $this->boolean = 0;
+        }
+        return $this->ResponseDB;
+    }
+    /** Response Db_Connect Take out from archive */
+    public function ResponseOfDbToLogFile()
+    {
+        $ResponseDbDaws = $this->Db_Connect();
+        if (isset($ResponseDbDaws) && !empty($ResponseDbDaws)) {
+            if ($this->boolean === 1) {
+                file_put_contents(DbConnectToDAWS::NameZip, $ResponseDbDaws);
+                $zip = new ZipArchive();
+                $filename = DbConnectToDAWS::NameZip;
+                if ($zip->open($filename) === TRUE) {
+                    $zip->extractTo(DbConnectToDAWS::PathToDbConfigurations);
+                    $zip->close();
+                    $file = [
+                        'timestamp' => $this->timestamp,
+                        'ToMessage' => 1];
+                    $_SESSION['FileZip'] = true;
+                    unlink($filename);
+                    return $file;
+                } else {
+                    try {
+                        throw new  Exception('Failed to unzip zip' . DbConnectToDAWS::NameZip);
+                    } catch (Exception $e) {
+                        echo $e->getMessage();
+                    }
+                }
+            }
+            else if($this->boolean === 0)
+            {
+                $file=[
+                    'timestamp' => $this->timestamp,
+                    'code' => $ResponseDbDaws,
+                    'ToMessage' => 0];
+                return $file;
+            }
+            else
+            {
+                try {
+                    throw new  Exception('Failed to connect ' . DbConnectToDAWS::UrlNamespace);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
+            }
+        }
+
+    }
+
+
+
+}
+?>
