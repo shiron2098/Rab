@@ -53,7 +53,6 @@ class MysqlDbConnect extends Rabbimq
             $results = print_r($row, true);
             $a = new MysqlDbConnect();
             $a->log($results);
-            print_r($row);
             $timeNow = time();
             $time = strtotime('+5minutes', $row['TimeTask']) . PHP_EOL;
             print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
@@ -64,8 +63,8 @@ class MysqlDbConnect extends Rabbimq
                                     $rabbitResponse = $Rabbi->index();*/
                                     $results = print_r($row, true);
                                     $a->log($results);
-/*                                    $response = $a->UpdateBaseMYSQL('Code', $this->idOperator);
-                                    $a->log($response);*/
+                                    $response = $a->UpdateBaseMYSQL($row['DBNAME'],$row['id']);
+                                    $a->log($response);
                                 } else {
                                     throw new Exception('TIme is not come');
 
@@ -116,7 +115,7 @@ class MysqlDbConnect extends Rabbimq
     protected function UpdateBaseMYSQL($nameTable,$UserId){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE $nameTable SET time = $this->Timestamp WHERE id=$UserId"
+            "UPDATE $nameTable SET TimeTask = $this->Timestamp WHERE id=$UserId"
         );
         $a = 'Update complete timestamp to Database MYSQL' . PHP_EOL;
         return $a;

@@ -9868,3 +9868,919 @@ TIme is not comeTIme is not comeTIme is not come2019-06-27 10:46:33 TIme is not 
     [SQL_ZAP] => select pro.code from Products pro
 )
 
+2019-07-01 15:23:00 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+)
+
+2019-07-01 15:23:00 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+)
+
+2019-07-01 15:23:00 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+)
+
+2019-07-01 15:23:00 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+)
+
+2019-07-01 15:23:11 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+)
+
+2019-07-01 15:23:11 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+)
+
+2019-07-01 15:23:11 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+)
+
+2019-07-01 15:23:11 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+)
+
+2019-07-01 15:32:27 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:32:27 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:32:27 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:32:27 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:35 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:35 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:35 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:35 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:35 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:35 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:40 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:40 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:40 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:40 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:40 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:40 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:45 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:45 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:45 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:45 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:45 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:45 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:47 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:47 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:47 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:47 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:47 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:47 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:48 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:48 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:48 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:48 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:48 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:48 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:49 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:49 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:49 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:49 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:49 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:49 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:50 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:50 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:50 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:50 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:50 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:51 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:51 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:33:51 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:33:51 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:51 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:33:51 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:15 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:15 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:15 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:15 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:15 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:15 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:20 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:20 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:20 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:20 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:20 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:20 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:56 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:56 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561131406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:56 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:56 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:56 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561148406
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:56 Update complete timestamp to Database MYSQL
+
+2019-07-01 15:34:57 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:57 TIme is not come
+2019-07-01 15:34:57 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:57 TIme is not come
+2019-07-01 15:34:59 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:34:59 TIme is not come
+2019-07-01 15:34:59 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:34:59 TIme is not come
+2019-07-01 15:35:00 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:35:00 TIme is not come
+2019-07-01 15:35:00 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:35:00 TIme is not come
+2019-07-01 15:35:01 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:35:01 TIme is not come
+2019-07-01 15:35:01 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:35:01 TIme is not come
+2019-07-01 15:35:02 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:35:02 TIme is not come
+2019-07-01 15:35:02 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:35:02 TIme is not come
+2019-07-01 15:35:03 Array
+(
+    [id] => 1
+    [Operatorid] => 5234523
+    [Name] => Operver
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
+    [DBNAME] => Code
+)
+
+2019-07-01 15:35:03 TIme is not come
+2019-07-01 15:35:03 Array
+(
+    [id] => 1
+    [Operatorid] => 435234
+    [Name] => Prods
+    [Softprovider] => stylesoft
+    [TimeTask] => 1561995296
+    [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+    [SQL_ZAP] => select pro.code from Products pro
+    [DBNAME] => Product
+)
+
+2019-07-01 15:35:03 TIme is not come
