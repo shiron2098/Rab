@@ -1,8 +1,10 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+include_once ('Rabbimq.php');
 /*
 $ad  = $aa->__getFunctions();*/
 
-class DbConnectToDAWS
+class DbConnectToDAWS extends Rabbimq
 {
     const WSDL = "http://web-server:8083/vmodataaccessws.asmx?WSDL";
     const HeadersLocation = "http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2";
@@ -15,13 +17,14 @@ class DbConnectToDAWS
     protected $ResponseDB;
     protected $boolean = 2;
     private $HeaderLocal;
+    protected $rabbi;
 
     protected $timestamp;
 
     public function __construct($SqlParam,$HeadersLocal)
     {
-        ini_set('session.gc_maxlifetime', 315619200);
-        ini_set('session.cookie_lifetime', 315619200);
+/*        ini_set('session.gc_maxlifetime', 315619200);
+        ini_set('session.cookie_lifetime', 315619200);*/
 
 
         $this->SqlParam=$SqlParam;
@@ -67,8 +70,17 @@ class DbConnectToDAWS
         }
         else
         {
-            $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response;
-            $this->boolean = 0;
+            try {
+                if ($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage) {
+                    throw new Exception('Error message of db Daws' . PHP_EOL);
+                } else {
+                    $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response;
+                    $this->boolean = 0;
+                }
+            }catch(Exception $e){
+                echo $e->getMessage();
+
+            }
         }
         return $this->ResponseDB;
     }
@@ -112,13 +124,15 @@ class DbConnectToDAWS
                     throw new  Exception('Failed to connect ' . DbConnectToDAWS::UrlNamespace);
                 } catch (Exception $e) {
                     echo $e->getMessage();
+                    $fd = fopen("/home/shir/Documents/rab/Logi.log", 'a+');
+                    fwrite($fd,$e->getMessage(). DATE("d.m.Y H:i")."\r\n");
+                    fclose($fd);
                 }
             }
         }
-
+        $fd = fopen("/home/shir/Documents/rab/Logi.log", 'a+');
+        fwrite($fd,'COMPLETE'. DATE("d.m.Y H:i")."\r\n");
+        fclose($fd);
     }
-
-
-
 }
 ?>

@@ -1,0 +1,1308 @@
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:33:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:33:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561728721
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:34:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:34:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561728781
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:35:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:35:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561728841
+        )
+
+)
+errorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:37:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:37:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561728961
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:39:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:39:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729081
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:41:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:41:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729201
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:42:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:42:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729261
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:43:02
+    [timestamp sent to Rabbit] => 28.06.2019 13:43:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729321
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:44:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:44:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729382
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:45:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:45:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729382
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:47:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:47:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729502
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:48:02
+    [timestamp sent to Rabbit] => 28.06.2019 13:48:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729622
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:52:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:52:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729861
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:53:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:53:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561729921
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:55:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:55:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730041
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:57:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:57:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730162
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 13:59:01
+    [timestamp sent to Rabbit] => 28.06.2019 13:59:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730281
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:00:02
+    [timestamp sent to Rabbit] => 28.06.2019 14:00:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730341
+        )
+
+)
+errorrtrterrorrtrterrorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:03:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:03:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730402
+        )
+
+)
+errorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:03:37
+    [timestamp sent to Rabbit] => 28.06.2019 14:03:37
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730581
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:04:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:04:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730581
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:05:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:05:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730641
+        )
+
+)
+errorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:06:27
+    [timestamp sent to Rabbit] => 28.06.2019 14:06:27
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730702
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:07:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:07:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730702
+        )
+
+)
+errorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:08:46
+    [timestamp sent to Rabbit] => 28.06.2019 14:08:46
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730822
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:09:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:09:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730822
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:10:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:10:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730942
+        )
+
+)
+errorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:10:48
+    [timestamp sent to Rabbit] => 28.06.2019 14:10:48
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730942
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:11:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:11:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561730942
+        )
+
+)
+errorrtrterrorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:12:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:12:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731062
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:13:02
+    [timestamp sent to Rabbit] => 28.06.2019 14:13:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731062
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:15:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:15:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731182
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:17:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:17:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731302
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:20:02
+    [timestamp sent to Rabbit] => 28.06.2019 14:20:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731482
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:21:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:21:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731602
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:23:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:23:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731722
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:25:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:25:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731842
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:27:02
+    [timestamp sent to Rabbit] => 28.06.2019 14:27:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561731902
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:29:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:29:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732022
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:31:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:31:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732141
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:33:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:33:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732141
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:35:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:35:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732442
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:37:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:37:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732442
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:39:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:39:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732442
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:41:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:41:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732801
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:43:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:43:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732801
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:45:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:45:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561732801
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:47:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:47:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733101
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:49:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:49:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733101
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:51:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:51:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733401
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:53:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:53:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733401
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:55:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:55:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733401
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:57:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:57:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733701
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 14:59:01
+    [timestamp sent to Rabbit] => 28.06.2019 14:59:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561733701
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:01:02
+    [timestamp sent to Rabbit] => 28.06.2019 15:01:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734001
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:03:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:03:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734001
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:05:02
+    [timestamp sent to Rabbit] => 28.06.2019 15:05:03
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734001
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:07:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:07:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734303
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:09:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:09:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734303
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:11:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:11:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734303
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:13:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:13:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734661
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:15:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:15:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734661
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:17:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:17:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734961
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:19:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:19:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734961
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:21:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:21:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561734961
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:23:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:23:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735262
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:25:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:25:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735262
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:27:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:27:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735262
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:29:02
+    [timestamp sent to Rabbit] => 28.06.2019 15:29:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735621
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:31:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:31:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735621
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:33:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:33:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735921
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:35:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:35:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735921
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 28.06.2019 15:37:01
+    [timestamp sent to Rabbit] => 28.06.2019 15:37:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561735921
+        )
+
+)
+errorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:17:38
+    [timestamp sent to Rabbit] => 01.07.2019 13:17:39
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561736222
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:17:39
+    [timestamp sent to Rabbit] => 01.07.2019 13:17:39
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561736222
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:18:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:18:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:18:33
+    [timestamp sent to Rabbit] => 01.07.2019 13:18:33
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:19:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:19:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:20:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:20:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:21:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:21:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:22:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:22:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:23:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:23:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:23:02
+    [timestamp sent to Rabbit] => 01.07.2019 13:23:02
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987059
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:24:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:24:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987382
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:25:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:25:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987382
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:26:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:26:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987382
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:27:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:27:01
+    [Code] => stdClass Object
+        (
+            [id] => 3
+            [name] => RTR
+            [SQL_string] => SELECT * FROM Operator
+            [time] => 1561987382
+        )
+
+)
+errorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:49:29
+    [timestamp sent to Rabbit] => 01.07.2019 13:49:29
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:50:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:50:01
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:51:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:51:01
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:52:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:52:01
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:53:02
+    [timestamp sent to Rabbit] => 01.07.2019 13:53:02
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:54:02
+    [timestamp sent to Rabbit] => 01.07.2019 13:54:02
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:55:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:55:02
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:56:01
+    [timestamp sent to Rabbit] => 01.07.2019 13:56:01
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 5234523
+            [Name] => Operver
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561131406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+errorerrorerrorerrorerrorerrorerrorrtrterrorerrorerrorerrorerrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 13:59:18
+    [timestamp sent to Rabbit] => 01.07.2019 13:59:18
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 435234
+            [Name] => Prods
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561148406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code from Products pro
+        )
+
+)
+errorrtrterrorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 14:00:26
+    [timestamp sent to Rabbit] => 01.07.2019 14:00:26
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 435234
+            [Name] => Prods
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561148406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code from Products pro
+        )
+
+)
+errorstdClass Object
+(
+    [Timestamp read from DAWS] => 01.07.2019 14:01:01
+    [timestamp sent to Rabbit] => 01.07.2019 14:01:01
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 435234
+            [Name] => Prods
+            [Softprovider] => stylesoft
+            [TimeTask] => 1561148406
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code from Products pro
+        )
+
+)
+errorerrorerrorrtrterrorerrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorerrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrterrorrtrt

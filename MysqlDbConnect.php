@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 spl_autoload('Rabbimq');
+include_once 'Rabbimq.php';
 
 
 class MysqlDbConnect extends Rabbimq
@@ -14,12 +15,15 @@ class MysqlDbConnect extends Rabbimq
     private $Operatorid;
     protected $Timestamp;
     protected $linkConnect;
+    protected $idOperator;
+    protected $timestamp;
 
     public function __construct()
     {
 
         $this->Timestamp = strtotime(MysqlDbConnect::Time);
         $this->Dbconnect();
+
 
     }
 
@@ -35,14 +39,43 @@ class MysqlDbConnect extends Rabbimq
 
     }
 
-
     public function SelectDb()
     {
 
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM Operator"
-        );
+        $tasks = (Object)['Code', 'Product'];
+
+        foreach ($tasks as $Task) {
+            $result = mysqli_query(
+                $this->linkConnect,
+                "SELECT * FROM $Task"
+            );
+            $row = mysqli_fetch_assoc($result);
+            $results = print_r($row, true);
+            $a = new MysqlDbConnect();
+            $a->log($results);
+            print_r($row);
+            $timeNow = time();
+            $time = strtotime('+5minutes', $row['TimeTask']) . PHP_EOL;
+            print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
+            print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);
+                            try {
+                                if ($timeNow >= $time) {
+/*                                    $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
+                                    $rabbitResponse = $Rabbi->index();*/
+                                    $results = print_r($row, true);
+                                    $a->log($results);
+/*                                    $response = $a->UpdateBaseMYSQL('Code', $this->idOperator);
+                                    $a->log($response);*/
+                                } else {
+                                    throw new Exception('TIme is not come');
+
+                                }
+                            } catch (Exception $e) {
+                                echo $e->getMessage();
+                                $a->log($e->getMessage());
+                            }
+                        }
+        exit();
         /*            $this->Operatorid = $row['operatorid'];*/
         /*            if (!empty($result)) {
                         mysqli_query(
@@ -50,8 +83,8 @@ class MysqlDbConnect extends Rabbimq
                             "UPDATE Operator SET TimeInput=$this->Timestamp WHERE id=$this->Operatorid"
                         );
                     }*/
-
-        $row = mysqli_fetch_assoc($result);
+/*        $row = mysqli_fetch_assoc($result);
+        $results = print_r($row, true);*/
         /*$results = print_r($row, true);
             if (file_exists($row['Name'])) {
                 try {
@@ -65,6 +98,9 @@ class MysqlDbConnect extends Rabbimq
             $_SESSION['FileZip'] = false;*/
         $file = ['code' => $row,
             'timestamp' => $this->Timestamp];
+        $f = fopen(__DIR__ . '/fileoo.log', 'a+');
+        fwrite($f, 'error' . $results);
+        fclose($f);
         return $file;
 
         /*                $file = ['code' => $row,
@@ -76,29 +112,14 @@ class MysqlDbConnect extends Rabbimq
                             fwrite($f, $row);
                             fclose($f);*/
 
-
-        if (empty($row)) {
-            $f = fopen('file.log', 'a+');
-            fwrite($f, 'error' . $f);
-            fclose($f);
-        }
-
+    }
+    protected function UpdateBaseMYSQL($nameTable,$UserId){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "UPDATE $nameTable SET time = $this->Timestamp WHERE id=$UserId"
+        );
+        $a = 'Update complete timestamp to Database MYSQL' . PHP_EOL;
+        return $a;
     }
 }
-
-
-/**
- * mixed object_from_file
- *
- * @param string filename
- * @return mixed
- *
- */
-/*    function object_from_file($filename)
-    {
-        if(isset($filename) && !empty($filename)) {
-            $file = file_get_contents($filename);
-            $value = unserialize($file);
-            return $value;
-        }
-    }*/
+?>
