@@ -12,19 +12,20 @@ use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
 {
+    protected $ResponseMySQL;
 
-    public function index(){
-        $MYSQL = new MysqlDbConnect();
-        $response = $MYSQL->SelectDb();
+    public function index($reponse){
+        $this->ResponseMySQL = $reponse;
+        print_r($reponse);
         $rabbi=new RabbiSendSqlTakeInDbMYSQL();
-        $rabbi->AMQPConnect('localhost','5672','Shiro','1995','/');
+        $rabbi->AMQPConnect('localhost','5672','shir','1995','/');
         $rabbi->CreateExchange('rer','direct');
         $rabbi->CreateQueue('Operator24',false, true ,false,'operator333',false);
         try {
             $rabbi->CheckRabbit();
             if ($_SESSION['Zapros'] !== true)
             {
-                $rabbi->MessageOut($response);
+                $rabbi->MessageOut($this->ResponseMySQL);
                 echo $text ='message delivery is complete MYSQL';
                 $rabbi->log($text);
 /*                $a = new RabbitMqSendMessageDAWS();
@@ -43,5 +44,3 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
         }
     }
 }
-$a=new RabbiSendSqlTakeInDbMYSQL();
-$a->index();

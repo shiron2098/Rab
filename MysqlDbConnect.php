@@ -54,13 +54,13 @@ class MysqlDbConnect extends Rabbimq
             $a = new MysqlDbConnect();
             $a->log($results);
             $timeNow = time();
-            $time = strtotime('+5minutes', $row['TimeTask']) . PHP_EOL;
-            print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
+            $time = strtotime('+1minutes', $row['TimeTask']) . PHP_EOL;
+           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
             print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);
                             try {
                                 if ($timeNow >= $time) {
-/*                                    $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
-                                    $rabbitResponse = $Rabbi->index();*/
+                                    $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
+                                    $rabbitResponse = $Rabbi->index($row);
                                     $results = print_r($row, true);
                                     $a->log($results);
                                     $response = $a->UpdateBaseMYSQL($row['DBNAME'],$row['id']);

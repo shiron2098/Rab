@@ -11,8 +11,8 @@ abstract class Rabbimq
     const PASSIVETrue = TRUE;
     const passivefalse = False;
     const host = 'localhost';
-    const user = 'ret';
-    const password = '123';
+    const user = 'root';
+    const password = '';
     const database = 'daws';
     const logfile = 'file.log';
     protected $Quire;
@@ -53,11 +53,11 @@ abstract class Rabbimq
     public function MessageToArray($massivData)
     {
         try {
-            if (!empty($massivData['code'])) {
+            if (!empty($massivData)) {
                 $messageBody = json_encode([
-                    'Timestamp read from DAWS' => date('d.m.Y H:i:s', $massivData['timestamp']),
+                    'Timestamp read from DAWS' => date('d.m.Y H:i:s', $massivData['TimeTask']),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
-                    'Code' => $massivData['code'],
+                    'Code' => $massivData,
                 ]);
                 return $messageBody;
             } else {

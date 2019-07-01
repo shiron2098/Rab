@@ -34,7 +34,7 @@ class RabbitMqSendMessageDAWS extends Rabbimq
                     if(file_exists('data')){
                         unlink('data');
                     }
-                    $rabbi->AMQPConnect('localhost', '5672', 'Shiro', '1995', '/');
+                    $rabbi->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
                     $rabbi->CreateExchange('Type', 'direct');
                     $rabbi->CreateQueue('Type', false, true, false, 'Data', false);
                     $rabbi->MessageOut($response);
