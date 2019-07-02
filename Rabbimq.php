@@ -123,8 +123,7 @@ abstract class Rabbimq
     public function CheckRabbit(){
         $this->channel->queue_declare($this->queue, false, true, false, false);
         $result = $this->channel->basic_get($this->queue);
-         sleep(3);
-            if (empty($result)) {
+            if (empty($result->body)) {
                 $_SESSION['Zapros'] = False;
             } else {
                 $_SESSION['Zapros'] = true;

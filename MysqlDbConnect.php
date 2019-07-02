@@ -63,7 +63,7 @@ class MysqlDbConnect extends Rabbimq
 
             /*|| $timeNow>= $timeProduct*/
             try {
-                if ($timeNow >= $time) {
+                if ($timeNow >= $time || $timeNow >= $timeProduct ) {
                     $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
                     $rabbitResponse = $Rabbi->index($row);
                     $results = print_r($rabbitResponse, true);

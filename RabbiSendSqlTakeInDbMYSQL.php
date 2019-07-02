@@ -27,9 +27,9 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
                     $rabbi->MessageOut($this->ResponseMySQL);
                     $text = 'message delivery is complete MYSQL';
                     $_SESSION['Zapros']=true;
+/*                    $a = new RabbitMqSendMessageDAWS();
+                    $a->Connect();*/
                     return $text;
-                    /*                $a = new RabbitMqSendMessageDAWS();
-                                    $a->Connect();*/
                 } else {
                     throw new Exception('error download into rabbit because the message exists MYSQL');
 

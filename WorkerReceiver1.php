@@ -29,7 +29,13 @@ class WorkerReceiver1
 
         list($queue_name, ,) = $channel->queue_declare("Operator24", false, true, false, false);
 
-        $channel->queue_bind($queue_name, 'type');
+        $channel->queue_bind($queue_name, 'type',);
+
+        $channel->basic_qos(
+            null,   #размер предварительной выборки - размер окна предварительнйо выборки в октетах, null означает “без определённого ограничения”
+            1,  	#количество предварительных выборок - окна предварительных выборок в рамках целого сообщения
+            null	#глобальный - global=null означает, что настройки QoS должны применяться для получателей, global=true означает, что настройки QoS должны применяться к каналу
+        );
 
         echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";
 
