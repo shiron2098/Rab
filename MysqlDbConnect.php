@@ -57,7 +57,7 @@ class MysqlDbConnect extends Rabbimq
             $a->log($results);
             $timeNow = time();
             $time = strtotime('+1minutes', $row['TimeTask']) . PHP_EOL;
-            $timeProduct = strtotime('+2minutes', $row['TimeTask']) . PHP_EOL;
+            $timeProduct = strtotime('+5minutes', $row['TimeTask']) . PHP_EOL;
             /*           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
                         print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);*/
 

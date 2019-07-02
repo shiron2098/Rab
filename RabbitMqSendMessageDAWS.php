@@ -24,6 +24,7 @@ class RabbitMqSendMessageDAWS extends Rabbimq
         $rabbi=new RabbitMqSendMessageDAWS();
         $rabbi->log($results);
         if(!empty($responseOfMYSQL)&& isset($responseOfMYSQL)) {
+            $_SESSION['Zapros'] = false;
             $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->SQL_ZAP,$responseOfMYSQL->Code->connection_string);
             $response = $DAWS->ResponseOfDbToLogFile();
             try {

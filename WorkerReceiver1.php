@@ -58,6 +58,7 @@ class WorkerReceiver1
 
         while (count($channel->callbacks)) {
             $channel->wait();
+
             return $this->response;
         }
 

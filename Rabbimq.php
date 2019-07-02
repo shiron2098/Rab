@@ -120,14 +120,19 @@ abstract class Rabbimq
             $this->log($e->getMessage());
         }
     }
-    public function CheckRabbit(){
+    public function CheckRabbit()
+    {
         $this->channel->queue_declare($this->queue, false, true, false, false);
         $result = $this->channel->basic_get($this->queue);
-            if (empty($result->body)) {
-                $_SESSION['Zapros'] = False;
-            } else {
-                $_SESSION['Zapros'] = true;
-            }
+        if ($_SESSION['Zapros'] === true) {
+            return $_SESSION['Zapros'];
+        }
+        if (empty($result->body)) {
+
+            $_SESSION['Zapros'] = False;
+        } else {
+            $_SESSION['Zapros'] = true;
+        }
     }
     public function log ($text){
         file_put_contents(__DIR__ . Rabbimq::logfile,date('Y-m-d H:i:s', strtotime('now')) ." ". $text . PHP_EOL,FILE_APPEND);
