@@ -11,10 +11,10 @@ abstract class Rabbimq
     const PASSIVETrue = TRUE;
     const passivefalse = False;
     const host = 'localhost';
-    const user = 'root';
-    const password = '';
+    const user = 'ret';
+    const password = '123';
     const database = 'daws';
-    const logfile = 'file.log';
+    const logfile = '/file.log';
     protected $Quire;
     protected $channel;
     protected $connection;
@@ -55,7 +55,7 @@ abstract class Rabbimq
         try {
             if (!empty($massivData)) {
                 $messageBody = json_encode([
-                    'Timestamp read from DAWS' => date('d.m.Y H:i:s', $massivData['TimeTask']),
+                    'Timestamp read from DAWS' => date('d.m.Y H:i:s', $massivData['timestamp']),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
                     'Code' => $massivData,
                 ]);
@@ -123,17 +123,15 @@ abstract class Rabbimq
     public function CheckRabbit(){
         $this->channel->queue_declare($this->queue, false, true, false, false);
         $result = $this->channel->basic_get($this->queue);
-
-        if(empty($result)){
-            $_SESSION['Zapros'] = False;
-        }
-        else
-        {
-            $_SESSION['Zapros'] = true;
-        }
+         sleep(3);
+            if (empty($result)) {
+                $_SESSION['Zapros'] = False;
+            } else {
+                $_SESSION['Zapros'] = true;
+            }
     }
     public function log ($text){
-        file_put_contents(Rabbimq::logfile,date('Y-m-d H:i:s', strtotime('now')) ." ". $text . PHP_EOL,FILE_APPEND);
+        file_put_contents(__DIR__ . Rabbimq::logfile,date('Y-m-d H:i:s', strtotime('now')) ." ". $text . PHP_EOL,FILE_APPEND);
     }
 
 

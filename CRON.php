@@ -2,9 +2,6 @@
 session_start();
 include_once ('MysqlDbConnect.php');
 include_once ('RabbiSendSqlTakeInDbMYSQL.php');
-/* $fd = fopen("/home/shir/Documents/rab/lorrr.txt", 'a+');
-  fwrite($fd,'OBRACHEN K FAILY -'. DATE("d.m.Y H:i")."\r\n");*/
-
 
 
 class JobScheduler extends MysqlDbConnect
@@ -18,12 +15,10 @@ class JobScheduler extends MysqlDbConnect
 
     public function index()
     {
-        print_r($this->Tasks);
         $db = new MysqlDbConnect();
         $a = $db->SelectDb();
-
-        exit();
-        $b = ($a['code']['time']);
+        $db->log($a);
+      /*  $b = ($a['code']['time']);
         $this->id = $a['code']['id'];
         $timeNow = time();
         $time = strtotime('+5minutes', $b) . PHP_EOL;
@@ -43,7 +38,7 @@ class JobScheduler extends MysqlDbConnect
         } catch (Exception $e) {
             echo $e->getMessage();
             $db->log($e->getMessage());
-        }
+        }*/
     }
 }
 $a = new JobScheduler();

@@ -8,9 +8,9 @@ include_once ('DbConnectToDAWS.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
-$f = fopen(__DIR__ . '/DAWS.text', 'a+');
-fwrite($f, 'error' . 'rtrt');
-fclose($f);
+
+/*'SELECT pro.code,pro.description FROM Products pro'
+'http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2'*/
 
 class RabbitMqSendMessageDAWS extends Rabbimq
 {
@@ -21,20 +21,15 @@ class RabbitMqSendMessageDAWS extends Rabbimq
         $WorkerOfDb = new \app\WorkerReceiver1();
         $responseOfMYSQL = $WorkerOfDb->Index();
         $results = print_r($responseOfMYSQL, true);
-        $f = fopen(__DIR__ . '/DAWS.text', 'a+');
-        fwrite($f, 'error' . $results);
-        fclose($f);
+        $rabbi=new RabbitMqSendMessageDAWS();
+        $rabbi->log($results);
         if(!empty($responseOfMYSQL)&& isset($responseOfMYSQL)) {
-            $DAWS = new DbConnectToDAWS('SELECT pro.code,pro.description FROM Products pro','http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2');
+            $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->SQL_ZAP,$responseOfMYSQL->Code->connection_string);
             $response = $DAWS->ResponseOfDbToLogFile();
-            $rabbi=new RabbitMqSendMessageDAWS();
             try {
 
                 if(!empty($response)&& isset($response)) {
-                    if(file_exists('data')){
-                        unlink('data');
-                    }
-                    $rabbi->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
+                    $rabbi->AMQPConnect('localhost', '5672', 'Shiro', '1995', '/');
                     $rabbi->CreateExchange('Type', 'direct');
                     $rabbi->CreateQueue('Type', false, true, false, 'Data', false);
                     $rabbi->MessageOut($response);
@@ -42,6 +37,7 @@ class RabbitMqSendMessageDAWS extends Rabbimq
                 else
                 {
                     throw new Exception('error download into rabbit because the message exists DAWS');
+
 
                 }
             }catch (Exception $e) {

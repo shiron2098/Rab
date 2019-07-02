@@ -17,6 +17,7 @@ class MysqlDbConnect extends Rabbimq
     protected $linkConnect;
     protected $idOperator;
     protected $timestamp;
+    protected $TableName;
 
     public function __construct()
     {
@@ -42,12 +43,13 @@ class MysqlDbConnect extends Rabbimq
     public function SelectDb()
     {
 
-        $tasks = (Object)['Code', 'Product'];
-
-        foreach ($tasks as $Task) {
+        $row = $this->RowsDataTable();
+        if(!empty($row) && isset($row)){
+        foreach($row as $task) {
+            $this->TableName = $task['TABLE_NAME'];
             $result = mysqli_query(
                 $this->linkConnect,
-                "SELECT * FROM $Task"
+                "SELECT * FROM $this->TableName"
             );
             $row = mysqli_fetch_assoc($result);
             $results = print_r($row, true);
@@ -55,25 +57,31 @@ class MysqlDbConnect extends Rabbimq
             $a->log($results);
             $timeNow = time();
             $time = strtotime('+1minutes', $row['TimeTask']) . PHP_EOL;
-           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
-            print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);
-                            try {
-                                if ($timeNow >= $time) {
-                                    $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
-                                    $rabbitResponse = $Rabbi->index($row);
-                                    $results = print_r($row, true);
-                                    $a->log($results);
-                                    $response = $a->UpdateBaseMYSQL($row['DBNAME'],$row['id']);
-                                    $a->log($response);
-                                } else {
-                                    throw new Exception('TIme is not come');
+            $timeProduct = strtotime('+2minutes', $row['TimeTask']) . PHP_EOL;
+            /*           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
+                        print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);*/
 
-                                }
-                            } catch (Exception $e) {
-                                echo $e->getMessage();
-                                $a->log($e->getMessage());
-                            }
-                        }
+            /*|| $timeNow>= $timeProduct*/
+            try {
+                if ($timeNow >= $time) {
+                    $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
+                    $rabbitResponse = $Rabbi->index($row);
+                    $results = print_r($rabbitResponse, true);
+                    if(!empty($results)) {
+                        $a->log($results);
+                        $response = $a->UpdateBaseMYSQL($row['DBNAME'], $row['id']);
+                        $a->log($response);
+                    }
+                } else {
+                    throw new Exception('TIme is not come');
+
+                }
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                $a->log($e->getMessage());
+            }
+        }
+    }
         exit();
         /*            $this->Operatorid = $row['operatorid'];*/
         /*            if (!empty($result)) {
@@ -119,6 +127,16 @@ class MysqlDbConnect extends Rabbimq
         );
         $a = 'Update complete timestamp to Database MYSQL' . PHP_EOL;
         return $a;
+    }
+    protected function RowsDataTable(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='daws'"
+        );
+        foreach ($result as $res){
+            $MYSQLdbname[]= $res;
+        }
+        return $MYSQLdbname;
     }
 }
 ?>
