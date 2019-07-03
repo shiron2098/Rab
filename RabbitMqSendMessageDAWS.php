@@ -20,20 +20,19 @@ class RabbitMqSendMessageDAWS extends Rabbimq
         include_once ('WorkerReceiver1.php');
         $WorkerOfDb = new \app\WorkerReceiver1();
         $responseOfMYSQL = $WorkerOfDb->Index();
-        $results = print_r($responseOfMYSQL, true);
+        $results = print_r($responseOfMYSQL,
+            true);
         $rabbi=new RabbitMqSendMessageDAWS();
         $rabbi->log($results);
-        if(!empty($responseOfMYSQL)&& isset($responseOfMYSQL)) {
-            $_SESSION['Zapros'] = false;
-            $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->SQL_ZAP,$responseOfMYSQL->Code->connection_string);
-            $response = $DAWS->ResponseOfDbToLogFile();
+/*            $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->SQL_ZAP,$responseOfMYSQL->Code->connection_string);
+            $response = $DAWS->ResponseOfDbToLogFile();*/
             try {
-
-                if(!empty($response)&& isset($response)) {
-                    $rabbi->AMQPConnect('localhost', '5672', 'Shiro', '1995', '/');
+                if(!empty($responseOfMYSQL)&& isset($responseOfMYSQL)) {
+                    $_SESSION['Zapros'] = false;
+                    $rabbi->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
                     $rabbi->CreateExchange('Type', 'direct');
-                    $rabbi->CreateQueue('Type', false, true, false, 'Data', false);
-                    $rabbi->MessageOut($response);
+                    $rabbi->CreateQueue('Type', false, false, false, 'Data', false);
+                    $rabbi->MessageOut($responseOfMYSQL);
                 }
                 else
                 {
@@ -46,7 +45,6 @@ class RabbitMqSendMessageDAWS extends Rabbimq
                 $rabbi->log($e->getMessage());
             }
         }
-    }
 }
 $a = new RabbitMqSendMessageDAWS();
 $a->Connect();
