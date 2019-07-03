@@ -11,13 +11,11 @@ class MysqlDbConnect extends Rabbimq
     const Time = 'now';
     const FileResponseName = __DIR__ . 'Response';
 
-
-    private $Operatorid;
-    protected $Timestamp;
-    protected $linkConnect;
-    protected $idOperator;
-    protected $timestamp;
-    protected $TableName;
+    private $timeTask;
+    private $Timestamp;
+    private $linkConnect;
+    private $idOperator;
+    private $TableName;
 
     public function __construct()
     {
@@ -43,81 +41,74 @@ class MysqlDbConnect extends Rabbimq
     public function SelectDb()
     {
 
+        /*        $shm_key = rand('441324953','634345634345');
+                $shm_id = shmop_open($shm_key, "c", 0644, 100);
+                 print_R($shm_id);*/
         $row = $this->RowsDataTable();
-        if(!empty($row) && isset($row)){
-        foreach($row as $task) {
-            $this->TableName = $task['TABLE_NAME'];
-            $result = mysqli_query(
-                $this->linkConnect,
-                "SELECT * FROM $this->TableName"
-            );
-            $row = mysqli_fetch_assoc($result);
-            $results = print_r($row, true);
-            $a = new MysqlDbConnect();
-            $a->log($results);
-            $timeNow = time();
-            $time = strtotime('+1minutes', $row['TimeTask']) . PHP_EOL;
-            /*           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
-                        print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);*/
+        if (!empty($row) && isset($row)) {
+            $fileRepeat = file_get_contents(self::FileRepeatToTask);
+            if (file_exists(self::FileRepeatToTask) && !empty($fileRepeat)) {
+                $fileRepeat = file_get_contents(self::FileRepeatToTask);
+                $rowOfDb = $this->SeletDb($fileRepeat);
+                $this->timeTask = strtotime('+1minutes', $rowOfDb['TimeTask']);
+                $response = $this->TimeTaskAnd($rowOfDb);
 
-            /*|| $timeNow>= $timeProduct*/
-            try {
-                if ($timeNow >= $time) {
-                    $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
-                    $rabbitResponse = $Rabbi->index($row);
-                    $results = print_r($rabbitResponse, true);
-                    if(!empty($results)) {
-                        $a->log($results);
-                        $response = $a->UpdateBaseMYSQL($row['DBNAME'], $row['id']);
-                        $a->log($response);
+                if(!empty($response)) {
+                    $this->DeleteRepeat($rowOfDb['DBNAME']);
+                }
+            }
+            else
+            {
+                foreach ($row as $task) {
+                    $this->TableName = $task['TABLE_NAME'];
+                    $rowOfDb = $this->SeletDb($this->TableName);
+                    $results = print_r($row, true);
+                    $this->log($results);
+                    $this->timeTask = strtotime('+1minutes', $row['TimeTask']) . PHP_EOL;
+                    $this->TimeTaskAnd($rowOfDb);
+/*                    if (!empty($_SESSION['Povtor']) === true && isset ($_SESSION['Povtor']) === true) {
+                        $this->TimeTaskAnd($rowOfDb);
                     }
-                } else {
-                    throw new Exception('TIme is not come');
+                    else {*/
 
+                    /*           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
+                                print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);*/
+
+                    /*|| $timeNow>= $timeProduct*/
                 }
-            } catch (Exception $e) {
-                echo $e->getMessage();
-                $a->log($e->getMessage());
+
             }
+            /*            $this->Operatorid = $row['operatorid'];*/
+            /*            if (!empty($result)) {
+                            mysqli_query(
+                                $this->linkConnect,
+                                "UPDATE Operator SET TimeInput=$this->Timestamp WHERE id=$this->Operatorid"
+                            );
+                        }*/
+            /*        $row = mysqli_fetch_assoc($result);
+                    $results = print_r($row, true);*/
+            /*$results = print_r($row, true);
+                if (file_exists($row['Name'])) {
+                    try {
+                        $_SESSION['Zapros'] = false;
+                        throw new Exception('message is allready sent ');
+                    }catch(Exception $e) {
+                       echo $e->getMessage();
+                    }
+                }
+                file_put_contents($row['Name'], $results);
+                $_SESSION['FileZip'] = false;*/
+
+            /*                $file = ['code' => $row,
+                                'timestamp' => $this->Timestamp];
+                            $_SESSION['FileZip']=false;
+                            return $file;*/
+
+            /*                if ($f = fopen(MysqlDbConnect::FileResponseName, 'a+')) {
+                                fwrite($f, $row);
+                                fclose($f);*/
+
         }
-    }
-        exit();
-        /*            $this->Operatorid = $row['operatorid'];*/
-        /*            if (!empty($result)) {
-                        mysqli_query(
-                            $this->linkConnect,
-                            "UPDATE Operator SET TimeInput=$this->Timestamp WHERE id=$this->Operatorid"
-                        );
-                    }*/
-/*        $row = mysqli_fetch_assoc($result);
-        $results = print_r($row, true);*/
-        /*$results = print_r($row, true);
-            if (file_exists($row['Name'])) {
-                try {
-                    $_SESSION['Zapros'] = false;
-                    throw new Exception('message is allready sent ');
-                }catch(Exception $e) {
-                   echo $e->getMessage();
-                }
-            }
-            file_put_contents($row['Name'], $results);
-            $_SESSION['FileZip'] = false;*/
-        $file = ['code' => $row,
-            'timestamp' => $this->Timestamp];
-        $f = fopen(__DIR__ . '/fileoo.log', 'a+');
-        fwrite($f, 'error' . $results);
-        fclose($f);
-        return $file;
-
-        /*                $file = ['code' => $row,
-                            'timestamp' => $this->Timestamp];
-                        $_SESSION['FileZip']=false;
-                        return $file;*/
-
-        /*                if ($f = fopen(MysqlDbConnect::FileResponseName, 'a+')) {
-                            fwrite($f, $row);
-                            fclose($f);*/
-
     }
     protected function UpdateBaseMYSQL($nameTable,$UserId){
         $result = mysqli_query(
@@ -137,5 +128,62 @@ class MysqlDbConnect extends Rabbimq
         }
         return $MYSQLdbname;
     }
+    protected function TimeTaskAnd($row){
+        try {
+            if ($this->Timestamp >= $this->timeTask) {
+                $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
+                $rabbitResponse = $Rabbi->index($row);
+                $results = print_r($rabbitResponse, true);
+                if(!empty($results)) {
+                    $this->log($results);
+                    $response = $this->UpdateBaseMYSQL($row['DBNAME'], $row['id']);
+                    $this->log($response);
+                    return $response;
+                }
+            } else {
+                throw new Exception('TIme is not come');
+
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
+    }
+/*    private function PovtorTask(){
+        $shm_key = ftok(__FILE__, 't');
+        $shm_id = shmop_open($shm_key, "c", 0644, 100);
+    }*/
+
+    public function SeletDb($NameTables){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM $NameTables"
+        );
+        $row = mysqli_fetch_assoc($result);
+        return $row;
+    }
+    protected function DeleteRepeat($NameDelete){
+
+        $DELETE = $NameDelete;
+
+        $data = file(self::FileRepeatToTask);
+
+        $out = array();
+
+        foreach($data as $line) {
+            if(trim($line) != $DELETE) {
+                $out[] = $line;
+            }
+        }
+
+        $fp = fopen(self::FileRepeatToTask, "w+");
+        flock($fp, LOCK_EX);
+        foreach($out as $line) {
+            fwrite($fp, $line);
+        }
+        flock($fp, LOCK_UN);
+        fclose($fp);
+    }
+
 }
 ?>

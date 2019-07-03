@@ -12,7 +12,8 @@ use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
 {
-    protected $ResponseMySQL;
+    public $ResponseMySQL;
+    public $TimeAndTaskDolg;
 
     public function index($reponse){
         $this->ResponseMySQL = $reponse;
@@ -31,19 +32,18 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
                     $text = 'message delivery is complete MYSQL';
                     $_SESSION['Zapros']=true;
                     $rabbi->log($text);
-/*                    include_once('RabbitMqSendMessageDAWS.php');*/
+/*                   include_once('RabbitMqSendMessageDAWS.php');*/
                     return $text;
                 } else {
-                    while(true){
-                        if($_SESSION['Zapros'] === false){
-                            $rabbi->MessageOut($this->ResponseMySQL);
-                            $text = 'message delivery is complete MYSQL2';
-                            $rabbi->log($text);
-                            break;
-                        }
+                    $fileRepeat = file_get_contents(self::FileRepeatToTask);
+                    $rabbi->SearchRepeat($this->ResponseMySQL['DBNAME'] . PHP_EOL);
+                    if(!empty($_SESSION['String'])=== true && isset($_SESSION['String']) === true) {
+                        throw new Exception('error download into rabbit because the message exists MYSQL');
                     }
-                    throw new Exception('error download into rabbit because the message exists MYSQL');
-
+                    else
+                    {
+                        file_put_contents(self::FileRepeatToTask, $this->ResponseMySQL['DBNAME'] . PHP_EOL, FILE_APPEND);
+                    }
                 }
             }
         }

@@ -15,6 +15,7 @@ abstract class Rabbimq
     const password = '';
     const database = 'daws';
     const logfile = '/file.log';
+    const FileRepeatToTask = __DIR__ . '/Repeat.log';
     protected $Quire;
     protected $channel;
     protected $connection;
@@ -123,8 +124,10 @@ abstract class Rabbimq
     }
     public function CheckRabbit()
     {
-        $this->channel->queue_declare($this->queue, false, false, false, false);
+        /*$this->channel->queue_declare($this->queue, false, false, false, false);*/
         $result = $this->channel->basic_get($this->queue);
+        $this->channel->close();
+        $this->connection->close();
         if ($_SESSION['Zapros'] === true) {
             return $_SESSION['Zapros'];
         }
@@ -134,11 +137,32 @@ abstract class Rabbimq
         } else {
             $_SESSION['Zapros'] = true;
         }
-        $this->channel->close();
-        $this->connection->close();
     }
     public function log ($text){
         file_put_contents(__DIR__ . Rabbimq::logfile,date('Y-m-d H:i:s', strtotime('now')) ." ". $text . PHP_EOL,FILE_APPEND);
+    }
+    protected function SearchRepeat($row)
+    {
+        $file = self::FileRepeatToTask; // Файл
+        $string = trim($row . PHP_EOL); // Строка для записи
+        $data_file = file($file); // Считываем данные из файла
+
+        // Функция для применения к массиву
+/*        function my_trim(&$item)
+        {
+            $item = trim($item);
+        }*/
+
+        // Тут убираем пробелы по краям записей
+        /*array_walk($data_file, "my_trim");*/
+
+        // Смотрим, есть ли такая запись
+        if (!in_array($row, $data_file)) {
+            $_SESSION['String']= false;
+
+        } else {
+            $_SESSION['String'] = true;
+        }
     }
 
 
