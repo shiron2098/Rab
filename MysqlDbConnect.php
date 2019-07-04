@@ -13,7 +13,7 @@ class MysqlDbConnect extends Rabbimq
 
     private $timeTask;
     private $Timestamp;
-    private $linkConnect;
+    protected $linkConnect;
     private $idOperator;
     private $TableName;
 
@@ -46,7 +46,6 @@ class MysqlDbConnect extends Rabbimq
                  print_R($shm_id);*/
         $row = $this->RowsDataTable();
         if (!empty($row) && isset($row)) {
-            $fileRepeat = file_get_contents(self::FileRepeatToTask);
             if (file_exists(self::FileRepeatToTask) && !empty($fileRepeat)) {
                 $fileRepeat = file_get_contents(self::FileRepeatToTask);
                 $rowOfDb = $this->SeletDb($fileRepeat);

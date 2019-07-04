@@ -22,12 +22,12 @@ class WorkerReceiver1
     private $response;
     public function Index()
     {
-        $connection = new AMQPStreamConnection('localhost', 5672, 'shir', '1995');
+        $connection = new AMQPStreamConnection('localhost', 5672, 'Shiro', '1995');
         $channel = $connection->channel();
 
         $channel->exchange_declare('type', 'direct', false, false, false);
 
-        list($queue_name, ,) = $channel->queue_declare("Operator24", false, false, false, false);
+        list($queue_name, ,) = $channel->queue_declare("Operator23", false, false, false, false);
 
         $channel->queue_bind($queue_name, 'type');
 
