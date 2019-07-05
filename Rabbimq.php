@@ -16,6 +16,7 @@ abstract class Rabbimq
     const database = 'daws';
     const logfile = '/file.log';
     const FileRepeatToTask =  __DIR__ . '/Repeat.log';
+
     protected $Quire;
     protected $channel;
     protected $connection;
@@ -23,7 +24,6 @@ abstract class Rabbimq
     protected $queue;
     protected $Exchange;
     protected $routing_key;
-
 
 
     public function AMQPConnect($host, $port, $username, $password, $vhost)

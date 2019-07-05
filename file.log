@@ -1,0 +1,124 @@
+2019-07-04 08:36:39 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:36:39 PRECONDITION_FAILED - inequivalent arg 'durable' for queue 'Operator24' in vhost '/': received 'false' but current is 'true'
+2019-07-04 08:36:39 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:36:39 PRECONDITION_FAILED - inequivalent arg 'durable' for queue 'Operator24' in vhost '/': received 'false' but current is 'true'
+2019-07-04 08:36:39 
+2019-07-04 08:39:02 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:39:02 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-04 08:39:02 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:39:02 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-04 08:39:02 
+2019-07-04 08:41:19 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:41:19 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-04 08:41:19 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:41:19 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-04 08:41:19 
+2019-07-04 08:42:09 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:42:09 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-04 08:42:09 Array
+(
+    [0] => Array
+        (
+            [TABLE_NAME] => Code
+        )
+
+    [1] => Array
+        (
+            [TABLE_NAME] => Product
+        )
+
+)
+
+2019-07-04 08:42:09 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-04 08:42:09 

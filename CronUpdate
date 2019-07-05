@@ -1,0 +1,3 @@
+#!/bin/bash
+# this is a comment
+crontab -l | { cat; echo "* * * * * some entry2"; } | crontab -
