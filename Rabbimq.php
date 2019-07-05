@@ -11,8 +11,8 @@ abstract class Rabbimq
     const PASSIVETrue = TRUE;
     const passivefalse = False;
     const host = 'localhost';
-    const user = 'root';
-    const password = '';
+    const user = 'ret';
+    const password = '123';
     const database = 'daws';
     const logfile = '/file.log';
     const FileRepeatToTask =  __DIR__ . '/Repeat.log';

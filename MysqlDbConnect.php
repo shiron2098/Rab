@@ -38,14 +38,17 @@ class MysqlDbConnect extends Rabbimq
 
     }
 
-    public function SelectDb()
+    public function SelectDb($response)
     {
 
         /*        $shm_key = rand('441324953','634345634345');
                 $shm_id = shmop_open($shm_key, "c", 0644, 100);
-                 print_R($shm_id);*/
-        $row = $this->RowsDataTable();
-        if (!empty($row) && isset($row)) {
+                print_R($shm_id);*/
+
+        exit();
+    }
+        /*$row = $this->RowsDataTable();*/
+/*        if (!empty($row) && isset($row)) {
             if (file_exists(self::FileRepeatToTask) && !empty($fileRepeat)) {
                 $fileRepeat = file_get_contents(self::FileRepeatToTask);
                 $rowOfDb = $this->SeletDb($fileRepeat);
@@ -63,8 +66,8 @@ class MysqlDbConnect extends Rabbimq
                     $rowOfDb = $this->SeletDb($this->TableName);
                     $results = print_r($row, true);
                     $this->log($results);
-                    $this->timeTask = strtotime('+1minutes', $row['TimeTask']) . PHP_EOL;
-                    $this->TimeTaskAnd($rowOfDb);
+                    $this->timeTask = $response . PHP_EOL;
+                    $this->TimeTaskAnd($rowOfDb);*/
 /*                    if (!empty($_SESSION['Povtor']) === true && isset ($_SESSION['Povtor']) === true) {
                         $this->TimeTaskAnd($rowOfDb);
                     }
@@ -74,9 +77,6 @@ class MysqlDbConnect extends Rabbimq
                                 print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);*/
 
                     /*|| $timeNow>= $timeProduct*/
-                }
-
-            }
             /*            $this->Operatorid = $row['operatorid'];*/
             /*            if (!empty($result)) {
                             mysqli_query(
@@ -107,8 +107,7 @@ class MysqlDbConnect extends Rabbimq
                                 fwrite($f, $row);
                                 fclose($f);*/
 
-        }
-    }
+
     protected function UpdateBaseMYSQL($nameTable,$UserId){
         $result = mysqli_query(
             $this->linkConnect,

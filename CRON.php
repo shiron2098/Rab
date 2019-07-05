@@ -2,6 +2,7 @@
 session_start();
 include_once ('MysqlDbConnect.php');
 include_once ('RabbiSendSqlTakeInDbMYSQL.php');
+include_once ('Job.php');
 
 
 class JobScheduler extends Job
@@ -15,9 +16,17 @@ class JobScheduler extends Job
 
     public function index()
     {
+
+        $newdb = new JobScheduler();
+        $newdb->SelectToDbJobSCheduler();
+       $newdb->Tointo();
+/*        $rep = $newdb->RepeatSingle();
         $db = new MysqlDbConnect();
-        $a = $db->SelectDb();
-        $db->log($a);
+        $a = $db->SelectDb($rep);
+        $db->log($a);*/
+       $newdb->TimeTask();
+
+        print_r($newdb);
       /*  $b = ($a['code']['time']);
         $this->id = $a['code']['id'];
         $timeNow = time();
@@ -39,6 +48,13 @@ class JobScheduler extends Job
             echo $e->getMessage();
             $db->log($e->getMessage());
         }*/
+    }
+    public function Tointo(){
+            $result = mysqli_query(
+                $this->linkConnect,
+                "insert into JobScheduler (StartScheduler,Scheduler,SQL_ZAP,Userid) values ('1562350645','retret','SELECT * FROM Product',$this->Userid)"
+            );
+            print_r($this->linkConnect);
     }
 }
 $a = new JobScheduler();

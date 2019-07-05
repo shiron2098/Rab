@@ -12,25 +12,27 @@ class Job extends MysqlDbConnect{
 
     protected $Userid;
     protected $TimeForScheduler;
+    protected $DateForMYSQL;
     Public function SelectToDbJobSCheduler(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM  Operator"
+            "SELECT * FROM Operator"
         );
         $row = mysqli_fetch_assoc($result);
         $this->Userid = $row['Operatorid'];
+        $this->DateForMYSQL= date('l',strtotime('now'));
     }
     public function InsertToDbJobScheduler(){
         $result = mysqli_query(
             $this->linkConnect,
             "insert into JobScheduler (StartScheduler,Scheduler,SQL_ZAP,Userid) values ('" . time() . "','" . job::Schedule . "',
-'" . job::SQL . "','" . $this->Userid  . "')"
+'" . job::SQL . "','" . $this->Userid . "')"
         );
     }
     public function SelectJobScheduler(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM  Tabledate WHERE Userid = $this->Userid"
+            "SELECT * FROM Tabledate WHERE Userid = $this->Userid"
         );
         $row = mysqli_fetch_assoc($result);
         foreach ($result as $res){
@@ -53,7 +55,7 @@ class Job extends MysqlDbConnect{
                 $this->TimeForScheduler[]= $res['Saturday'];
             }
             elseif(!empty($res['Sunday'])){
-                  $this->TimeForScheduler[]= $res['Sunday'] ;
+                $this->TimeForScheduler[]= $res['Sunday'] ;
             }
         }
         return $this->TimeForScheduler;
@@ -61,25 +63,46 @@ class Job extends MysqlDbConnect{
 
     public function TimeTask(){
         $time = (time());
-        $date = date('l',strtotime('+1day'));
-        $userid = 'Userid';
+        $userid = 'UserTimeId';
         $result = mysqli_query(
             $this->linkConnect,
-            "SHOW COLUMNS FROM Tabledate;"
+            "SHOW COLUMNS FROM TableDate;"
         );
         foreach ($result as $res) {
-            if($date === $res['Field']){
+            if($this->DateForMYSQL === $res['Field']){
                 $result = mysqli_query(
                     $this->linkConnect,
-                    "insert into Tabledate ($date,$userid) values ($time,$this->Userid)"
+                    "insert into TableDate ($this->DateForMYSQL,$userid) values ($time,$this->Userid)"
                 );
+                print_r($this->linkConnect);
+                if(!empty($this->linkConnect->error_list)){
+                    $result = mysqli_query(
+                        $this->linkConnect,
+                        "UPDATE TableDate SET $this->DateForMYSQL = $time WHERE UserTimeId=$this->Userid"
+                    );
+                }
             }
+        }
+    }
+   public function RepeatSingle(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT $this->DateForMYSQL FROM TableDate WHERE UserTimeId = $this->Userid"
+        );
+        $row = mysqli_fetch_assoc($result);
+        if(!empty($row)) {
+            foreach ($row as $date)
+                return $date;
+        }
+        else
+        {
+            $a = 'error empty response';
+            return $a;
         }
     }
 }
 $a = new Job();
 $a->SelectToDbJobSCheduler();
-$e = $a->SelectJobScheduler();
-print_r($e);
-/*$a->TimeTask();*/
+/*$e = $a->RepeatSingle();*/
+/*$e = $a->TimeTask();*/
 
