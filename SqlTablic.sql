@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS Operator (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   Operatorid INTEGER NOT NULL UNIQUE,
@@ -33,12 +32,13 @@ CREATE INDEX  CodeAndDecriptionIndex on Product(Code,Description);
 CREATE INDEX  NameAndPasswordIndex on Operator(Name,Password);
 CREATE TABLE IF NOT EXITSTS TableDate (
        id INTEGER PRIMARY KEY AUTO_INCREMENT,
-       monday INTEGER no null,
-       tuesday INTEGER no null,
-       wednesday INTEGER no null,
-       thursday INTEGER no null,
-       friday INTEGER no null,
-       saturday INTEGER no null,
-       sunday INTEGER no null,
-       Userid INTEGER
+       Monday INTEGER,
+       Tuesday INTEGER,
+       Wednesday INTEGER,
+       Thursday INTEGER,
+       Friday INTEGER,
+       Saturday INTEGER,
+       Sunday INTEGER,
+       Userid INTEGER,
+      FOREIGN KEY (Userid)  REFERENCES Operator (Operatorid)
 )ENGINE InnoDB DEFAULT CHARSET = UTF8;

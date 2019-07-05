@@ -11,14 +11,14 @@ class Job extends MysqlDbConnect{
     const SQL = 'SELECT * FROM Product';
 
     protected $Userid;
+    protected $TimeForScheduler;
     Public function SelectToDbJobSCheduler(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM  "
+            "SELECT * FROM  Operator"
         );
         $row = mysqli_fetch_assoc($result);
         $this->Userid = $row['Operatorid'];
-        return $row;
     }
     public function InsertToDbJobScheduler(){
         $result = mysqli_query(
@@ -30,16 +30,56 @@ class Job extends MysqlDbConnect{
     public function SelectJobScheduler(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM  JobScheduler"
+            "SELECT * FROM  Tabledate WHERE Userid = $this->Userid"
         );
         $row = mysqli_fetch_assoc($result);
-        return $row;
+        foreach ($result as $res){
+            if(!empty($res['Monday'])){
+                $this->TimeForScheduler[]= $res['Monday'];
+            }
+            elseif(!empty($res['Tuesday'])){
+                $this->TimeForScheduler[]= $res['Tuesday'];
+            }
+            elseif(!empty($res['Wednesday'])){
+                $this->TimeForScheduler[]= $res['Wednesday'];
+            }
+            elseif(!empty($res['Thursday'])){
+                $this->TimeForScheduler[]= $res['Thursday'];
+            }
+            elseif(!empty($res['Friday'])){
+                $this->TimeForScheduler[]= $res['Friday'];
+            }
+            elseif(!empty($res['Saturday'])){
+                $this->TimeForScheduler[]= $res['Saturday'];
+            }
+            elseif(!empty($res['Sunday'])){
+                  $this->TimeForScheduler[]= $res['Sunday'] ;
+            }
+        }
+        return $this->TimeForScheduler;
     }
+
     public function TimeTask(){
-        $date = date('l',strtotime('now'));
-        print_R($date);
+        $time = (time());
+        $date = date('l',strtotime('+1day'));
+        $userid = 'Userid';
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SHOW COLUMNS FROM Tabledate;"
+        );
+        foreach ($result as $res) {
+            if($date === $res['Field']){
+                $result = mysqli_query(
+                    $this->linkConnect,
+                    "insert into Tabledate ($date,$userid) values ($time,$this->Userid)"
+                );
+            }
+        }
     }
 }
 $a = new Job();
-$a->TimeTask();
+$a->SelectToDbJobSCheduler();
+$e = $a->SelectJobScheduler();
+print_r($e);
+/*$a->TimeTask();*/
 

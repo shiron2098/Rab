@@ -4,7 +4,7 @@ include_once ('MysqlDbConnect.php');
 include_once ('RabbiSendSqlTakeInDbMYSQL.php');
 
 
-class JobScheduler extends MysqlDbConnect
+class JobScheduler extends Job
 {
     protected $id;
     protected $Time;
