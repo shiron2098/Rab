@@ -20,13 +20,12 @@ class JobScheduler extends Job
         $newdb = new JobScheduler();
         $newdb->SelectToDbJobSCheduler();
        $newdb->Tointo();
-/*        $rep = $newdb->RepeatSingle();
+        $newdb->TimeTask();
+        $rep2 =$newdb->SchedulerSingle();
         $db = new MysqlDbConnect();
-        $a = $db->SelectDb($rep);
-        $db->log($a);*/
-       $newdb->TimeTask();
+        $a = $db->SelectDb($rep2);
+        $db->log($a);
 
-        print_r($newdb);
       /*  $b = ($a['code']['time']);
         $this->id = $a['code']['id'];
         $timeNow = time();
@@ -52,9 +51,8 @@ class JobScheduler extends Job
     public function Tointo(){
             $result = mysqli_query(
                 $this->linkConnect,
-                "insert into JobScheduler (StartScheduler,Scheduler,SQL_ZAP,Userid) values ('1562350645','retret','SELECT * FROM Product',$this->Userid)"
+                "insert into JobScheduler (StartScheduler,Scheduler,SQL_ZAP,Userid) values ('1562350645','retret','SELECT * FROM Productl',$this->Userid)"
             );
-            print_r($this->linkConnect);
     }
 }
 $a = new JobScheduler();

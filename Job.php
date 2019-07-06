@@ -20,7 +20,6 @@ class Job extends MysqlDbConnect{
         );
         $row = mysqli_fetch_assoc($result);
         $this->Userid = $row['Operatorid'];
-        $this->DateForMYSQL= date('l',strtotime('now'));
     }
     public function InsertToDbJobScheduler(){
         $result = mysqli_query(
@@ -74,7 +73,6 @@ class Job extends MysqlDbConnect{
                     $this->linkConnect,
                     "insert into TableDate ($this->DateForMYSQL,$userid) values ($time,$this->Userid)"
                 );
-                print_r($this->linkConnect);
                 if(!empty($this->linkConnect->error_list)){
                     $result = mysqli_query(
                         $this->linkConnect,
@@ -84,15 +82,16 @@ class Job extends MysqlDbConnect{
             }
         }
     }
-   public function RepeatSingle(){
+
+    public function SchedulerSingle(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT $this->DateForMYSQL FROM TableDate WHERE UserTimeId = $this->Userid"
+            "SELECT * FROM JobScheduler WHERE Userid = $this->Userid"
         );
-        $row = mysqli_fetch_assoc($result);
-        if(!empty($row)) {
-            foreach ($row as $date)
-                return $date;
+        if(!empty($result)) {
+            foreach ($result as $date)
+               $file[] =$date;
+                return $file;
         }
         else
         {

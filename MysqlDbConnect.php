@@ -11,11 +11,18 @@ class MysqlDbConnect extends Rabbimq
     const Time = 'now';
     const FileResponseName = __DIR__ . 'Response';
 
-    private $timeTask;
+
+
+    protected $idtask;
+    protected $userid;
+    private $startSql;
+    private $TimeTaskUpdate;
+    protected $timetask;
     private $Timestamp;
     protected $linkConnect;
     private $idOperator;
     private $TableName;
+    protected $DateForMYSQL;
 
     public function __construct()
     {
@@ -44,9 +51,20 @@ class MysqlDbConnect extends Rabbimq
         /*        $shm_key = rand('441324953','634345634345');
                 $shm_id = shmop_open($shm_key, "c", 0644, 100);
                 print_R($shm_id);*/
-
+        foreach ($response as $arrayTime) {
+            $this->idtask = $arrayTime['id'];
+            $this->startSql = $arrayTime['StartScheduler'];
+            if ($this->startSql <= $this->Timestamp) {
+                $this->DateForMYSQL= date('l',strtotime('now'));
+                $responseOFdbTableDate = $this->RepeatSingle();
+                $this->TimeTaskUpdate = strtotime('+5minutes', $responseOFdbTableDate);
+                $this->timetask = $responseOFdbTableDate;
+                $response = $this->SeletDb();
+                print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));
+                $this->TimeTaskAnd($response);
+            }
+        }
         exit();
-    }
         /*$row = $this->RowsDataTable();*/
 /*        if (!empty($row) && isset($row)) {
             if (file_exists(self::FileRepeatToTask) && !empty($fileRepeat)) {
@@ -55,19 +73,21 @@ class MysqlDbConnect extends Rabbimq
                 $this->timeTask = strtotime('+1minutes', $rowOfDb['TimeTask']);
                 $response = $this->TimeTaskAnd($rowOfDb);
 
-                if(!empty($response)) {
+                if (!empty($response)) {
                     $this->DeleteRepeat($rowOfDb['DBNAME']);
-                }
-            }
-            else
-            {
+                }*/
+     /*       } else {*/
                 foreach ($row as $task) {
                     $this->TableName = $task['TABLE_NAME'];
                     $rowOfDb = $this->SeletDb($this->TableName);
                     $results = print_r($row, true);
                     $this->log($results);
                     $this->timeTask = $response . PHP_EOL;
-                    $this->TimeTaskAnd($rowOfDb);*/
+                    $this->TimeTaskAnd($rowOfDb);
+                }
+
+
+    }
 /*                    if (!empty($_SESSION['Povtor']) === true && isset ($_SESSION['Povtor']) === true) {
                         $this->TimeTaskAnd($rowOfDb);
                     }
@@ -108,10 +128,10 @@ class MysqlDbConnect extends Rabbimq
                                 fclose($f);*/
 
 
-    protected function UpdateBaseMYSQL($nameTable,$UserId){
+    protected function UpdateBaseMYSQL(){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE $nameTable SET TimeTask = $this->Timestamp WHERE id=$UserId"
+            "UPDATE TableDate SET $this->DateForMYSQL = $this->TimeTaskUpdate WHERE id=$this->idtask"
         );
         $a = 'Update complete timestamp to Database MYSQL' . PHP_EOL;
         return $a;
@@ -128,13 +148,13 @@ class MysqlDbConnect extends Rabbimq
     }
     protected function TimeTaskAnd($row){
         try {
-            if ($this->Timestamp >= $this->timeTask) {
+            if ($this->Timestamp >= $this->timetask) {
                 $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
                 $rabbitResponse = $Rabbi->index($row);
                 $results = print_r($rabbitResponse, true);
                 if(!empty($results)) {
                     $this->log($results);
-                    $response = $this->UpdateBaseMYSQL($row['DBNAME'], $row['id']);
+                    $response = $this->UpdateBaseMYSQL();
                     $this->log($response);
                     return $response;
                 }
@@ -152,10 +172,12 @@ class MysqlDbConnect extends Rabbimq
         $shm_id = shmop_open($shm_key, "c", 0644, 100);
     }*/
 
-    public function SeletDb($NameTables){
+    public function SeletDb(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM $NameTables"
+            "SELECT Operatorid,Name,Password,connection_string,SQL_ZAP FROM Operator
+                  JOIN jobscheduler on jobscheduler.userid =  Operator.Operatorid
+                  WHERE jobscheduler.id = $this->idtask"
         );
         $row = mysqli_fetch_assoc($result);
         return $row;
@@ -181,6 +203,22 @@ class MysqlDbConnect extends Rabbimq
         }
         flock($fp, LOCK_UN);
         fclose($fp);
+    }
+    public function RepeatSingle(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT $this->DateForMYSQL FROM TableDate WHERE id = $this->idtask"
+        );
+        $row = mysqli_fetch_assoc($result);
+        if(!empty($row)) {
+            foreach ($row as $date)
+                return $date;
+        }
+        else
+        {
+            $a = 'error empty response';
+            return $a;
+        }
     }
 
 }

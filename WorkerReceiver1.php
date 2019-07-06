@@ -22,7 +22,7 @@ class WorkerReceiver1
     private $response;
     public function Index()
     {
-        $connection = new AMQPStreamConnection('localhost', 5672, 'Shiro', '1995');
+        $connection = new AMQPStreamConnection('localhost', 5672, 'shir', '1995');
         $channel = $connection->channel();
 
         $channel->exchange_declare('type', 'direct', false, false, false);

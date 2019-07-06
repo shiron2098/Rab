@@ -19,6 +19,14 @@ CREATE TABLE IF NOT EXISTS Product (
   FOREIGN KEY (Userid)  REFERENCES Operator (Operatorid)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 insert into Product (Code,Description,TimeTaskUpdated,Userid,DBNAME) values ('rterterter','2343453','1561148406','23','Product');
+CREATE TABLE IF NOT EXISTS JobScheduler (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  StartScheduler INTEGER NOT NULL,
+  LastTake INTEGER,
+  SQL_ZAP VARCHAR(150) UNIQUE,
+  Userid INTEGER,
+  FOREIGN KEY (Userid)  REFERENCES Operator (Operatorid)
+)ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE TABLE IF NOT EXISTS TableDate (
        id INTEGER PRIMARY KEY AUTO_INCREMENT,
        Monday INTEGER,
@@ -28,16 +36,9 @@ CREATE TABLE IF NOT EXISTS TableDate (
        Friday INTEGER,
        Saturday INTEGER,
        Sunday INTEGER,
-       UserTimeId INTEGER unique
-)ENGINE InnoDB DEFAULT CHARSET = UTF8;
-CREATE TABLE IF NOT EXISTS JobScheduler (
-     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-     StartScheduler Varchar(50),
-     Scheduler varchar(255),
-     SQL_ZAP VARCHAR(150),
-     Userid INTEGER,
-     FOREIGN KEY (Userid)  REFERENCES Operator (Operatorid),
-     FOREIGN KEY (id)  REFERENCES TableDate (UserTimeId)
+       UserTimeId INTEGER,
+  FOREIGN KEY (UserTimeId)  REFERENCES Operator (Operatorid),
+  FOREIGN KEY (id)  REFERENCES JobScheduler (id)
 )ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX OperIndex on Operator(Operatorid);
 CREATE INDEX  CodeAndDecriptionIndex on Product(Code,Description);

@@ -223,3 +223,101 @@
 
 2019-07-05 14:58:23 stream_socket_client(): unable to connect to tcp://localhost:5672 (Connection refused)
 2019-07-05 14:58:23 
+2019-07-06 11:41:32 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-06 11:42:56 ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+2019-07-06 11:43:37 message delivery is complete MYSQL
+2019-07-06 11:44:51 error download into rabbit because the message exists MYSQL
+2019-07-06 11:46:58 error download into rabbit because the message exists MYSQL
+2019-07-06 11:50:06 message delivery is complete MYSQL
+2019-07-06 11:51:42 message delivery is complete MYSQL
+2019-07-06 11:59:44 error download into rabbit because the message exists MYSQL
+2019-07-06 12:00:22 message delivery is complete MYSQL
+2019-07-06 12:00:26 message delivery is complete MYSQL
+2019-07-06 12:04:14 message delivery is complete MYSQL
+2019-07-06 12:04:14 message delivery is complete MYSQL
+2019-07-06 12:04:14 Update complete timestamp to Database MYSQL
+
+2019-07-06 12:04:34 message delivery is complete MYSQL
+2019-07-06 12:04:40 message delivery is complete MYSQL
+2019-07-06 12:05:38 message delivery is complete MYSQL
+2019-07-06 12:05:41 message delivery is complete MYSQL
+2019-07-06 12:06:02 Update complete timestamp to Database MYSQL
+
+2019-07-06 12:14:37 error download into rabbit because the message exists MYSQL
+2019-07-06 12:17:32 error download into rabbit because the message exists MYSQL
+2019-07-06 12:18:29 message delivery is complete MYSQL
+2019-07-06 12:18:33 message delivery is complete MYSQL
+2019-07-06 12:18:42 Update complete timestamp to Database MYSQL
+
+2019-07-06 12:19:40 message delivery is complete MYSQL
+2019-07-06 12:19:42 message delivery is complete MYSQL
+2019-07-06 12:19:47 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:20:53 error download into rabbit because the message exists MYSQL
+2019-07-06 15:20:53 error download into rabbit because the message exists MYSQL
+2019-07-06 15:21:02 message delivery is complete MYSQL
+2019-07-06 15:21:02 message delivery is complete MYSQL
+2019-07-06 15:21:02 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:21:02 error download into rabbit because the message exists MYSQL
+2019-07-06 12:22:39 error download into rabbit because the message exists MYSQL
+2019-07-06 15:24:16 error download into rabbit because the message exists MYSQL
+2019-07-06 15:24:16 error download into rabbit because the message exists MYSQL
+2019-07-06 15:24:31 message delivery is complete MYSQL
+2019-07-06 15:24:31 message delivery is complete MYSQL
+2019-07-06 15:24:31 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:24:31 error download into rabbit because the message exists MYSQL
+2019-07-06 15:25:24 message delivery is complete MYSQL
+2019-07-06 15:25:24 message delivery is complete MYSQL
+2019-07-06 15:25:24 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:25:24 error download into rabbit because the message exists MYSQL
+2019-07-06 15:25:30 error download into rabbit because the message exists MYSQL
+2019-07-06 15:25:30 error download into rabbit because the message exists MYSQL
+2019-07-06 12:38:26 error download into rabbit because the message exists MYSQL
+2019-07-06 15:39:57 message delivery is complete MYSQL
+2019-07-06 15:39:57 message delivery is complete MYSQL
+2019-07-06 15:39:57 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:39:57 error download into rabbit because the message exists MYSQL
+2019-07-06 15:40:02 error download into rabbit because the message exists MYSQL
+2019-07-06 15:40:02 error download into rabbit because the message exists MYSQL
+2019-07-06 15:40:25 message delivery is complete MYSQL
+2019-07-06 15:40:25 message delivery is complete MYSQL
+2019-07-06 15:40:25 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:40:25 error download into rabbit because the message exists MYSQL
+2019-07-06 15:40:41 error download into rabbit because the message exists MYSQL
+2019-07-06 15:40:41 error download into rabbit because the message exists MYSQL
+2019-07-06 12:41:14 message delivery is complete MYSQL
+2019-07-06 12:41:17 message delivery is complete MYSQL
+2019-07-06 12:42:10 message delivery is complete MYSQL
+2019-07-06 12:42:12 message delivery is complete MYSQL
+2019-07-06 12:42:14 Update complete timestamp to Database MYSQL
+
+2019-07-06 15:42:30 error download into rabbit because the message exists MYSQL
+2019-07-06 15:42:30 error download into rabbit because the message exists MYSQL
+2019-07-06 12:44:22 message delivery is complete MYSQL
+2019-07-06 12:44:43 message delivery is complete MYSQL
+2019-07-06 12:44:46 Update complete timestamp to Database MYSQL
+
+2019-07-06 12:45:10 TIme is not come
+2019-07-06 12:49:00 message delivery is complete MYSQL
+2019-07-06 12:49:00 message delivery is complete MYSQL
+2019-07-06 12:49:00 Update complete timestamp to Database MYSQL
+
+2019-07-06 14:13:33 error download into rabbit because the message exists MYSQL
+2019-07-06 14:13:42 message delivery is complete MYSQL
+2019-07-06 14:13:42 message delivery is complete MYSQL
+2019-07-06 14:13:42 Update complete timestamp to Database MYSQL
+
+2019-07-06 14:16:21 message delivery is complete MYSQL
+2019-07-06 14:16:30 message delivery is complete MYSQL
+2019-07-06 14:16:32 Update complete timestamp to Database MYSQL
+
+2019-07-06 17:17:07 error download into rabbit because the message exists MYSQL
+2019-07-06 17:17:07 error download into rabbit because the message exists MYSQL
+2019-07-06 17:18:17 error download into rabbit because the message exists MYSQL
+2019-07-06 17:18:17 error download into rabbit because the message exists MYSQL
+2019-07-06 14:20:29 error download into rabbit because the message exists MYSQL

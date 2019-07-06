@@ -18,7 +18,7 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
     public function index($reponse){
         $this->ResponseMySQL = $reponse;
         $rabbi=new RabbiSendSqlTakeInDbMYSQL();
-        $rabbi->AMQPConnect('localhost','5672','Shiro','1995','/');
+        $rabbi->AMQPConnect('localhost','5672','shir','1995','/');
         $rabbi->CreateExchange('Type','direct');
         $rabbi->CreateQueue('Operator23',false, false ,false,'operator333',false);
         try {
