@@ -18,9 +18,6 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
     public function index($reponse){
         $this->ResponseMySQL = $reponse;
         $rabbi=new RabbiSendSqlTakeInDbMYSQL();
-        $rabbi->AMQPConnect('localhost','5672','shir','1995','/');
-        $rabbi->CreateExchange('Type','direct');
-        $rabbi->CreateQueue('Operator23',false, false ,false,'operator333',false);
         try {
             $rabbi->CheckRabbit();
             if (isset($_SESSION['Zapros'])) {
@@ -29,19 +26,19 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
                     $rabbi->CreateExchange('Type','direct');
                     $rabbi->CreateQueue('Operator24',false, false ,false,'operator333',false);
                     $rabbi->MessageOut($this->ResponseMySQL);
-                    $text = 'message delivery is complete MYSQL';
+                    $text = 'message delivery is complete Rabbit #' . $this->ResponseMySQL['id'];
                     $_SESSION['Zapros']=true;
                     $rabbi->log($text);
 /*                   include_once('RabbitMqSendMessageDAWS.php');*/
                     return $text;
                 } else {
-                    $rabbi->SearchRepeat($this->ResponseMySQL['DBNAME'] . PHP_EOL);
+                    $rabbi->SearchRepeat($this->ResponseMySQL['id'] . PHP_EOL);
                     if(!empty($_SESSION['String'])=== true && isset($_SESSION['String']) === true) {
-                        throw new Exception('error download into rabbit because the message exists MYSQL');
+                        throw new Exception('error download into rabbit because the message exists MYSQL' . $this->ResponseMySQL['id']);
                     }
                     else
                     {
-                        file_put_contents(self::FileRepeatToTask, $this->ResponseMySQL['DBNAME'] . PHP_EOL, FILE_APPEND);
+                        file_put_contents(self::FileRepeatToTask, $this->ResponseMySQL['id'] . PHP_EOL, FILE_APPEND);
                     }
                 }
             }

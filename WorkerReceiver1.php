@@ -27,7 +27,7 @@ class WorkerReceiver1
 
         $channel->exchange_declare('type', 'direct', false, false, false);
 
-        list($queue_name, ,) = $channel->queue_declare("Operator23", false, false, false, false);
+        list($queue_name, ,) = $channel->queue_declare("Operator24", false, false, false, false);
 
         $channel->queue_bind($queue_name, 'type');
 

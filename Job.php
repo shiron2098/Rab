@@ -28,7 +28,7 @@ class Job extends MysqlDbConnect{
 '" . job::SQL . "','" . $this->Userid . "')"
         );
     }
-    public function SelectJobScheduler(){
+/*    public function SelectJobScheduler(){
         $result = mysqli_query(
             $this->linkConnect,
             "SELECT * FROM Tabledate WHERE Userid = $this->Userid"
@@ -58,7 +58,7 @@ class Job extends MysqlDbConnect{
             }
         }
         return $this->TimeForScheduler;
-    }
+    }*/
 
     public function TimeTask(){
         $time = (time());
@@ -100,8 +100,6 @@ class Job extends MysqlDbConnect{
         }
     }
 }
-$a = new Job();
-$a->SelectToDbJobSCheduler();
 /*$e = $a->RepeatSingle();*/
 /*$e = $a->TimeTask();*/
 

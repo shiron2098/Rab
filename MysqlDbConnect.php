@@ -28,6 +28,8 @@ class MysqlDbConnect extends Rabbimq
     {
 
         $this->Timestamp = strtotime(MysqlDbConnect::Time);
+        $this->DateForMYSQL= date('l',strtotime('now'));
+
         $this->Dbconnect();
 
 
@@ -48,95 +50,86 @@ class MysqlDbConnect extends Rabbimq
     public function SelectDb($response)
     {
 
-        /*        $shm_key = rand('441324953','634345634345');
-                $shm_id = shmop_open($shm_key, "c", 0644, 100);
-                print_R($shm_id);*/
-        foreach ($response as $arrayTime) {
-            $this->idtask = $arrayTime['id'];
-            $this->startSql = $arrayTime['StartScheduler'];
-            if ($this->startSql <= $this->Timestamp) {
-                $this->DateForMYSQL= date('l',strtotime('now'));
-                $responseOFdbTableDate = $this->RepeatSingle();
-                $this->TimeTaskUpdate = strtotime('+5minutes', $responseOFdbTableDate);
-                $this->timetask = $responseOFdbTableDate;
-                $response = $this->SeletDb();
-                print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));
-                $this->TimeTaskAnd($response);
+        if (!empty($response) && isset($response)) {
+            if ($file = file_exists(self::FileRepeatToTask)) {
+                if (!empty(file_get_contents(self::FileRepeatToTask))) {
+                    $fileRepeat = file_get_contents(self::FileRepeatToTask);
+                    $this->idtask = current(explode(PHP_EOL, $fileRepeat));
+                    $rowOfDb = $this->DataFromVendmax($this->idtask);
+                    $this->TimeTableDate($this->idtask);
+                    $response = $this->CheckDataAndSendMessage($rowOfDb);
+                    if (!empty($response)) {
+                        $this->DeleteRepeat($rowOfDb['id']);
+                    }
+                } else {
+                    foreach ($response as $arrayTime) {
+                        $this->idtask = $arrayTime['id'];
+                        $this->startSql = $arrayTime['StartScheduler'];
+                        if ($this->startSql <= $this->Timestamp) {
+                            $response = $this->DataFromVendmax($this->idtask);
+                            $responseTimeTableDate = $this->TimeTableDate($this->idtask);
+                            if (!empty($responseTimeTableDate)) {
+                                /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
+                                $this->CheckDataAndSendMessage($response);
+                            }
+                        }
+                    }
+                }
             }
         }
-        exit();
-        /*$row = $this->RowsDataTable();*/
-/*        if (!empty($row) && isset($row)) {
-            if (file_exists(self::FileRepeatToTask) && !empty($fileRepeat)) {
-                $fileRepeat = file_get_contents(self::FileRepeatToTask);
-                $rowOfDb = $this->SeletDb($fileRepeat);
-                $this->timeTask = strtotime('+1minutes', $rowOfDb['TimeTask']);
-                $response = $this->TimeTaskAnd($rowOfDb);
-
-                if (!empty($response)) {
-                    $this->DeleteRepeat($rowOfDb['DBNAME']);
-                }*/
-     /*       } else {*/
-                foreach ($row as $task) {
-                    $this->TableName = $task['TABLE_NAME'];
-                    $rowOfDb = $this->SeletDb($this->TableName);
-                    $results = print_r($row, true);
-                    $this->log($results);
-                    $this->timeTask = $response . PHP_EOL;
-                    $this->TimeTaskAnd($rowOfDb);
-                }
-
-
     }
-/*                    if (!empty($_SESSION['Povtor']) === true && isset ($_SESSION['Povtor']) === true) {
-                        $this->TimeTaskAnd($rowOfDb);
-                    }
-                    else {*/
 
-                    /*           print_r(date('Y-m-d H:i:s',$timeNow . PHP_EOL));
-                                print_r(date('Y-m-d H:i:s',$time) . PHP_EOL);*/
+    protected function TimeTableDate($id)
+    {
+        $responseOFdbTableDate = $this->RepeatSingle($id);
+        if (!empty($responseOFdbTableDate)) {
+            $this->TimeTaskUpdate = strtotime('+5minutes', $responseOFdbTableDate);
+            $this->timetask = $responseOFdbTableDate;
+            return $responseOFdbTableDate;
+        } else {
+            $text = 'No schedule for the day job=#' . $this->idtask;
+            $this->log($text);
+            return null;
+        }
+    }
 
-                    /*|| $timeNow>= $timeProduct*/
-            /*            $this->Operatorid = $row['operatorid'];*/
-            /*            if (!empty($result)) {
-                            mysqli_query(
-                                $this->linkConnect,
-                                "UPDATE Operator SET TimeInput=$this->Timestamp WHERE id=$this->Operatorid"
-                            );
-                        }*/
-            /*        $row = mysqli_fetch_assoc($result);
-                    $results = print_r($row, true);*/
-            /*$results = print_r($row, true);
-                if (file_exists($row['Name'])) {
-                    try {
-                        $_SESSION['Zapros'] = false;
-                        throw new Exception('message is allready sent ');
-                    }catch(Exception $e) {
-                       echo $e->getMessage();
-                    }
-                }
-                file_put_contents($row['Name'], $results);
-                $_SESSION['FileZip'] = false;*/
-
-            /*                $file = ['code' => $row,
-                                'timestamp' => $this->Timestamp];
-                            $_SESSION['FileZip']=false;
-                            return $file;*/
-
-            /*                if ($f = fopen(MysqlDbConnect::FileResponseName, 'a+')) {
-                                fwrite($f, $row);
-                                fclose($f);*/
-
-
-    protected function UpdateBaseMYSQL(){
+    private function UpdateBaseMYSQL(){
         $result = mysqli_query(
             $this->linkConnect,
             "UPDATE TableDate SET $this->DateForMYSQL = $this->TimeTaskUpdate WHERE id=$this->idtask"
         );
-        $a = 'Update complete timestamp to Database MYSQL' . PHP_EOL;
-        return $a;
+        try {
+            if ($result === true) {
+                $a = 'Update complete timestamp to TableDate MYSQL #' . $this->idtask  . PHP_EOL;
+                return $a;
+            } else {
+                throw new Exception('Error update Tabledate #' . $this->DateForMYSQL . $this->idtask);
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
     }
-    protected function RowsDataTable(){
+    Private function UpdateJobScheduler(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "UPDATE JobScheduler SET LastTake = $this->Timestamp WHERE id=$this->idtask"
+        );
+        try {
+            if ($result === true) {
+                $a = 'Update complete timestamp to Database JobScheduler MYSQL #' .  $this->idtask . PHP_EOL;
+                return $a;
+            } else {
+                throw new Exception('Error update JobScheduler MYSQL #' . $this->idtask . PHP_EOL);
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
+    }
+
+
+/*    protected function RowsDataTable(){
         $result = mysqli_query(
             $this->linkConnect,
             "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='daws'"
@@ -145,21 +138,24 @@ class MysqlDbConnect extends Rabbimq
             $MYSQLdbname[]= $res;
         }
         return $MYSQLdbname;
-    }
-    protected function TimeTaskAnd($row){
+    }*/
+
+
+    protected function CheckDataAndSendMessage($row){
         try {
             if ($this->Timestamp >= $this->timetask) {
                 $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
                 $rabbitResponse = $Rabbi->index($row);
                 $results = print_r($rabbitResponse, true);
                 if(!empty($results)) {
-                    $this->log($results);
-                    $response = $this->UpdateBaseMYSQL();
-                    $this->log($response);
-                    return $response;
+                    $responseTableDate = $this->UpdateBaseMYSQL();
+                    $this->log($responseTableDate);
+                    $responseJobScheduler=$this->UpdateJobScheduler();
+                    $this->log($responseJobScheduler);
+                    return $responseJobScheduler;
                 }
             } else {
-                throw new Exception('TIme is not come');
+                throw new Exception('TIme is not come job ' . $row['SQL_ZAP'] . ' # ' . $this->idtask);
 
             }
         } catch (Exception $e) {
@@ -167,20 +163,25 @@ class MysqlDbConnect extends Rabbimq
             $this->log($e->getMessage());
         }
     }
-/*    private function PovtorTask(){
-        $shm_key = ftok(__FILE__, 't');
-        $shm_id = shmop_open($shm_key, "c", 0644, 100);
-    }*/
 
-    public function SeletDb(){
+    public function DataFromVendmax($idtask){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT Operatorid,Name,Password,connection_string,SQL_ZAP FROM Operator
-                  JOIN jobscheduler on jobscheduler.userid =  Operator.Operatorid
-                  WHERE jobscheduler.id = $this->idtask"
+            "SELECT JobScheduler.id,Operatorid,Name,Password,connection_string,SQL_ZAP FROM Operator
+                  JOIN JobScheduler on JobScheduler.userid =  Operator.Operatorid
+                  WHERE JobScheduler.id = $idtask"
         );
         $row = mysqli_fetch_assoc($result);
-        return $row;
+        try {
+            if (!empty($row)) {
+                return $row;
+            } else {
+                throw new Exception('Response from Jobscheduler and OPerator null #' . $this-$idtask);
+            }
+        }catch(Exception $e){
+           echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
     }
     protected function DeleteRepeat($NameDelete){
 
@@ -210,14 +211,19 @@ class MysqlDbConnect extends Rabbimq
             "SELECT $this->DateForMYSQL FROM TableDate WHERE id = $this->idtask"
         );
         $row = mysqli_fetch_assoc($result);
-        if(!empty($row)) {
-            foreach ($row as $date)
-                return $date;
-        }
-        else
-        {
-            $a = 'error empty response';
-            return $a;
+        try {
+            if (!empty($row)) {
+                foreach ($row as $time){
+                    return $time;
+                }
+            }
+            else
+            {
+                throw new Exception('Response of Tabledate null');
+            }
+        }catch(Exception $e){
+           echo $e->getMessage();
+            $this->log($e->getMessage());
         }
     }
 
