@@ -10,6 +10,7 @@ class MysqlDbConnect extends Rabbimq
     const NoConnect = 'No connect';
     const Time = 'now';
     const FileResponseName = __DIR__ . 'Response';
+    const FilePathCreate = __DIR__ . '/Repeat.log';
 
 
 
@@ -76,6 +77,11 @@ class MysqlDbConnect extends Rabbimq
                     }
                 }
             }
+            else
+            {
+                file_put_contents(self::FileRepeatToTask, 'Start Log' . PHP_EOL, FILE_APPEND);
+            }
+
         }
     }
 
@@ -87,7 +93,7 @@ class MysqlDbConnect extends Rabbimq
             $this->timetask = $responseOFdbTableDate;
             return $responseOFdbTableDate;
         } else {
-            $text = 'No schedule for the day job=#' . $this->idtask;
+            $text = 'No schedule for the day job #' . $this->idtask;
             $this->log($text);
             return null;
         }
