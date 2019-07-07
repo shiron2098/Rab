@@ -17,6 +17,9 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
 
     public function index($reponse){
         $this->ResponseMySQL = $reponse;
+        $results = print_r($this->ResponseMySQL,
+            true);
+        $this->log($results);
         $rabbi=new RabbiSendSqlTakeInDbMYSQL();
         try {
             $rabbi->CheckRabbit();

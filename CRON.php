@@ -24,7 +24,9 @@ class JobScheduler extends Job
         $rep2 =$newdb->SchedulerSingle();
         $db = new MysqlDbConnect();
         $a = $db->SelectDb($rep2);
-        $db->log($a);
+/*        $results = print_r($a,
+            true);
+        $this->log($results);*/
 
       /*  $b = ($a['code']['time']);
         $this->id = $a['code']['id'];

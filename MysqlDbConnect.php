@@ -10,7 +10,6 @@ class MysqlDbConnect extends Rabbimq
     const NoConnect = 'No connect';
     const Time = 'now';
     const FileResponseName = __DIR__ . 'Response';
-    const FilePathCreate = __DIR__ . '/Repeat.log';
 
 
 
@@ -52,7 +51,9 @@ class MysqlDbConnect extends Rabbimq
     {
 
         if (!empty($response) && isset($response)) {
-            if ($file = file_exists(self::FileRepeatToTask)) {
+            if ($file = !file_exists(self::FileRepeatToTask)) {
+                fopen(self::FileRepeatToTask,'a+');
+            }
                 if (!empty(file_get_contents(self::FileRepeatToTask))) {
                     $fileRepeat = file_get_contents(self::FileRepeatToTask);
                     $this->idtask = current(explode(PHP_EOL, $fileRepeat));
@@ -76,11 +77,6 @@ class MysqlDbConnect extends Rabbimq
                         }
                     }
                 }
-            }
-            else
-            {
-                file_put_contents(self::FileRepeatToTask, 'Start Log' . PHP_EOL, FILE_APPEND);
-            }
 
         }
     }
@@ -89,7 +85,7 @@ class MysqlDbConnect extends Rabbimq
     {
         $responseOFdbTableDate = $this->RepeatSingle($id);
         if (!empty($responseOFdbTableDate)) {
-            $this->TimeTaskUpdate = strtotime('+5minutes', $responseOFdbTableDate);
+            $this->TimeTaskUpdate = strtotime('+2minutes', $responseOFdbTableDate);
             $this->timetask = $responseOFdbTableDate;
             return $responseOFdbTableDate;
         } else {
@@ -106,7 +102,7 @@ class MysqlDbConnect extends Rabbimq
         );
         try {
             if ($result === true) {
-                $a = 'Update complete timestamp to TableDate MYSQL #' . $this->idtask  . PHP_EOL;
+                $a = 'Update complete timestamp to TableDate MYSQL #' . $this->idtask;
                 return $a;
             } else {
                 throw new Exception('Error update Tabledate #' . $this->DateForMYSQL . $this->idtask);
@@ -123,10 +119,10 @@ class MysqlDbConnect extends Rabbimq
         );
         try {
             if ($result === true) {
-                $a = 'Update complete timestamp to Database JobScheduler MYSQL #' .  $this->idtask . PHP_EOL;
+                $a = 'Update complete timestamp to Database JobScheduler MYSQL #' .  $this->idtask;
                 return $a;
             } else {
-                throw new Exception('Error update JobScheduler MYSQL #' . $this->idtask . PHP_EOL);
+                throw new Exception('Error update JobScheduler MYSQL #' . $this->idtask);
             }
         }catch(Exception $e){
             echo $e->getMessage();
