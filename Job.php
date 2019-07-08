@@ -73,6 +73,7 @@ class Job extends MysqlDbConnect{
                     $this->linkConnect,
                     "insert into TableDate ($this->DateForMYSQL,$userid) values ($time,$this->Userid)"
                 );
+                print_R($this->linkConnect);
                 if(!empty($this->linkConnect->error_list)){
                     $result = mysqli_query(
                         $this->linkConnect,
