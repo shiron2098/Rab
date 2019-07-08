@@ -25,7 +25,7 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
             $rabbi->CheckRabbit();
             if (isset($_SESSION['Zapros'])) {
                 if ($_SESSION['Zapros'] !== true) {
-                    $rabbi->AMQPConnect('localhost','5672','shir','1995','/');
+                    $rabbi->AMQPConnect('localhost','5672','Shiro','1995','/');
                     $rabbi->CreateExchange('Type','direct');
                     $rabbi->CreateQueue('Operator24',false, false ,false,'operator333',false);
                     $rabbi->MessageOut($this->ResponseMySQL);
