@@ -85,7 +85,7 @@ class MysqlDbConnect extends Rabbimq
     {
         $responseOFdbTableDate = $this->RepeatSingle($id);
         if (!empty($responseOFdbTableDate)) {
-            $this->TimeTaskUpdate = strtotime('+2minutes', $responseOFdbTableDate);
+            $this->TimeTaskUpdate = strtotime('+60minutes', $responseOFdbTableDate);
             $this->timetask = $responseOFdbTableDate;
             return $responseOFdbTableDate;
         } else {

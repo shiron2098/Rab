@@ -11,8 +11,8 @@ abstract class Rabbimq
     const PASSIVETrue = TRUE;
     const passivefalse = False;
     const host = 'localhost';
-    const user = 'ret';
-    const password = 'qweasd';
+    const user = 'root';
+    const password = '';
     const database = 'daws';
     const logfile = '/file.log';
     const FileRepeatToTask =  __DIR__ . '/Repeat.log';
@@ -97,6 +97,7 @@ abstract class Rabbimq
 
     public function MassivMessageTODAWS($ResponseToDb)
     {
+        print_r($ResponseToDb);
         try {
             if (isset($ResponseToDb) && !empty($ResponseToDb)) {
                 if ($ResponseToDb['ToMessage'] === 0) {
@@ -124,14 +125,14 @@ abstract class Rabbimq
     }
     public function CheckRabbit()
     {
-        $this->AMQPConnect('localhost','5672','shir','1995','/');
+        $this->AMQPConnect('localhost','5672','Shiro','1995','/');
         $this->CreateExchange('Type','direct');
         $this->CreateQueue('Operator24',false, false ,false,'operator333',false);
         /*$this->channel->queue_declare($this->queue, false, false, false, false);*/
         $result = $this->channel->basic_get($this->queue);
         $this->channel->close();
         $this->connection->close();
-        if ($_SESSION['Zapros'] === true) {
+        if (isset($_SESSION['Zapros']) === true) {
             return $_SESSION['Zapros'];
         }
         if (empty($result->body)) {
