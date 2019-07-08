@@ -37,7 +37,7 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
                 } else {
                     $rabbi->SearchRepeat($this->ResponseMySQL['id'] . PHP_EOL);
                     if(!empty($_SESSION['String'])=== true && isset($_SESSION['String']) === true) {
-                        throw new Exception('error download into rabbit because the message exists MYSQL' . $this->ResponseMySQL['id']);
+                        throw new Exception('error download into rabbit because the message exists MYSQL #' . $this->ResponseMySQL['id']);
                     }
                     else
                     {

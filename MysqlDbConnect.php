@@ -22,6 +22,7 @@ class MysqlDbConnect extends Rabbimq
     protected $linkConnect;
     private $idOperator;
     private $TableName;
+    private $TimeTaskToRepeat;
     protected $DateForMYSQL;
 
     public function __construct()
@@ -52,32 +53,39 @@ class MysqlDbConnect extends Rabbimq
 
         if (!empty($response) && isset($response)) {
             if ($file = !file_exists(self::FileRepeatToTask)) {
-                fopen(self::FileRepeatToTask,'a+');
+                fopen(self::FileRepeatToTask, 'a+');
             }
-                if (!empty(file_get_contents(self::FileRepeatToTask))) {
-                    $fileRepeat = file_get_contents(self::FileRepeatToTask);
-                    $this->idtask = current(explode(PHP_EOL, $fileRepeat));
-                    $rowOfDb = $this->DataFromVendmax($this->idtask);
-                    $this->TimeTableDate($this->idtask);
+            if (!empty(file_get_contents(self::FileRepeatToTask))) {
+                $fileRepeat = file_get_contents(self::FileRepeatToTask);
+                $this->idtask = current(explode(PHP_EOL, $fileRepeat));
+                $rowOfDb = $this->DataFromVendmax($this->idtask);
+
+                if($this->TimeTableDate($this->idtask) !== null) {
                     $response = $this->CheckDataAndSendMessage($rowOfDb);
                     if (!empty($response)) {
                         $this->DeleteRepeat($rowOfDb['id']);
                     }
-                } else {
-                    foreach ($response as $arrayTime) {
-                        $this->idtask = $arrayTime['id'];
-                        $this->startSql = $arrayTime['StartScheduler'];
-                        if ($this->startSql <= $this->Timestamp) {
-                            $response = $this->DataFromVendmax($this->idtask);
-                            $responseTimeTableDate = $this->TimeTableDate($this->idtask);
-                            if (!empty($responseTimeTableDate)) {
-                                /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
-                                $this->CheckDataAndSendMessage($response);
-                            }
+                }
+                else
+                {
+                    return null;
+                }
+
+            } else {
+                foreach ($response as $arrayTime) {
+                    $this->TimeTaskToRepeat = '+10minutes';
+                    $this->idtask = $arrayTime['id'];
+                    $this->startSql = $arrayTime['StartScheduler'];
+                    if ($this->startSql <= $this->Timestamp) {
+                        $response = $this->DataFromVendmax($this->idtask);
+                        $responseTimeTableDate = $this->TimeTableDate($this->idtask);
+                        if (!empty($responseTimeTableDate)) {
+                            /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
+                            $this->CheckDataAndSendMessage($response);
                         }
                     }
                 }
-
+            }
         }
     }
 
@@ -85,16 +93,25 @@ class MysqlDbConnect extends Rabbimq
     {
         $responseOFdbTableDate = $this->RepeatSingle($id);
         if (!empty($responseOFdbTableDate)) {
-            $this->TimeTaskUpdate = strtotime('+2minutes', $responseOFdbTableDate);
-            $this->timetask = $responseOFdbTableDate;
-            return $responseOFdbTableDate;
+            /** insert to time  */
+            $this->InsertDateTime($this->TimeTaskToRepeat);
+            $check = $this->CheckDatetime();
+            if(!empty($check)) {
+                $this->timetask = $responseOFdbTableDate;
+                return $responseOFdbTableDate;
+            }
+            else
+            {
+                $text='There is no time to repeat';
+                $this->log($text);
+                return null;
+            }
         } else {
             $text = 'No schedule for the day job #' . $this->idtask;
             $this->log($text);
             return null;
         }
     }
-
     private function UpdateBaseMYSQL(){
         $result = mysqli_query(
             $this->linkConnect,
@@ -131,29 +148,20 @@ class MysqlDbConnect extends Rabbimq
     }
 
 
-/*    protected function RowsDataTable(){
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='daws'"
-        );
-        foreach ($result as $res){
-            $MYSQLdbname[]= $res;
-        }
-        return $MYSQLdbname;
-    }*/
-
-
     protected function CheckDataAndSendMessage($row){
         try {
             if ($this->Timestamp >= $this->timetask) {
+
                 $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
                 $rabbitResponse = $Rabbi->index($row);
                 $results = print_r($rabbitResponse, true);
                 if(!empty($results)) {
+                    $this->TimeTaskUpdate = strtotime($this->TimeTaskToRepeat, $this->Timestamp);
                     $responseTableDate = $this->UpdateBaseMYSQL();
                     $this->log($responseTableDate);
                     $responseJobScheduler=$this->UpdateJobScheduler();
                     $this->log($responseJobScheduler);
+
                     return $responseJobScheduler;
                 }
             } else {
@@ -225,6 +233,47 @@ class MysqlDbConnect extends Rabbimq
             }
         }catch(Exception $e){
            echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
+    }
+    private function CheckDatetime(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT $this->DateForMYSQL FROM TableTimeDate WHERE id = $this->idtask"
+        );
+        $row = mysqli_fetch_assoc($result);
+        try {
+            if (!empty($row)) {
+                foreach ($row as $time){
+                    $this->TimeTaskToRepeat = $time;
+                    return $this->TimeTaskToRepeat;
+                }
+            }
+            else
+            {
+                throw new Exception('No repeat time');
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
+    }
+    private function InsertDateTime($Time){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "insert into TableTimeDate ($this->DateForMYSQL) values ('" . $Time . "')"
+        );
+        try {
+            if ($result === true) {
+                $text = 'Complete update record string';
+                $this->log($text);
+            }
+            else
+            {
+                throw new Exception('Insert no TableTimeDate # ' . $this->DateForMYSQL . $Time ) ;
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
             $this->log($e->getMessage());
         }
     }

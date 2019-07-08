@@ -12,7 +12,7 @@ abstract class Rabbimq
     const passivefalse = False;
     const host = 'localhost';
     const user = 'ret';
-    const password = 'qweasd';
+    const password = '123';
     const database = 'daws';
     const logfile = '/file.log';
     const FileRepeatToTask =  __DIR__ . '/Repeat.log';
@@ -131,7 +131,7 @@ abstract class Rabbimq
         $result = $this->channel->basic_get($this->queue);
         $this->channel->close();
         $this->connection->close();
-        if ($_SESSION['Zapros'] === true) {
+        if (isset($_SESSION['Zapros']) === true) {
             return $_SESSION['Zapros'];
         }
         if (empty($result->body)) {

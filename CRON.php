@@ -53,7 +53,7 @@ class JobScheduler extends Job
     public function Tointo(){
             $result = mysqli_query(
                 $this->linkConnect,
-                "insert into JobScheduler (StartScheduler,LastTake,SQL_ZAP,Userid) values ('1562350645','23423','Select * from PRereedsl',$this->Userid)"
+                "insert into JobScheduler (StartScheduler,LastTake,SQL_ZAP,Userid) values ('1562350645','23423','select pro.description from Products pro',$this->Userid)"
             );
     }
 }
