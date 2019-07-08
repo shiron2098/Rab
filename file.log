@@ -1,104 +1,77 @@
-2019-07-07 17:20:44 
-2019-07-07 17:33:02 message delivery is complete Rabbit #3
-2019-07-07 17:33:37 Update complete timestamp to TableDate MYSQL #3
-
-2019-07-07 17:33:40 Update complete timestamp to Database JobScheduler MYSQL #3
-
-2019-07-07 17:33:59 
-2019-07-07 17:35:17 TIme is not come job Select * from PRereedsl # 3
-2019-07-07 17:35:18 
-2019-07-07 17:36:51 
-2019-07-07 17:37:19 message delivery is complete Rabbit #3
-2019-07-07 17:37:20 Update complete timestamp to TableDate MYSQL #3
-
-2019-07-07 17:37:20 Update complete timestamp to Database JobScheduler MYSQL #3
-
-2019-07-07 17:37:35 
-2019-07-07 17:37:54 TIme is not come job Select * from PRereedsl # 3
-2019-07-07 17:37:55 
-2019-07-07 17:39:12 TIme is not come job Select * from PRereedsl # 3
-2019-07-07 17:39:38 TIme is not come job Select * from PRereedsl # 3
-2019-07-07 17:41:07 error download into rabbit because the message exists MYSQL3
-2019-07-07 17:41:12 
-2019-07-07 17:43:33 message delivery is complete Rabbit #3
-2019-07-07 17:43:46 Update complete timestamp to TableDate MYSQL #3
-
-2019-07-07 17:43:50 Update complete timestamp to Database JobScheduler MYSQL #3
-
-2019-07-07 17:45:26 message delivery is complete Rabbit #3
-2019-07-07 17:45:29 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 17:45:30 Update complete timestamp to Database JobScheduler MYSQL #3
-2019-07-07 17:45:42 
-2019-07-07 17:46:02 message delivery is complete Rabbit #3
-2019-07-07 17:47:17 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 17:47:19 Update complete timestamp to Database JobScheduler MYSQL #3
-2019-07-07 17:47:37 
-2019-07-07 18:13:38 message delivery is complete Rabbit #3
-2019-07-07 18:13:44 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 18:13:45 Update complete timestamp to Database JobScheduler MYSQL #3
-2019-07-07 18:13:49 
-2019-07-07 18:16:11 Array
+2019-07-08 10:20:08 Array
 (
-    [id] => 3
+    [id] => 1
     [Operatorid] => 23
     [Name] => class2
     [Password] => 2479465
     [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
-    [SQL_ZAP] => Select * from PRereedsl
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
 )
 
-2019-07-07 18:16:28 message delivery is complete Rabbit #3
-2019-07-07 18:16:30 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 18:16:30 Update complete timestamp to Database JobScheduler MYSQL #3
-2019-07-07 18:16:31 
-2019-07-07 18:16:53 Array
+2019-07-08 10:20:13 message delivery is complete Rabbit #1
+2019-07-08 10:20:15 Update complete timestamp to TableDate MYSQL #1
+2019-07-08 10:20:16 Update complete timestamp to Database JobScheduler MYSQL #1
+2019-07-08 10:20:26 stdClass Object
 (
-    [id] => 3
+    [Timestamp read from DAWS] => 08.07.2019 10:20:10
+    [timestamp sent to Rabbit] => 08.07.2019 10:20:10
+    [Code] => stdClass Object
+        (
+            [id] => 1
+            [Operatorid] => 23
+            [Name] => class2
+            [Password] => 2479465
+            [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
+            [SQL_ZAP] => select pro.code, pro.description from Products pro
+        )
+
+)
+
+2019-07-08 10:21:47 Array
+(
+    [id] => 1
     [Operatorid] => 23
     [Name] => class2
     [Password] => 2479465
     [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
-    [SQL_ZAP] => Select * from PRereedsl
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
 )
 
-2019-07-07 18:16:53 message delivery is complete Rabbit #3
-2019-07-07 18:16:55 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 18:17:00 Update complete timestamp to Database JobScheduler MYSQL #3
-2019-07-07 18:17:32 Array
+2019-07-08 10:21:49 message delivery is complete Rabbit #1
+2019-07-08 10:21:50 Update complete timestamp to TableDate MYSQL #1
+2019-07-08 10:21:50 Update complete timestamp to Database JobScheduler MYSQL #1
+2019-07-08 10:28:12 Array
 (
-    [id] => 3
+    [id] => 1
     [Operatorid] => 23
     [Name] => class2
     [Password] => 2479465
     [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
-    [SQL_ZAP] => Select * from PRereedsl
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
 )
 
-2019-07-07 18:17:40 
-2019-07-07 18:17:45 Array
+2019-07-08 10:28:18 Array
 (
-    [id] => 3
+    [id] => 1
     [Operatorid] => 23
     [Name] => class2
     [Password] => 2479465
     [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
-    [SQL_ZAP] => Select * from PRereedsl
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
 )
 
-2019-07-07 18:17:45 message delivery is complete Rabbit #3
-2019-07-07 18:17:51 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 18:17:51 Update complete timestamp to Database JobScheduler MYSQL #3
-2019-07-07 18:18:03 
-2019-07-07 18:18:30 Array
+2019-07-08 10:28:18 error download into rabbit because the message exists MYSQL1
+2019-07-08 10:28:49 Array
 (
-    [id] => 3
+    [id] => 1
     [Operatorid] => 23
     [Name] => class2
     [Password] => 2479465
     [connection_string] => http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2
-    [SQL_ZAP] => Select * from PRereedsl
+    [SQL_ZAP] => select pro.code, pro.description from Products pro
 )
 
-2019-07-07 18:18:30 message delivery is complete Rabbit #3
-2019-07-07 18:18:31 Update complete timestamp to TableDate MYSQL #3
-2019-07-07 18:18:31 Update complete timestamp to Database JobScheduler MYSQL #3
+2019-07-08 10:28:56 message delivery is complete Rabbit #1
+2019-07-08 10:28:56 Update complete timestamp to TableDate MYSQL #1
+2019-07-08 10:28:56 Update complete timestamp to Database JobScheduler MYSQL #1
+2019-07-08 10:29:24 TIme is not come job select pro.code, pro.description from Products pro # 1
