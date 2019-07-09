@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-spl_autoload('Rabbimq');
 include_once 'Rabbimq.php';
 
 
@@ -15,14 +14,15 @@ class MysqlDbConnect extends Rabbimq
 
     protected $idtask;
     protected $userid;
-    private $startSql;
-    private $TimeTaskUpdate;
+    protected $startSql;
+    protected $TimeTaskUpdate;
     protected $timetask;
-    private $Timestamp;
+    protected $Timestamp;
     protected $linkConnect;
-    private $idOperator;
-    private $TableName;
-    private $TimeTaskToRepeat;
+    protected $IdJobScheduler;
+    protected $IDDataTableRows;
+    protected $IDTimeDataTableRows;
+    protected $TimeTaskToRepeat;
     protected $DateForMYSQL;
 
     public function __construct()
@@ -57,13 +57,15 @@ class MysqlDbConnect extends Rabbimq
             }
             if (!empty(file_get_contents(self::FileRepeatToTask))) {
                 $fileRepeat = file_get_contents(self::FileRepeatToTask);
-                $this->idtask = current(explode(PHP_EOL, $fileRepeat));
-                $rowOfDb = $this->DataFromVendmax($this->idtask);
-
-                if($this->TimeTableDate($this->idtask) !== null) {
+                $this->IdJobScheduler = current(explode(PHP_EOL, $fileRepeat));
+                $this->RepeatData($this->IdJobScheduler);
+                $rowOfDb = $this->DataFromVendmax($this->IdJobScheduler);
+                if($this->TimeTableDate($this->IDDataTableRows) !== null) {
                     $response = $this->CheckDataAndSendMessage($rowOfDb);
                     if (!empty($response)) {
                         $this->DeleteRepeat($rowOfDb['id']);
+                        $text = 'Delete Repeat complete #' . $rowOfDb['id'];
+                        $this->log($text);
                     }
                 }
                 else
@@ -73,12 +75,12 @@ class MysqlDbConnect extends Rabbimq
 
             } else {
                 foreach ($response as $arrayTime) {
-                    $this->TimeTaskToRepeat = '+10minutes';
-                    $this->idtask = $arrayTime['id'];
+                    $this->IdJobScheduler = $arrayTime['id'];
                     $this->startSql = $arrayTime['StartScheduler'];
+                    $this->RepeatData($this->IdJobScheduler);
                     if ($this->startSql <= $this->Timestamp) {
-                        $response = $this->DataFromVendmax($this->idtask);
-                        $responseTimeTableDate = $this->TimeTableDate($this->idtask);
+                        $response = $this->DataFromVendmax($this->IdJobScheduler);
+                        $responseTimeTableDate = $this->TimeTableDate($this->IDDataTableRows);
                         if (!empty($responseTimeTableDate)) {
                             /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
                             $this->CheckDataAndSendMessage($response);
@@ -88,17 +90,17 @@ class MysqlDbConnect extends Rabbimq
             }
         }
     }
-123
     protected function TimeTableDate($id)
     {
         $responseOFdbTableDate = $this->RepeatSingle($id);
         if (!empty($responseOFdbTableDate)) {
             /** insert to time  */
-            $this->InsertDateTime($this->TimeTaskToRepeat);
-            $check = $this->CheckDatetime();
+            $check = $this->CheckDatetime($this->IDTimeDataTableRows);
             if(!empty($check)) {
-                $this->timetask = $responseOFdbTableDate;
-                return $responseOFdbTableDate;
+                foreach($responseOFdbTableDate as $rob) {
+                    $this->timetask = $rob;
+                    return $rob;
+                }
             }
             else
             {
@@ -112,17 +114,17 @@ class MysqlDbConnect extends Rabbimq
             return null;
         }
     }
-    private function UpdateBaseMYSQL(){
+    private function UpdateBaseTableDateMYSQL(){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE TableDate SET $this->DateForMYSQL = $this->TimeTaskUpdate WHERE id=$this->idtask"
+            "UPDATE TableDate SET $this->DateForMYSQL = $this->TimeTaskUpdate WHERE id=$this->IDDataTableRows"
         );
         try {
             if ($result === true) {
-                $a = 'Update complete timestamp to TableDate MYSQL #' . $this->idtask;
+                $a = 'Update complete timestamp to TableDate MYSQL #' . $this->IDDataTableRows;
                 return $a;
             } else {
-                throw new Exception('Error update Tabledate #' . $this->DateForMYSQL . $this->idtask);
+                throw new Exception('Error update Tabledate #' . $this->DateForMYSQL . $this->IDDataTableRows);
             }
         }catch(Exception $e){
             echo $e->getMessage();
@@ -132,14 +134,14 @@ class MysqlDbConnect extends Rabbimq
     Private function UpdateJobScheduler(){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE JobScheduler SET LastTake = $this->Timestamp WHERE id=$this->idtask"
+            "UPDATE JobScheduler SET LastTake = $this->Timestamp WHERE id=$this->IdJobScheduler"
         );
         try {
             if ($result === true) {
-                $a = 'Update complete timestamp to Database JobScheduler MYSQL #' .  $this->idtask;
+                $a = 'Update complete timestamp to Database JobScheduler MYSQL #' .  $this->IdJobScheduler;
                 return $a;
             } else {
-                throw new Exception('Error update JobScheduler MYSQL #' . $this->idtask);
+                throw new Exception('Error update JobScheduler MYSQL #' . $this->IdJobScheduler);
             }
         }catch(Exception $e){
             echo $e->getMessage();
@@ -157,7 +159,7 @@ class MysqlDbConnect extends Rabbimq
                 $results = print_r($rabbitResponse, true);
                 if(!empty($results)) {
                     $this->TimeTaskUpdate = strtotime($this->TimeTaskToRepeat, $this->Timestamp);
-                    $responseTableDate = $this->UpdateBaseMYSQL();
+                    $responseTableDate = $this->UpdateBaseTableDateMYSQL();
                     $this->log($responseTableDate);
                     $responseJobScheduler=$this->UpdateJobScheduler();
                     $this->log($responseJobScheduler);
@@ -165,7 +167,7 @@ class MysqlDbConnect extends Rabbimq
                     return $responseJobScheduler;
                 }
             } else {
-                throw new Exception('TIme is not come job ' . $row['SQL_ZAP'] . ' # ' . $this->idtask);
+                throw new Exception('TIme is not come job ' . $row['SQL_ZAP'] . ' # ' . $this->IdJobScheduler);
 
             }
         } catch (Exception $e) {
@@ -186,7 +188,7 @@ class MysqlDbConnect extends Rabbimq
             if (!empty($row)) {
                 return $row;
             } else {
-                throw new Exception('Response from Jobscheduler and OPerator null #' . $this-$idtask);
+                throw new Exception('Response from Jobscheduler and OPerator null #' . $this->IdJobScheduler);
             }
         }catch(Exception $e){
            echo $e->getMessage();
@@ -215,17 +217,15 @@ class MysqlDbConnect extends Rabbimq
         flock($fp, LOCK_UN);
         fclose($fp);
     }
-    public function RepeatSingle(){
+    private function RepeatSingle(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT $this->DateForMYSQL FROM TableDate WHERE id = $this->idtask"
+            "SELECT $this->DateForMYSQL FROM TableDate WHERE id = $this->IDDataTableRows"
         );
         $row = mysqli_fetch_assoc($result);
         try {
             if (!empty($row)) {
-                foreach ($row as $time){
-                    return $time;
-                }
+                    return $row;
             }
             else
             {
@@ -236,17 +236,16 @@ class MysqlDbConnect extends Rabbimq
             $this->log($e->getMessage());
         }
     }
-    private function CheckDatetime(){
+    private function CheckDatetime($Idjob){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT $this->DateForMYSQL FROM TableTimeDate WHERE id = $this->idtask"
+            "SELECT $this->DateForMYSQL FROM TableTimeDate WHERE id = $Idjob"
         );
         $row = mysqli_fetch_assoc($result);
         try {
             if (!empty($row)) {
                 foreach ($row as $time){
-                    $this->TimeTaskToRepeat = $time;
-                    return $this->TimeTaskToRepeat;
+                    return $this->TimeTaskToRepeat = $time;
                 }
             }
             else
@@ -258,25 +257,31 @@ class MysqlDbConnect extends Rabbimq
             $this->log($e->getMessage());
         }
     }
-    private function InsertDateTime($Time){
+    Protected function RepeatData($idtask){
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into TableTimeDate ($this->DateForMYSQL) values ('" . $Time . "')"
+            "SELECT TableDate.id as TableDateid,TableTimeDate.id as TableTimeDateid FROM JobScheduler
+                JOIN TableDate on TableDate.Jobid =  JobScheduler.id
+                join TableTimeDate ON TableTimeDate.JobTimeid = TableDate.id
+                WHERE JobScheduler.id = $idtask"
         );
+        $row = mysqli_fetch_assoc($result);
         try {
-            if ($result === true) {
-                $text = 'Complete update record string';
-                $this->log($text);
+            if (!empty($row)) {
+                $this->IDDataTableRows = $row['TableDateid'];
+                $this->IDTimeDataTableRows = $row ['TableTimeDateid'];
             }
             else
             {
-                throw new Exception('Insert no TableTimeDate # ' . $this->DateForMYSQL . $Time ) ;
+                throw new Exception('error no date ID MYSQL');
             }
         }catch(Exception $e){
             echo $e->getMessage();
             $this->log($e->getMessage());
         }
     }
+
+
 
 }
 ?>

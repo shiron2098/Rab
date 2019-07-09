@@ -19,13 +19,12 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
         $this->ResponseMySQL = $reponse;
         $results = print_r($this->ResponseMySQL,
             true);
-        $this->log($results);
         $rabbi=new RabbiSendSqlTakeInDbMYSQL();
         try {
             $rabbi->CheckRabbit();
             if (isset($_SESSION['Zapros'])) {
                 if ($_SESSION['Zapros'] !== true) {
-                    $rabbi->AMQPConnect('localhost','5672','Shiro','1995','/');
+                    $rabbi->AMQPConnect('localhost','5672','shir','1995','/');
                     $rabbi->CreateExchange('Type','direct');
                     $rabbi->CreateQueue('Operator24',false, false ,false,'operator333',false);
                     $rabbi->MessageOut($this->ResponseMySQL);
@@ -42,6 +41,8 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
                     else
                     {
                         file_put_contents(self::FileRepeatToTask, $this->ResponseMySQL['id'] . PHP_EOL, FILE_APPEND);
+                        $text = 'Put in line for addition #' . $this->ResponseMySQL['id'];
+                        $this->log($text);
                     }
                 }
             }

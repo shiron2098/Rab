@@ -1,8 +1,6 @@
 <?php
 
 $date = date('l',strtotime('now'));
-print_R($date);
-
 
 ?>
 <form action="Job.php" method="post">

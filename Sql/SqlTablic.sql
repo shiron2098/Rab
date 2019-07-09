@@ -36,9 +36,8 @@ Thursday INTEGER,
 Friday INTEGER,
 Saturday INTEGER,
 Sunday INTEGER,
-UserTimeId INTEGER,
-FOREIGN KEY (UserTimeId) REFERENCES Operator (Operatorid),
-FOREIGN KEY (id) REFERENCES JobScheduler (id)
+Jobid INTEGER NOT NULL,
+FOREIGN KEY (Jobid) REFERENCES JobScheduler (id)
 )ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE TABLE IF NOT EXISTS TableTimeDate (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -49,7 +48,8 @@ CREATE TABLE IF NOT EXISTS TableTimeDate (
     Friday VARCHAR(30),
     Saturday VARCHAR(30),
     Sunday VARCHAR(30),
-    FOREIGN KEY (id) REFERENCES TableDate (id)
+    JobTimeid INTEGER NOT NULL,
+    FOREIGN KEY (JobTimeid) REFERENCES TableDate (id)
 )ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX OperIndex on Operator(Operatorid);
 CREATE INDEX CodeAndDecriptionIndex on Product(Code,Description);

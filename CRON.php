@@ -3,60 +3,40 @@ session_start();
 include_once ('MysqlDbConnect.php');
 include_once ('RabbiSendSqlTakeInDbMYSQL.php');
 include_once ('Job.php');
+include_once ('RepeatQueue.php');
 
 
-class JobScheduler extends Job
+class JobScheduler extends RepeatQueue
 {
     protected $id;
     protected $Time;
     protected $TImeToServer;
     protected $response;
     protected $Tasks;
+    protected $TimeTaskToRepeat;
 
 
-    public function index()
+    public function index($newdb)
     {
-
-        $newdb = new JobScheduler();
         $newdb->SelectToDbJobSCheduler();
-/*      $newdb->Tointo();
-        $newdb->TimeTask();*/
+        $this->TimeTaskToRepeat = '+10minutes';
+/*        $rowJob =  $newdb->Tointo();
+
+        $rowTableDate = $newdb->TimeTask($rowJob);
+        $newdb->InsertDateTime($this->TimeTaskToRepeat,$rowTableDate);*/
         $rep2 =$newdb->SchedulerSingle();
-        $db = new MysqlDbConnect();
-        $a = $db->SelectDb($rep2);
-/*        $results = print_r($a,
-            true);
-        $this->log($results);*/
-
-      /*  $b = ($a['code']['time']);
-        $this->id = $a['code']['id'];
-        $timeNow = time();
-        $time = strtotime('+5minutes', $b) . PHP_EOL;
-        print_r(date('H:i:s', $timeNow));
-        print_r(date('H:i:s', $time));
-        try {
-            if ($timeNow >= $time) {
-                $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
-                $a = $Rabbi->index();
-                $db->log($a);
-                $response = $db->UpdateBaseMYSQL('Operator', $this->id);
-                $db->log($response);
-            } else {
-                throw new Exception('TIme is not come');
-
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            $db->log($e->getMessage());
-        }*/
+        $newdb->RepeatIndex($rep2);
+/*        $db = new MysqlDbConnect();
+        $a = $db->SelectDb($rep2);*/
     }
     public function Tointo(){
             $result = mysqli_query(
                 $this->linkConnect,
-                "insert into JobScheduler (StartScheduler,LastTake,SQL_ZAP,Userid) values ('1562350645','23423','select pro.description from Products pro',$this->Userid)"
+                "insert into JobScheduler (StartScheduler,LastTake,SQL_ZAP,Userid) values ('1562350645','23423','select pro.code,pro.description from Products pro',$this->Userid)"
             );
+            return $this->RowsNewColumnInsert();
     }
 }
 $a = new JobScheduler();
-$a->index();
+$a->index($a);
 ?>
