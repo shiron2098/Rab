@@ -52,42 +52,49 @@ class MysqlDbConnect extends Rabbimq
     {
 
         if (!empty($response) && isset($response)) {
-            if ($file = !file_exists(self::FileRepeatToTask)) {
-                fopen(self::FileRepeatToTask, 'a+');
-            }
-            if (!empty(file_get_contents(self::FileRepeatToTask))) {
-                $fileRepeat = file_get_contents(self::FileRepeatToTask);
-                $this->IdJobScheduler = current(explode(PHP_EOL, $fileRepeat));
-                $this->RepeatData($this->IdJobScheduler);
-                $rowOfDb = $this->DataFromVendmax($this->IdJobScheduler);
-                if($this->TimeTableDate($this->IDDataTableRows) !== null) {
-                    $response = $this->CheckDataAndSendMessage($rowOfDb);
-                    if (!empty($response)) {
-                        $this->DeleteRepeat($rowOfDb['id']);
-                        $text = 'Delete Repeat complete #' . $rowOfDb['id'];
-                        $this->log($text);
-                    }
-                }
-                else
-                {
-                    return null;
-                }
+            /*           if ($file = !file_exists(self::FileRepeatToTask)) {
+                           fopen(self::FileRepeatToTask, 'a+');
+                       }
+                       if (!empty(file_get_contents(self::FileRepeatToTask))) {
+                           $fileRepeat = file_get_contents(self::FileRepeatToTask);
+                           $this->IdJobScheduler = current(explode(PHP_EOL, $fileRepeat));
+                           $this->RepeatData($this->IdJobScheduler);
+                           $rowOfDb = $this->DataFromVendmax($this->IdJobScheduler);
+                           if($this->TimeTableDate($this->IDDataTableRows) !== null) {
+                               $response = $this->CheckDataAndSendMessage($rowOfDb);
+                               if (!empty($response)) {
+                                   $this->DeleteRepeat($rowOfDb['id']);
+                                   $text = 'Delete Repeat complete #' . $rowOfDb['id'];
+                                   $this->log($text);
+                               }
+                           }
+                           else
+                           {
+                               return null;
+                           }
 
-            } else {
-                foreach ($response as $arrayTime) {
-                    $this->IdJobScheduler = $arrayTime['id'];
-                    $this->startSql = $arrayTime['StartScheduler'];
-                    $this->RepeatData($this->IdJobScheduler);
-                    if ($this->startSql <= $this->Timestamp) {
-                        $response = $this->DataFromVendmax($this->IdJobScheduler);
-                        $responseTimeTableDate = $this->TimeTableDate($this->IDDataTableRows);
-                        if (!empty($responseTimeTableDate)) {
-                            /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
-                            $this->CheckDataAndSendMessage($response);
-                        }
+                       } else {*/
+            foreach ($response as $arrayTime) {
+                $this->IdJobScheduler = $arrayTime['id'];
+                $this->startSql = $arrayTime['StartScheduler'];
+                $this->RepeatData($this->IdJobScheduler);
+                if ($this->startSql <= $this->Timestamp) {
+                    $response = $this->DataFromVendmax($this->IdJobScheduler);
+                    $responseTimeTableDate = $this->TimeTableDate($this->IDDataTableRows);
+                    if (!empty($responseTimeTableDate)) {
+                        /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
+                        $this->CheckDataAndSendMessage($response);
                     }
+                } else {
+                    $text = 'time is not STARTSQL' . $this->IdJobScheduler;
+                    $this->log($text);
                 }
             }
+        }
+        else
+        {
+            $text = '$Response null' . $this->IdJobScheduler;
+            $this->log($text);
         }
     }
     protected function TimeTableDate($id)
@@ -260,7 +267,7 @@ class MysqlDbConnect extends Rabbimq
     Protected function RepeatData($idtask){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT TableDate.id as TableDateid,TableTimeDate.id as TableTimeDateid FROM JobScheduler
+            "SELECT JobScheduler.id as JobSchedulerid,TableDate.id as TableDateid,TableTimeDate.id as TableTimeDateid FROM JobScheduler
                 JOIN TableDate on TableDate.Jobid =  JobScheduler.id
                 join TableTimeDate ON TableTimeDate.JobTimeid = TableDate.id
                 WHERE JobScheduler.id = $idtask"
@@ -268,6 +275,7 @@ class MysqlDbConnect extends Rabbimq
         $row = mysqli_fetch_assoc($result);
         try {
             if (!empty($row)) {
+                $this->IdJobScheduler = $row['JobSchedulerid'];
                 $this->IDDataTableRows = $row['TableDateid'];
                 $this->IDTimeDataTableRows = $row ['TableTimeDateid'];
             }

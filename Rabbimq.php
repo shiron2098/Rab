@@ -14,8 +14,8 @@ abstract class Rabbimq
     const user = 'ret';
     const password = '123';
     const database = 'daws';
-    const logfile = '/file.log';
-    const FileRepeatToTask =  __DIR__ . '/Repeat.log';
+    const logfile = '/log/file.log';
+    const FileRepeatToTask =  __DIR__ . '/log/Repeat.log';
 
     protected $Quire;
     protected $channel;
@@ -146,20 +146,20 @@ abstract class Rabbimq
     }
     protected function SearchRepeat($row)
     {
-        $file = self::FileRepeatToTask; // Файл
-        $string = trim($row . PHP_EOL); // Строка для записи
-        $data_file = file($file); // Считываем данные из файла
+        $file = self::FileRepeatToTask; // file
+        $string = trim($row . PHP_EOL); // string for write
+        $data_file = file($file); // Read data from file
 
-        // Функция для применения к массиву
+        // Function from application to array
 /*        function my_trim(&$item)
         {
             $item = trim($item);
         }*/
 
-        // Тут убираем пробелы по краям записей
+        // We remove spaces around the edges of the record
         /*array_walk($data_file, "my_trim");*/
 
-        // Смотрим, есть ли такая запись
+        // See if there is such a record
         if (!in_array($row, $data_file)) {
             $_SESSION['String']= false;
 

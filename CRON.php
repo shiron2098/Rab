@@ -6,7 +6,7 @@ include_once ('Job.php');
 include_once ('RepeatQueue.php');
 
 
-class JobScheduler extends RepeatQueue
+class CRON extends RepeatQueue
 {
     protected $id;
     protected $Time;
@@ -25,10 +25,13 @@ class JobScheduler extends RepeatQueue
         $rowTableDate = $newdb->TimeTask($rowJob);
         $newdb->InsertDateTime($this->TimeTaskToRepeat,$rowTableDate);*/
         $rep2 =$newdb->SchedulerSingle();
-        $newdb->RepeatIndex($rep2);
-/*        $db = new MysqlDbConnect();
-        $a = $db->SelectDb($rep2);*/
+        $db = new MysqlDbConnect();
+        $a = $db->SelectDb($rep2);
     }
+
+
+
+
     public function Tointo(){
             $result = mysqli_query(
                 $this->linkConnect,
@@ -37,6 +40,6 @@ class JobScheduler extends RepeatQueue
             return $this->RowsNewColumnInsert();
     }
 }
-$a = new JobScheduler();
+$a = new CRON();
 $a->index($a);
 ?>

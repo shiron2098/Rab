@@ -19,22 +19,21 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
         $this->ResponseMySQL = $reponse;
         $results = print_r($this->ResponseMySQL,
             true);
-        $rabbi=new RabbiSendSqlTakeInDbMYSQL();
         try {
-            $rabbi->CheckRabbit();
+            $this->CheckRabbit();
             if (isset($_SESSION['Zapros'])) {
                 if ($_SESSION['Zapros'] !== true) {
-                    $rabbi->AMQPConnect('localhost','5672','shir','1995','/');
-                    $rabbi->CreateExchange('Type','direct');
-                    $rabbi->CreateQueue('Operator24',false, false ,false,'operator333',false);
-                    $rabbi->MessageOut($this->ResponseMySQL);
+                    $this->AMQPConnect('localhost','5672','shir','1995','/');
+                    $this->CreateExchange('Type','direct');
+                    $this->CreateQueue('Operator24',false, false ,false,'operator333',false);
+                    $this->MessageOut($this->ResponseMySQL);
                     $text = 'message delivery is complete Rabbit #' . $this->ResponseMySQL['id'];
                     $_SESSION['Zapros']=true;
-                    $rabbi->log($text);
+                    $this->log($text);
 /*                   include_once('RabbitMqSendMessageDAWS.php');*/
                     return $text;
                 } else {
-                    $rabbi->SearchRepeat($this->ResponseMySQL['id'] . PHP_EOL);
+                    $this->SearchRepeat($this->ResponseMySQL['id'] . PHP_EOL);
                     if(!empty($_SESSION['String'])=== true && isset($_SESSION['String']) === true) {
                         throw new Exception('error download into rabbit because the message exists MYSQL #' . $this->ResponseMySQL['id']);
                     }
@@ -49,7 +48,7 @@ class RabbiSendSqlTakeInDbMYSQL extends Rabbimq
         }
         catch (Exception $e) {
             echo $e->getMessage();
-            $rabbi->log($e->getMessage());
+            $this->log($e->getMessage());
         }
     }
 }

@@ -22,17 +22,18 @@ class RabbitMqSendMessageDAWS extends Rabbimq
         $responseOfMYSQL = $WorkerOfDb->Index();
         $results = print_r($responseOfMYSQL,
             true);
-        $rabbi=new RabbitMqSendMessageDAWS();
-        $rabbi->log($results);
+        /*$rabbi->log($results);*/
             $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->SQL_ZAP,$responseOfMYSQL->Code->connection_string);
             $response = $DAWS->ResponseOfDbToLogFile();
             try {
                 if(!empty($response)&& isset($response)) {
                     $_SESSION['Zapros'] = false;
-                    $rabbi->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
-                    $rabbi->CreateExchange('Type', 'direct');
-                    $rabbi->CreateQueue('Type', false, false, false, 'Data', false);
-                    $rabbi->MessageOut($response);
+                    $this->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
+                    $this->CreateExchange('Type', 'direct');
+                    $this->CreateQueue('Type', false, false, false, 'Data', false);
+                    $this->MessageOut($response);
+                    $text = 'message delivery is complete RabbitDAWS #' . $this->$responseOfMYSQL['id'];
+                    $this->log($text);
                 }
                 else
                 {
@@ -42,7 +43,7 @@ class RabbitMqSendMessageDAWS extends Rabbimq
                 }
             }catch (Exception $e) {
                 echo $e->getMessage();
-                $rabbi->log($e->getMessage());
+                $this->log($e->getMessage());
             }
         }
 }
