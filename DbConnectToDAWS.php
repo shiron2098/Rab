@@ -3,6 +3,9 @@ require_once __DIR__ . '/vendor/autoload.php';
 include_once ('Rabbimq.php');
 /*
 $ad  = $aa->__getFunctions();*/
+/*'userName' => 'admin',
+            'userPassword' => "00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466",
+            'sid' => 1,*/
 
 class DbConnectToDAWS extends Rabbimq
 {
@@ -11,17 +14,19 @@ class DbConnectToDAWS extends Rabbimq
     const UrlNamespace = "http://tempuri.org/";
     const NameZip = 'code.zip';
     const PathToDbConfigurations =__DIR__;
-    protected $SqlParam;
-    protected $ParamsToAuthenticateUser = [];
-    protected $SqlParamToExecuteDbStatement = [];
+    private $SqlParam;
+    private $ParamsToAuthenticateUser = [];
+    private $SqlParamToExecuteDbStatement = [];
     protected $ResponseDB;
-    protected $boolean = 2;
+    private $boolean = 2;
     private $HeaderLocal;
     protected $rabbi;
-
+    private $Username;
+    private $User_Password;
+    private $Softprovider;
     protected $timestamp;
 
-    public function __construct($SqlParam,$HeadersLocal)
+    public function __construct($SqlParam,$HeadersLocal,$Username,$User_Password,$SoftProvider)
     {
 /*        ini_set('session.gc_maxlifetime', 315619200);
         ini_set('session.cookie_lifetime', 315619200);*/
@@ -29,12 +34,15 @@ class DbConnectToDAWS extends Rabbimq
 
         $this->SqlParam=$SqlParam;
         $this->HeaderLocal = $HeadersLocal;
+        $this->Username = $Username;
+        $this->User_Password = $User_Password;
+        $this->Softprovider = $SoftProvider;
 
 
         /** @var array ParamsForAuthenticateUser */
         $this->ParamsToAuthenticateUser = array(
-            'userName' => 'admin',
-            'userPassword' => "00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466",
+            'userName' => $this->Username,
+            'userPassword' => $this->User_Password,
             'sid' => 1,
         );
 
@@ -53,7 +61,7 @@ class DbConnectToDAWS extends Rabbimq
 
         /** @var array $connect */
 
-        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToDAWS::UrlNamespace,
+        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => $this->Softprovider,
             'trace' => TRUE,
             'exceptions' => false));
 

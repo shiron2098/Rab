@@ -6,27 +6,10 @@ Include_once 'Job.php';
 class RepeatQueue extends Job
 {
 
+
     public function __construct()
     {
-
-        $this->Timestamp = strtotime(MysqlDbConnect::Time);
-        $this->DateForMYSQL = date('l', strtotime('now'));
-
-        $this->Dbconnect();
-
-
-    }
-
-    public function Dbconnect()
-    {
-        $link = mysqli_connect(
-            self::host,
-            self::user,
-            self::password,
-            self::database
-        ) or die (MysqlDbConnect::NoConnect);
-        $this->linkConnect = $link;
-
+        parent::__construct();
     }
     public function RepeatIndex()
     {
@@ -35,10 +18,10 @@ class RepeatQueue extends Job
             }
             if (!empty(file_get_contents(self::FileRepeatToTask))) {
                 $fileRepeat = file_get_contents(self::FileRepeatToTask);
-                $this->IdJobScheduler = current(explode(PHP_EOL, $fileRepeat));
-                $this->RepeatData($this->IdJobScheduler);
-                $rowOfDb = $this->DataFromVendmax($this->IdJobScheduler);
-                if ($this->TimeTableDate($this->IDDataTableRows) !== null) {
+                $this->IDOperators = current(explode(PHP_EOL, $fileRepeat));
+                $this->RepeatData($this->IDOperators);
+                $rowOfDb = $this->DataFromVendmax($this->IDJobs);
+                if ($this->TimeTableDate($this->IDJobs) !== null) {
                     $response = $this->CheckDataAndSendMessage($rowOfDb);
                     if (!empty($response)) {
                         $this->DeleteRepeat($rowOfDb['id']);

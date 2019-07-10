@@ -13,7 +13,7 @@ abstract class Rabbimq
     const host = 'localhost';
     const user = 'ret';
     const password = '123';
-    const database = 'daws';
+    const database = 'daws2';
     const logfile = '/log/file.log';
     const FileRepeatToTask =  __DIR__ . '/log/Repeat.log';
 
@@ -63,7 +63,7 @@ abstract class Rabbimq
                 ]);
                 return $messageBody;
             } else {
-                throw new Exception('Error message from DAWS');
+                throw new Exception('Error message from RabbitMYSQL');
             }
         }catch(Exception $e){
             echo $e->getMessage();
@@ -71,6 +71,25 @@ abstract class Rabbimq
         }
     }
 
+    /////////////////////////////
+    public function MessageToDaws($Massiv){
+        try {
+            if (!empty($Massiv['timestamp'])&& isset($Massiv['timestamp'])) {
+                $messageBody = ([
+                    'Timestamp read from DAWS' => date('d.m.Y H:i:s',$Massiv['timestamp']),
+                    'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
+                    'Code' => $Massiv['code'],
+                ]);
+                return $messageBody;
+            } else {
+                throw new Exception('Error message from DAWSRabbit');
+            }
+        }catch(Exception $e){
+            echo $e->getMessage();
+            $this->log($e->getMessage());
+        }
+    }
+    /////////////////////////////
     public function MessageOut($ResponseToDb)
     {
 

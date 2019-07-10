@@ -1,56 +1,26 @@
-CREATE TABLE IF NOT EXISTS Operator (
+CREATE TABLE IF NOT EXISTS Operators (
 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-Operatorid INTEGER NOT NULL UNIQUE,
-Name VARCHAR(100) NOT NULL,
-Password varchar(100) NOT NULL,
-Softprovider VARCHAR(30) NOT NULL,
-TimeOper INTEGER NOT NULL,
-connection_string VARCHAR(255),
-DBNAME VARCHAR(15)
+Name VARCHAR(30) NOT NULL UNIQUE,
+Code VARCHAR(100) NOT NULL,
+Connection_Softprovider VARCHAR(100) NOT NULL,
+Connection_Url VARCHAR(100) NOT NULL,
+User_name VARCHAR (150) NOT NULL,
+User_password VARCHAR(150)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
-insert into Operator (Operatorid,Name,Password,Softprovider,TimeOper,connection_string,DBNAME) values ('23','class2','2479465' ,'stylesoft','1561131406','http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2','Operator');
-CREATE TABLE IF NOT EXISTS Product (
+/*insert into Operators (Name,Code,Connection_Softprovider,Connection_Url,User_name,User_password) values ('Anton','class2','Vendmax' ,'http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2','Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466');*/
+CREATE TABLE IF NOT EXISTS Jobs (
 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-Code VARCHAR(255) NOT NULL,
-Description VARCHAR(255) NOT NULL,
-TimeTaskUpdated varchar(50),
-Userid Integer NOT NULL,
-DBNAME VARCHAR(15),
-FOREIGN KEY (Userid) REFERENCES Operator (Operatorid)
+Operatorid INTEGER NOT NULL,
+Command VARCHAR(255) NOT NULL,
+last_execute_dt TIMESTAMP,
+FOREIGN KEY (Operatorid) REFERENCES Operators (id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
-insert into Product (Code,Description,TimeTaskUpdated,Userid,DBNAME) values ('rterterter','2343453','1561148406','23','Product');
-CREATE TABLE IF NOT EXISTS JobScheduler (
+/*insert into Jobs (Operatorid,Command,last_execute_dt) values ('1','select pro.code,pro.description from Products pro',now());*/
+CREATE TABLE IF NOT EXISTS job_scheduler (
 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-StartScheduler INTEGER NOT NULL,
-LastTake INTEGER,
-SQL_ZAP VARCHAR(150) UNIQUE,
-Userid INTEGER,
-FOREIGN KEY (Userid) REFERENCES Operator (Operatorid)
+job_id INTEGER NOT NULL,
+execute_interval INTEGER,
+FOREIGN KEY (job_id) REFERENCES Jobs (id)
 )ENGINE InnoDB DEFAULT CHARSET = UTF8;
-CREATE TABLE IF NOT EXISTS TableDate (
-id INTEGER PRIMARY KEY AUTO_INCREMENT,
-Monday INTEGER,
-Tuesday INTEGER,
-Wednesday INTEGER,
-Thursday INTEGER,
-Friday INTEGER,
-Saturday INTEGER,
-Sunday INTEGER,
-Jobid INTEGER NOT NULL,
-FOREIGN KEY (Jobid) REFERENCES JobScheduler (id)
-)ENGINE InnoDB DEFAULT CHARSET = UTF8;
-CREATE TABLE IF NOT EXISTS TableTimeDate (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    Monday VARCHAR(30),
-    Tuesday VARCHAR(30),
-    Wednesday VARCHAR(30),
-    Thursday VARCHAR(30),
-    Friday VARCHAR(30),
-    Saturday VARCHAR(30),
-    Sunday VARCHAR(30),
-    JobTimeid INTEGER NOT NULL,
-    FOREIGN KEY (JobTimeid) REFERENCES TableDate (id)
-)ENGINE InnoDB DEFAULT CHARSET = UTF8;
-CREATE INDEX OperIndex on Operator(Operatorid);
-CREATE INDEX CodeAndDecriptionIndex on Product(Code,Description);
-CREATE INDEX NameAndPasswordIndex on Operator(Name,Password);
+CREATE INDEX OperIndex on Jobs(Operatorid);
+CREATE INDEX CodeAndDecriptionIndex on job_scheduler(job_id,execute_interval);

@@ -20,10 +20,10 @@ class RabbitMqSendMessageDAWS extends Rabbimq
         include_once ('WorkerReceiver1.php');
         $WorkerOfDb = new \app\WorkerReceiver1();
         $responseOfMYSQL = $WorkerOfDb->Index();
-        $results = print_r($responseOfMYSQL,
+/*        $results = print_r($responseOfMYSQL,
             true);
-        /*$rabbi->log($results);*/
-            $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->SQL_ZAP,$responseOfMYSQL->Code->connection_string);
+        $rabbi->log($results);*/
+            $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->Command,$responseOfMYSQL->Code->Connection_Url,$responseOfMYSQL->Code->User_name,$responseOfMYSQL->Code->User_password,$responseOfMYSQL->Code->Connection_Softprovider);
             $response = $DAWS->ResponseOfDbToLogFile();
             try {
                 if(!empty($response)&& isset($response)) {
@@ -32,12 +32,12 @@ class RabbitMqSendMessageDAWS extends Rabbimq
                     $this->CreateExchange('Type', 'direct');
                     $this->CreateQueue('Type', false, false, false, 'Data', false);
                     $this->MessageOut($response);
-                    $text = 'message delivery is complete RabbitDAWS #' . $this->$responseOfMYSQL['id'];
+                    $text = 'message delivery is complete RabbitDAWS #' . $responseOfMYSQL->Code->id;
                     $this->log($text);
                 }
                 else
                 {
-                    throw new Exception('error download into rabbit because the message exists DAWS');
+                    throw new Exception('error download into rabbit because the message exists DAWS' . $responseOfMYSQL->Code->id);
 
 
                 }

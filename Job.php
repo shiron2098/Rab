@@ -22,12 +22,11 @@ class Job extends MysqlDbConnect
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM Operator"
+            "SELECT * FROM Operators"
 
         );
         $row = mysqli_fetch_assoc($result);
-        $this->Userid = $row['Operatorid'];
-        $this->idtime = $row['id'];
+        $this->Userid = $row['id'];
     }
 
     public function InsertToDbJobScheduler()
@@ -101,7 +100,7 @@ class Job extends MysqlDbConnect
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT * FROM JobScheduler WHERE Userid = $this->Userid"
+            "SELECT * FROM Jobs WHERE Operatorid = $this->Userid"
         );
         if (!empty($result)) {
             foreach ($result as $date)
