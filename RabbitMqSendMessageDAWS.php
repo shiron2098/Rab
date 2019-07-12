@@ -16,36 +16,40 @@ class RabbitMqSendMessageDAWS extends Rabbimq
 {
     const NameFile = __DIR__ . "/data";
 
-    public function Connect(){
-        include_once ('WorkerReceiver1.php');
+    public function Connect()
+    {
+        include_once('WorkerReceiver1.php');
         $WorkerOfDb = new \app\WorkerReceiver1();
         $responseOfMYSQL = $WorkerOfDb->Index();
-/*        $results = print_r($responseOfMYSQL,
-            true);
-        $rabbi->log($results);*/
-            $DAWS = new DbConnectToDAWS($responseOfMYSQL->Code->Command,$responseOfMYSQL->Code->Connection_Url,$responseOfMYSQL->Code->User_name,$responseOfMYSQL->Code->User_password,$responseOfMYSQL->Code->Connection_Softprovider);
-            $response = $DAWS->ResponseOfDbToLogFile();
-            try {
-                if(!empty($response)&& isset($response)) {
-                    $_SESSION['Zapros'] = false;
-                    $this->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
-                    $this->CreateExchange('Type', 'direct');
-                    $this->CreateQueue('Type', false, false, false, 'Data', false);
-                    $this->MessageOut($response);
-                    $text = 'message delivery is complete RabbitDAWS #' . $responseOfMYSQL->Code->id;
-                    $this->log($text);
+        /*        $results = print_r($responseOfMYSQL,
+                    true);
+                $rabbi->log($results);*/
+        try {
+            foreach ($responseOfMYSQL as $array) {
+                $responseDATAMYSQL = json_decode($array);
+                if (!empty($responseDATAMYSQL) && isset($responseDATAMYSQL)) {
+                    $DAWS = new DbConnectToDAWS($responseDATAMYSQL->Code->command, $responseDATAMYSQL->Code->connection_url, $responseDATAMYSQL->Code->user_name, $responseDATAMYSQL->Code->user_password, $responseDATAMYSQL->Code->software_provider);
+                    $response = $DAWS->ResponseOfDbToLogFile();
+                    if (!empty($response) && isset($response)) {
+                        $_SESSION['Zapros'] = false;
+                        $this->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
+                        $this->CreateExchange('Type', 'direct');
+                        $this->CreateQueue('ResponseOperator#' . $responseDATAMYSQL->Code->operatorid, false, false, false, $responseDATAMYSQL->Code->name, false);
+                        $this->MessageOut($response);
+                        $text = 'message delivery is complete RabbitDAWS #' . $responseDATAMYSQL->Code->Jobsid;
+                        $this->log($text);
+                    } else {
+                        throw new Exception('error download into rabbit because the message exists DAWS' . $responseDATAMYSQL->Code->Jobsid);
+                    }
+                } else {
+                    throw new Exception('Response of mysql array null');
                 }
-                else
-                {
-                    throw new Exception('error download into rabbit because the message exists DAWS' . $responseOfMYSQL->Code->id);
-
-
-                }
-            }catch (Exception $e) {
-                echo $e->getMessage();
-                $this->log($e->getMessage());
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            $this->log($e->getMessage());
         }
+    }
 }
 $a = new RabbitMqSendMessageDAWS();
 $a->Connect();

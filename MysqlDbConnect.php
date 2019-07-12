@@ -24,6 +24,8 @@ class MysqlDbConnect extends Rabbimq
     protected $IDJob_Scheduler;
     protected $TimeTaskToRepeat;
     protected $DateForMYSQL;
+    protected $timeMYSQLRabbit;
+    protected $idfull;
 
     public function __construct()
     {
@@ -59,22 +61,28 @@ class MysqlDbConnect extends Rabbimq
                     $responseTimeTableDate = $this->TimeTableDate($this->IDJobs);
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
-                        /*     print_r(date('Y-m-d H:i:s',$responseOFdbTableDate . PHP_EOL));*/
                         $this->CheckDataAndSendMessage($response);
                     }
             }
         }
         else
         {
-            $text = '$Response null' . $this->IdJobScheduler;
+            $text = '$Response null' . $this->IDOperators;
             $this->log($text);
         }
     }
 
-    private function StringToUnix(){
+
+
+
+
+
+
+
+    protected function StringToUnix(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT last_execute_dt FROM Jobs WHERE id = $this->IDJobs"
+            "SELECT last_execute_dt FROM jobs WHERE id = $this->IDJobs"
         );
         $row = mysqli_fetch_assoc($result);
         foreach ($row as $response);
@@ -92,7 +100,7 @@ class MysqlDbConnect extends Rabbimq
                     return $rob;
                 }
         } else {
-            $text = 'No schedule for the day job #' . $this->IdJobScheduler;
+            $text = 'No schedule for the day job';
             $this->log($text);
             return null;
         }
@@ -100,9 +108,8 @@ class MysqlDbConnect extends Rabbimq
     private function UpdateJobs(){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE Jobs SET last_execute_dt = now() WHERE id=$this->IDJobs"
+            "UPDATE jobs SET last_execute_dt = now() WHERE id=$this->IDJobs"
         );
-        print_r($this->linkConnect);
         try {
             if ($result === true) {
                 $a = 'Update complete timestamp to Jobs MYSQL #' . $this->IDJobs;
@@ -139,7 +146,9 @@ class MysqlDbConnect extends Rabbimq
             if ($this->Timestamp >= $this->timetask) {
 
                 $Rabbi = new RabbiSendSqlTakeInDbMYSQL();
-                $rabbitResponse = $Rabbi->index($row);
+                $response = ['time' => $this->timeMYSQLRabbit,
+                            'code' => $row];
+                $rabbitResponse = $Rabbi->index($response);
                 $results = print_r($rabbitResponse, true);
                 if(!empty($results)) {
                     $responseTableDate = $this->UpdateJobs();
@@ -148,7 +157,7 @@ class MysqlDbConnect extends Rabbimq
                     return $responseTableDate;
                 }
             } else {
-                throw new Exception('TIme is not come job ' . $row['Command'] . ' # ' . $this->IDJobs);
+                throw new Exception('TIme is not come job ' . $row['command'] . ' # ' . $this->IDJobs);
 
             }
         } catch (Exception $e) {
@@ -160,13 +169,13 @@ class MysqlDbConnect extends Rabbimq
     protected function DataFromVendmax($idtask){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT Jobs.id,Name,code,Connection_Softprovider,Connection_Url,User_name,User_password,Jobs.Command FROM Operators
-                  JOIN Jobs on Jobs.Operatorid =  Operators.id
-                  WHERE Jobs.id = $idtask"
+            "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,software_provider,connection_url,user_name,user_password,jobs.command FROM operators
+                  JOIN jobs on jobs.operator_id =  operators.id
+                  WHERE jobs.id = $idtask"
         );
-        $row = mysqli_fetch_assoc($result);
         try {
-            if (!empty($row)) {
+            if (!empty($row = mysqli_fetch_assoc($result))) {
+                $this->timeMYSQLRabbit = time();
                 return $row;
             } else {
                 throw new Exception('Response from Jobscheduler and OPerator null #' . $this->IDOperators);
@@ -201,16 +210,15 @@ class MysqlDbConnect extends Rabbimq
     private function RepeatSingle(){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT execute_interval FROM job_scheduler WHERE id = $this->IDJobs"
+            "SELECT execute_interval FROM job_schedule WHERE id = $this->IDJobs"
         );
-        $row = mysqli_fetch_assoc($result);
         try {
-            if (!empty($row)) {
+            if (!empty($row = mysqli_fetch_assoc($result))) {
                     return $row;
             }
             else
             {
-                throw new Exception('Response of Tabledate null');
+                throw new Exception('Response of job_scheduler null');
             }
         }catch(Exception $e){
            echo $e->getMessage();
@@ -241,17 +249,18 @@ class MysqlDbConnect extends Rabbimq
     Protected function RepeatData($idtask){
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT Operators.id as Operatorsid,Jobs.id as Jobsid,job_scheduler.job_id as JobSchedulerid FROM Operators
-                JOIN Jobs on Jobs.Operatorid =  Operators.id
-                join job_scheduler ON job_scheduler.job_id = Jobs.id
-                WHERE Jobs.id = $idtask"
+            "SELECT operators.id as Operatorsid,jobs.id as Jobsid,job_schedule.job_id as JobSchedulerid FROM operators
+                JOIN jobs on jobs.operator_id =  operators.id
+                join job_schedule ON job_schedule.job_id = jobs.id
+                WHERE jobs.id = $idtask"
         );
-        $row = mysqli_fetch_assoc($result);
         try {
-            if (!empty($row)) {
-                $this->IDOperators = $row['Operatorsid'];
-                $this->IDJobs = $row['Jobsid'];
-                $this->IDJob_Scheduler = $row ['JobSchedulerid'];
+            if (!empty($result)) {
+                foreach ($result as $row ) {
+                    $this->IDOperators = $row['Operatorsid'];
+                    $this->IDJobs = $row['Jobsid'];
+                    $this->IDJob_Scheduler = $row ['JobSchedulerid'];
+                }
             }
             else
             {

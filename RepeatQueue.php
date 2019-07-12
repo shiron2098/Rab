@@ -22,10 +22,11 @@ class RepeatQueue extends Job
                 $this->RepeatData($this->IDOperators);
                 $rowOfDb = $this->DataFromVendmax($this->IDJobs);
                 if ($this->TimeTableDate($this->IDJobs) !== null) {
+                    $this->StringToUnix();
                     $response = $this->CheckDataAndSendMessage($rowOfDb);
                     if (!empty($response)) {
-                        $this->DeleteRepeat($rowOfDb['id']);
-                        $text = 'Delete Repeat complete #' . $rowOfDb['id'];
+                        $this->DeleteRepeat($rowOfDb['Jobsid']);
+                        $text = 'Delete Repeat complete #' . $rowOfDb['Jobsid'];
                         $this->log($text);
                     }
                 } else {

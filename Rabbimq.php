@@ -24,6 +24,8 @@ abstract class Rabbimq
     protected $queue;
     protected $Exchange;
     protected $routing_key;
+    private   $checktrabbitmsg;
+    private   $int;
 
 
     public function AMQPConnect($host, $port, $username, $password, $vhost)
@@ -55,11 +57,11 @@ abstract class Rabbimq
     {
 
         try {
-            if (!empty($massivData)) {
+            if (!empty($massivData)&& !empty($massivData['time'])&& isset($massivData['time'])) {
                 $messageBody = json_encode([
-                    'Timestamp read from DAWS' => date('d.m.Y H:i:s'),
+                    'Timestamp read from MYSQL' => date('d.m.Y H:i:s' , $massivData['time'] ),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
-                    'Code' => $massivData,
+                    'Code' => $massivData['code'],
                 ]);
                 return $messageBody;
             } else {
@@ -75,7 +77,7 @@ abstract class Rabbimq
     public function MessageToDaws($Massiv){
         try {
             if (!empty($Massiv['timestamp'])&& isset($Massiv['timestamp'])) {
-                $messageBody = ([
+                $messageBody = json_encode([
                     'Timestamp read from DAWS' => date('d.m.Y H:i:s',$Massiv['timestamp']),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
                     'Code' => $Massiv['code'],
@@ -93,11 +95,10 @@ abstract class Rabbimq
     public function MessageOut($ResponseToDb)
     {
 
-        if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true) {
+        if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
             $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb);
             if(!empty($ReponseFromMessage)) {
-                $msg = new AMQPMessage($this->MessageToArray($ReponseFromMessage), array('content_type' => 'text/json',
-                    'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
+                $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
                 $this->channel->close();
                 $this->connection->close();
@@ -119,7 +120,7 @@ abstract class Rabbimq
         try {
             if (isset($ResponseToDb) && !empty($ResponseToDb)) {
                 if ($ResponseToDb['ToMessage'] === 0) {
-                    return $this->ReponseFromMessage;
+                    return $ResponseToDb;
 
                 } else if ($ResponseToDb['ToMessage'] === 1) {
                     if (file_exists(RabbitMqSendMessageDAWS::NameFile)) {
@@ -143,22 +144,37 @@ abstract class Rabbimq
     }
     public function CheckRabbit()
     {
-        $this->AMQPConnect('localhost','5672','shir','1995','/');
-        $this->CreateExchange('Type','direct');
-        $this->CreateQueue('Operator24',false, false ,false,'operator333',false);
-        /*$this->channel->queue_declare($this->queue, false, false, false, false);*/
-        $result = $this->channel->basic_get($this->queue);
-        $this->channel->close();
-        $this->connection->close();
-        if (isset($_SESSION['Zapros']) === true) {
-            return $_SESSION['Zapros'];
-        }
-        if (empty($result->body)) {
+        if(!empty($this->ResponseMySQL['code']['operatorid'])) {
+            $this->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
+            $this->CreateExchange('Type', 'direct');
+            $this->CreateQueue('ConfigOperator#' . $this->ResponseMySQL['code']['operatorid'], false, false, false, $this->ResponseMySQL['code']['code'], false);
+            /*$this->channel->queue_declare($this->queue, false, false, false, false);*/
+/*            foreach ($this->channel->basic_get($this->queue) as $res) {
+                   print_r($res);
+            }*/$this->int=0;
+                while($this->int ===0) {
+                    $this->checktrabbitmsg = $result = $this->channel->basic_get($this->queue);
+                    $data = $result->body;
+                    $dataDecodeJSON = json_decode($data);
+                    if ($dataDecodeJSON->Code->command !== $this->ResponseMySQL['code']['command'] && $dataDecodeJSON->Code->Jobsid !== $this->ResponseMySQL['code']['Jobsid']) {
+                           if($dataDecodeJSON === null){
+                               $this->channel->close();
+                               $this->connection->close();
+                               return $_SESSION['Zapros'] = false;
+                           }
+                            $_SESSION['Zapros'] = false;
+                    } else {
+                            $_SESSION['Zapros'] = true;
+                            $this->int = 1;
+                             $this->channel->close();
+                            $this->connection->close();
 
-            $_SESSION['Zapros'] = False;
-        } else {
-            $_SESSION['Zapros'] = true;
-        }
+                        }
+                    }
+/*                if (isset($_SESSION['Zapros']) === true) {
+                    return $_SESSION['Zapros'];
+                }*/
+            }
     }
     public function log ($text){
         file_put_contents(__DIR__ . Rabbimq::logfile,date('Y-m-d H:i:s', strtotime('now')) ." ". $text . PHP_EOL,FILE_APPEND);

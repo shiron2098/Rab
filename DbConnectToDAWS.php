@@ -138,9 +138,6 @@ class DbConnectToDAWS extends Rabbimq
                 }
             }
         }
-        $fd = fopen("/home/shir/Documents/rab/Logi.log", 'a+');
-        fwrite($fd,'COMPLETE'. DATE("d.m.Y H:i")."\r\n");
-        fclose($fd);
     }
 }
 ?>
