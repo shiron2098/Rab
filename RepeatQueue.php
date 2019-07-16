@@ -3,41 +3,25 @@ require_once __DIR__ . '/vendor/autoload.php';
 include_once 'Rabbimq.php';
 Include_once 'Job.php';
 
-class RepeatQueue extends Job
+
+class My extends Thread
 {
-
-
-    public function __construct()
+    function run()
     {
-        parent::__construct();
-    }
-    public function RepeatIndex()
-    {
-            if ($file = !file_exists(self::FileRepeatToTask)) {
-                fopen(self::FileRepeatToTask, 'a+');
-            }
-            if (!empty(file_get_contents(self::FileRepeatToTask))) {
-                $fileRepeat = file_get_contents(self::FileRepeatToTask);
-                $this->IDOperators = current(explode(PHP_EOL, $fileRepeat));
-                $this->RepeatData($this->IDOperators);
-                $rowOfDb = $this->DataFromVendmax($this->IDJobs);
-                if ($this->TimeTableDate($this->IDJobs) !== null) {
-                    $this->StringToUnix();
-                    $response = $this->CheckDataAndSendMessage($rowOfDb);
-                    if (!empty($response)) {
-                        $this->DeleteRepeat($rowOfDb['Jobsid']);
-                        $text = 'Delete Repeat complete #' . $rowOfDb['Jobsid'];
-                        $this->log($text);
-                    }
-                } else {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
+        for ($i = 1; $i < 10; $i++) {
+            echo Thread::getCurrentThreadId() . "\n";
+            sleep(2);     // <------
         }
+    }
 }
-$new = new RepeatQueue();
-$new->RepeatIndex();
+
+for ($i = 0; $i < 2; $i++) {
+    $pool[] = new My();
+}
+
+foreach ($pool as $worker) {
+    $worker->start();
+}
+foreach ($pool as $worker) {
+    $worker->join();
+}

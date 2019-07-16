@@ -1,31 +1,38 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-spl_autoload('MysqlDbConnect');
+require_once ('Log.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 
-abstract class Rabbimq
+abstract class Rabbimq extends Log
 {
     const PASSIVETrue = TRUE;
     const passivefalse = False;
-    const host = 'localhost';
-    const user = 'ret';
-    const password = '123';
-    const database = 'daws2';
-    const logfile = '/log/file.log';
-    const FileRepeatToTask =  __DIR__ . '/log/Repeat.log';
+    const Time = 'now';
+    const hostrabbit = 'localhost';
+    const port = '5672';
+    const username = 'shir';
+    const passwordrabbit = '1995';
+    const vhost = '/';
+    const exchange = 'Type';
+    const type = 'direct';
+    const NameConfig = 'JobOperator#';
+    const NameConfigDAWS = 'ResponseOperator#';
 
-    protected $Quire;
-    protected $channel;
-    protected $connection;
-    protected $ReponseFromMessage;
-    protected $queue;
-    protected $Exchange;
-    protected $routing_key;
-    private   $checktrabbitmsg;
-    private   $int;
+    protected $timestamp;
+    private $channel;
+    private $connection;
+    private $queue;
+    private $Exchange;
+    private $routing_key;
+    private $int;
+    private $jsonresponse;
+    protected $IDOperators;
+    protected $IDJobs;
+    protected $IDJob_Scheduler;
+    private $checktrabbitmsg;
 
 
     public function AMQPConnect($host, $port, $username, $password, $vhost)
@@ -92,7 +99,7 @@ abstract class Rabbimq
         }
     }
     /////////////////////////////
-    public function MessageOut($ResponseToDb)
+    public function MessageOut($ResponseToDb,$data)
     {
 
         if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
@@ -100,20 +107,23 @@ abstract class Rabbimq
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
+                $this->logDB($data->Code->Jobsid,$this->timestamp,self::statusOK);
                 $this->channel->close();
                 $this->connection->close();
             }
         } else {
-
             $msg = new AMQPMessage($this->MessageToArray($ResponseToDb), array('content_type' => 'text/json',
                 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
             $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
             $this->channel->close();
             $this->connection->close();
         }
+
     }
-
-
+    public function time(){
+        $this->timestamp = date('Y-m-d H:i:s' ,strtotime(CheckDataMYSQL::Time));
+        return $this->timestamp;
+    }
 
     public function MassivMessageTODAWS($ResponseToDb)
     {
@@ -142,42 +152,48 @@ abstract class Rabbimq
             $this->log($e->getMessage());
         }
     }
-    public function CheckRabbit()
+    public function CheckRabbit($Mysql)
     {
-        if(!empty($this->ResponseMySQL['code']['operatorid'])) {
-            $this->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
-            $this->CreateExchange('Type', 'direct');
-            $this->CreateQueue('ConfigOperator#' . $this->ResponseMySQL['code']['operatorid'], false, false, false, $this->ResponseMySQL['code']['code'], false);
+
+       $this->DataOperators= $this->DataFromOperators($this->IDOperators);
+        if(!empty($this->DataOperators['operatorid'])) {
+            $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit,self::vhost);
+            $this->CreateExchange(self::exchange, self::type);
+            $this->CreateQueue(self::NameConfig . $this->DataOperators['operatorid'], false, false, false, $this->DataOperators['code'], false);
             /*$this->channel->queue_declare($this->queue, false, false, false, false);*/
 /*            foreach ($this->channel->basic_get($this->queue) as $res) {
                    print_r($res);
             }*/$this->int=0;
-                while($this->int ===0) {
+                while($this->int === 0) {
                     $this->checktrabbitmsg = $result = $this->channel->basic_get($this->queue);
-                    $data = $result->body;
-                    $dataDecodeJSON = json_decode($data);
-                    if ($dataDecodeJSON->Code->command !== $this->ResponseMySQL['code']['command'] && $dataDecodeJSON->Code->Jobsid !== $this->ResponseMySQL['code']['Jobsid']) {
-                           if($dataDecodeJSON === null){
-                               $this->channel->close();
-                               $this->connection->close();
-                               return $_SESSION['Zapros'] = false;
-                           }
-                            $_SESSION['Zapros'] = false;
-                    } else {
-                            $_SESSION['Zapros'] = true;
-                            $this->int = 1;
-                             $this->channel->close();
-                            $this->connection->close();
+                    if (!empty($result->body)) {
+                        $this->jsonresponse = json_decode($result->body);
+                        if (!empty($Mysql['code']['command']) && !empty($Mysql['code']['Jobsid']) && $this->jsonresponse->Code->command && $this->jsonresponse->Code->Jobsid) {
+                            if ($this->jsonresponse->Code->command !== $Mysql['code']['command'] && $this->jsonresponse->Code->Jobsid !== $Mysql['code']['Jobsid']) {
+                                if (empty($this->jsonresponse)) {
+                                    $this->channel->close();
+                                    $this->connection->close();
+                                    return $_SESSION['Zapros'] = false;
+                                }
+                                $_SESSION['Zapros'] = false;
+                            } else {
+                                $_SESSION['Zapros'] = true;
+                                $this->int = 1;
+                                $this->channel->close();
+                                $this->connection->close();
 
+                            }
                         }
+                    }else{
+                        return $_SESSION['Zapros'] = false;
                     }
+                }
+
+
 /*                if (isset($_SESSION['Zapros']) === true) {
                     return $_SESSION['Zapros'];
                 }*/
             }
-    }
-    public function log ($text){
-        file_put_contents(__DIR__ . Rabbimq::logfile,date('Y-m-d H:i:s', strtotime('now')) ." ". $text . PHP_EOL,FILE_APPEND);
     }
     protected function SearchRepeat($row)
     {

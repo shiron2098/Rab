@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS job_schedule (
     execute_interval INTEGER,
 FOREIGN KEY (job_id) REFERENCES jobs (id)
 )ENGINE InnoDB DEFAULT CHARSET = UTF8;
+CREATE TABLE OF NOT EXISTS
 CREATE INDEX OperIndex on jobs(operator_id,last_execute_dt);
 CREATE INDEX CodeAndDecriptionIndex on job_schedule(job_id,execute_interval);
 COMMIT;

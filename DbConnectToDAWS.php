@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-include_once ('Rabbimq.php');
+require_once ('Rabbimq.php');
 /*
 $ad  = $aa->__getFunctions();*/
 /*'userName' => 'admin',
@@ -14,29 +14,29 @@ class DbConnectToDAWS extends Rabbimq
     const UrlNamespace = "http://tempuri.org/";
     const NameZip = 'code.zip';
     const PathToDbConfigurations =__DIR__;
-    private $SqlParam;
-    private $ParamsToAuthenticateUser = [];
-    private $SqlParamToExecuteDbStatement = [];
+    protected $SqlParam;
+    protected $ParamsToAuthenticateUser = [];
+    protected $SqlParamToExecuteDbStatement = [];
     protected $ResponseDB;
-    private $boolean = 2;
-    private $HeaderLocal;
+    protected $boolean = 2;
+    protected $HeaderLocal;
     protected $rabbi;
-    private $Username;
-    private $User_Password;
-    private $Softprovider;
-    protected $timestamp;
+    protected $Username;
+    protected $User_Password;
+    protected $Softprovider;
 
     public function __construct($SqlParam,$HeadersLocal,$Username,$User_Password,$SoftProvider)
     {
 /*        ini_set('session.gc_maxlifetime', 315619200);
         ini_set('session.cookie_lifetime', 315619200);*/
 
-
-        $this->SqlParam=$SqlParam;
-        $this->HeaderLocal = $HeadersLocal;
-        $this->Username = $Username;
-        $this->User_Password = $User_Password;
-        $this->Softprovider = $SoftProvider;
+       if(!empty($SqlParam)&& !empty($HeadersLocal)&&!empty($Username)&&!empty($User_Password)&&!empty($SoftProvider)) {
+           $this->SqlParam = $SqlParam;
+           $this->HeaderLocal = $HeadersLocal;
+           $this->Username = $Username;
+           $this->User_Password = $User_Password;
+           $this->Softprovider = $SoftProvider;
+       }
 
 
         /** @var array ParamsForAuthenticateUser */
@@ -71,7 +71,9 @@ class DbConnectToDAWS extends Rabbimq
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
-        $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
+        if(!empty($ToParamResponseDb)) {
+            $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
+        }
         if(!empty($this->ResponseDB)){
             $this->ResponseDB;
             $this->boolean = 1;
@@ -79,14 +81,15 @@ class DbConnectToDAWS extends Rabbimq
         else
         {
             try {
-                if ($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage) {
+                if (!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage)) {
                     throw new Exception('Error message of db Daws' . PHP_EOL);
                 } else {
-                    $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response;
+                    if(!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response))
                     $this->boolean = 0;
                 }
             }catch(Exception $e){
                 echo $e->getMessage();
+                sleep(1);
 
             }
         }
