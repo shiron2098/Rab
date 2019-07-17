@@ -81,15 +81,15 @@ class DbConnectToDAWS extends Rabbimq
         else
         {
             try {
-                if (!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage)) {
+                if (!empty($ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage)) {
+                    $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage;
                     throw new Exception('Error message of db Daws' . PHP_EOL);
                 } else {
                     if(!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response))
                     $this->boolean = 0;
                 }
             }catch(Exception $e){
-                echo $e->getMessage();
-                sleep(1);
+                echo $e->getMessage();;
 
             }
         }

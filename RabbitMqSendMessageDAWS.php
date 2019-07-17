@@ -28,6 +28,7 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
                     $responseJson = json_decode($array);
                     if (!empty($responseJson) && isset($responseJson)) {
                         $responseDATAMYSQL = $this->DataFromOperators($responseJson->Code->operatorid);
+                        $this->IdOperatorsFull($responseJson->Code->Jobsid);
                         sleep(5);
                         $DAWS = new DbConnectToDAWS($responseJson->Code->command, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password'], $responseDATAMYSQL['software_provider']);
                         $response = $DAWS->ResponseOfDbToLogFile();

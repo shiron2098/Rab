@@ -95,4 +95,23 @@ abstract class MYSQL
             $this->logtext($e->getMessage());
         }
     }
+    protected function UpdateJobs()
+    {
+        $result = mysqli_query(
+            $this->linkConnect,
+            "UPDATE jobs SET last_execute_dt = now() WHERE id=$this->IDJobs"
+        );
+        try {
+            if ($result === true) {
+                $a = 'Update complete timestamp to Jobs MYSQL #' . $this->IDJobs;
+                return $a;
+            } else {
+                throw new Exception('Error update Jobs #' . $this->IDJobs);
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            $this->logtext($e->getMessage());
+        }
+    }
+
 }

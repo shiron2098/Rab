@@ -6,3 +6,4 @@ CREATE TABLE IF NOT EXISTS job_history (
     status VARCHAR (10) NOT NULL
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX IndexHistory on job_history(execute_dt,status);
+COMMIT;

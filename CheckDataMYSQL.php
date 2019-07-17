@@ -78,25 +78,6 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             return null;
         }
     }
-
-    private function UpdateJobs()
-    {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "UPDATE jobs SET last_execute_dt = now() WHERE id=$this->IDJobs"
-        );
-        try {
-            if ($result === true) {
-                $a = 'Update complete timestamp to Jobs MYSQL #' . $this->IDJobs;
-                return $a;
-            } else {
-                throw new Exception('Error update Jobs #' . $this->IDJobs);
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            $this->logtext($e->getMessage());
-        }
-    }
     protected function CheckDataAndSendMessage($row)
     {
         try {
@@ -104,14 +85,8 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 
                 $response = ['time' => $this->timeMYSQLRabbit,
                     'code' => $row];
-                $rabbitResponse = $this->SendAndCheckMessageMYSQL($response);
-                $results = print_r($rabbitResponse, true);
-                if (!empty($results)) {
-                    $responseTableDate = $this->UpdateJobs();
-                    $this->logtext($responseTableDate);
+                $this->SendAndCheckMessageMYSQL($response);
 
-                    return $responseTableDate;
-                }
             } else {
                 $this->logDB($this->IDJobs,$this->timestamp,self::statusERROR);
                 throw new Exception('TIme is not come job ' . $row['command'] . ' # ' . $this->IDJobs);
@@ -128,8 +103,9 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,jobs.command FROM operators
+            "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,command_details.execute_statement as command FROM operators
                   JOIN jobs on jobs.operator_id =  operators.id
+                  join command_details on command_details.id = jobs.id
                   WHERE jobs.id = $idtask"
         );
         try {

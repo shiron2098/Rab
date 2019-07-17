@@ -28,11 +28,11 @@ abstract class Rabbimq extends Log
     private $Exchange;
     private $routing_key;
     private $int;
-    private $jsonresponse;
+    protected $jsonresponse;
     protected $IDOperators;
     protected $IDJobs;
     protected $IDJob_Scheduler;
-    private $checktrabbitmsg;
+    protected $checktrabbitmsg;
 
 
     public function AMQPConnect($host, $port, $username, $password, $vhost)
@@ -107,9 +107,19 @@ abstract class Rabbimq extends Log
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                $this->logDB($data->Code->Jobsid,$this->timestamp,self::statusOK);
+                $responseLOG = $this->logDB($data->Code->Jobsid,$this->timestamp,self::statusOK);
                 $this->channel->close();
                 $this->connection->close();
+                if(!empty($responseLOG)){
+                    $results = print_r($responseLOG, true);
+                    if (!empty($results)) {
+                        $responseTableDate = $this->UpdateJobs();
+                        $this->logtext($responseTableDate);
+
+                        return $responseTableDate;
+                    }
+                }
+
             }
         } else {
             $msg = new AMQPMessage($this->MessageToArray($ResponseToDb), array('content_type' => 'text/json',
@@ -183,6 +193,11 @@ abstract class Rabbimq extends Log
                                 $this->connection->close();
 
                             }
+                        }else{
+                            $text= 'rabbit body null';
+                            $this->logtext($text);
+                            $this->logDB($this->IDJobs,$this->timestamp,self::statusERROR);
+                            return $_SESSION['ZApros']= true;
                         }
                     }else{
                         return $_SESSION['Zapros'] = false;

@@ -21,9 +21,13 @@ class Log extends MYSQL
                 $text = 'Log error downloads to DATABASE MYSQL';
                 $this->logtext($text);
                 }
-        }
-        else
-        {
+            if($status === static::statusOK){
+                $text = 'log downloads complete in DATABASE MYSQL';
+                return $text;
+            }else{
+                return null;
+            }
+        } else {
             $text = 'Check $id and $time and $status to logDB function';
             $this->logtext($text);
         }
