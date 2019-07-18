@@ -21,7 +21,6 @@ abstract class Rabbimq extends Log
     const NameConfig = 'JobOperator#';
     const NameConfigDAWS = 'ResponseOperator#';
 
-    protected $timestamp;
     private $channel;
     private $connection;
     private $queue;
@@ -101,16 +100,15 @@ abstract class Rabbimq extends Log
     /////////////////////////////
     public function MessageOut($ResponseToDb,$data)
     {
-
         if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
             $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb);
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                $responseLOG = $this->logDB($data->Code->Jobsid,$this->timestamp,self::statusOK);
+                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->timetasklogstart, self::statusOK);
                 $this->channel->close();
                 $this->connection->close();
-                if(!empty($responseLOG)){
+                if(!empty($responseLOG)) {
                     $results = print_r($responseLOG, true);
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
@@ -119,6 +117,7 @@ abstract class Rabbimq extends Log
                         return $responseTableDate;
                     }
                 }
+
 
             }
         } else {
@@ -196,10 +195,12 @@ abstract class Rabbimq extends Log
                         }else{
                             $text= 'rabbit body null';
                             $this->logtext($text);
-                            $this->logDB($this->IDJobs,$this->timestamp,self::statusERROR);
+                            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
                             return $_SESSION['ZApros']= true;
                         }
                     }else{
+                        $this->channel->close();
+                        $this->connection->close();
                         return $_SESSION['Zapros'] = false;
                     }
                 }

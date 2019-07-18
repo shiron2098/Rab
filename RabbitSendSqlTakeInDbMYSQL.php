@@ -33,12 +33,12 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
                         /*                   include_once('RabbitMqSendMessageDAWS.php');*/
                         return $text;
                     } else {
-                        $this->logDB($this->IDJobs,$this->timestamp,self::statusERROR);
+                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
                         throw new Exception('error download into rabbit because the message exists MYSQL #' . $this->IDJobs);
 
                         }
                     } else {
-                        $this->logDB($this->IDJobs,$this->timestamp,self::statusERROR);
+                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
                         throw new Exception('Response mysql code and id null');
                     }
                 }
@@ -47,5 +47,6 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
                 $this->logtext($e->getMessage());
             }
         }
+
     }
 }

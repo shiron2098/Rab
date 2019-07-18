@@ -81,6 +81,12 @@ class WorkerReceiver1 extends \CheckDataMYSQL
                 }
             }
         }
-        return $file;
+        if(!empty($file)) {
+            return $file;
+        }else{
+            $text = '$file array WorkerReceiver null';
+            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
+            $this->logtext($text);
+        }
     }
 }

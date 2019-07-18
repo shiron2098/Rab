@@ -1,3 +1,15 @@
 #!/bin/bash
 # this is a comment
 crontab -l | { cat; echo "* * * * * some entry2"; } | crontab -
+
+
+
+1 - select * from CUS_View каждые 120 секунд
+2 - select * from VVI_View каждые 180 секунд
+3 - select code, cat, description, cost, in_service_date, out_service_date from products каждые 60 секунд
+
+
+
+SELECT * FROM jobs
+join job_history on job_history.job_id = jobs.command_id
+where jobs.operator_id = 1
