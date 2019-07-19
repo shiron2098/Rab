@@ -105,7 +105,7 @@ abstract class Rabbimq extends Log
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->timetasklogstart, self::statusOK);
+                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->timetasklogstart, self::statusOK,'complete');
                 $this->channel->close();
                 $this->connection->close();
                 if(!empty($responseLOG)) {
@@ -113,6 +113,7 @@ abstract class Rabbimq extends Log
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
                         $this->logtext($responseTableDate);
+                        $this->UpdateOperStreams();
 
                         return $responseTableDate;
                     }
@@ -132,6 +133,19 @@ abstract class Rabbimq extends Log
     public function time(){
         $this->timestamp = date('Y-m-d H:i:s' ,strtotime(CheckDataMYSQL::Time));
         return $this->timestamp;
+    }
+    public function UpdateOperStreams(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "UPDATE operators SET streams = 0 WHERE id=$this->IDOperators"
+        );
+        if($result !== false){
+            $text = 'Update to complete streams 0';
+            $this->logtext($text);
+        }else{
+            $text = 'update error streams';
+            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+        }
     }
 
     public function MassivMessageTODAWS($ResponseToDb)
@@ -158,7 +172,7 @@ abstract class Rabbimq extends Log
             }
         }catch(Exception $e ){
             echo $e->getMessage();
-            $this->log($e->getMessage());
+            $this->logtext($e->getMessage());
         }
     }
     public function CheckRabbit($Mysql)
@@ -195,7 +209,7 @@ abstract class Rabbimq extends Log
                         }else{
                             $text= 'rabbit body null';
                             $this->logtext($text);
-                            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
+                            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
                             return $_SESSION['ZApros']= true;
                         }
                     }else{
@@ -209,7 +223,11 @@ abstract class Rabbimq extends Log
 /*                if (isset($_SESSION['Zapros']) === true) {
                     return $_SESSION['Zapros'];
                 }*/
-            }
+            }else{
+            $text= 'DataOperators(Rabbimq.php) operatorid null';
+            $this->logtext($text);
+            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+        }
     }
     protected function SearchRepeat($row)
     {

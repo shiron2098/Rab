@@ -13,3 +13,8 @@ crontab -l | { cat; echo "* * * * * some entry2"; } | crontab -
 SELECT * FROM jobs
 join job_history on job_history.job_id = jobs.command_id
 where jobs.operator_id = 1
+
+
+select * from operators
+order by id desc
+limit 1

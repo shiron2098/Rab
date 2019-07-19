@@ -13,14 +13,14 @@ class Log extends MYSQL
 
     protected $timetasklogstart;
 
-    protected function logDB($id,$timelog,$status)
+    protected function logDB($id,$timelog,$status,$text)
     {
-        if (!empty($id) && !empty($timelog) && !empty($status)) {
+        if (!empty($id) && !empty($timelog) && !empty($status)&& !empty($text)) {
         foreach ($timelog as $key => $value) {
                 if ($key == $id) {
                     $result = mysqli_query(
                         $this->linkConnect,
-                        "insert into job_history (job_id,execute_start_time_dt,status) values ('" . $id . "','" . $value . "','" . $status . "')"
+                        "insert into job_history (job_id,execute_start_time_dt,status,description) values ('" . $id . "','" . $value . "','" . $status . "','" . $text  . "')"
                     );
                     if ($result === false) {
                         $text = 'Log error downloads to DATABASE MYSQL';
@@ -36,8 +36,6 @@ class Log extends MYSQL
                 }
             }
         } else {
-            $text = 'Check $id and $time and $status to logDB function';
-            $this->logtext($text);
             return null;
         }
     }

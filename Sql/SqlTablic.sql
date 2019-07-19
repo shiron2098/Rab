@@ -9,14 +9,15 @@ CREATE TABLE IF NOT EXISTS operators (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(30) NOT NULL UNIQUE,
     code VARCHAR(100) NOT NULL,
-    software_provider INTEGER NOT NULL,
+    software_provider_id INTEGER NOT NULL,
     connection_url VARCHAR(100) NOT NULL,
+    streams TINYINT,
     user_name VARCHAR (60) NOT NULL,
     user_password VARCHAR(100) NOT NULL,
-    FOREIGN KEY (software_provider) REFERENCES  software_providers (id)
+    FOREIGN KEY (software_provider_id) REFERENCES  software_providers (id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 
-CREATE INDEX Indexoperators on operators(software_provider);
+CREATE INDEX Indexoperators on operators(software_provider_id);
 
 CREATE TABLE IF NOT EXISTS commands(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS command_details(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     software_provider_id INTEGER NOT NULL,
     command_id  INTEGER NOT NULL,
-    execute_statement VARCHAR (255) NOT NULL UNIQUE,
+    execute_statement VARCHAR (255) NOT NULL,
     FOREIGN KEY (software_provider_id) REFERENCES software_providers(id),
     FOREIGN KEY (command_id) REFERENCES commands(id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
@@ -63,6 +64,7 @@ CREATE TABLE IF NOT EXISTS job_history (
     execute_start_time_dt DATETIME NOT NULL,
     execute_end_time_dt TIMESTAMP NOT NULL,
     status VARCHAR (10) NOT NULL,
+    description VARCHAR(255) NOT NULL,
     FOREIGN KEY (job_id) REFERENCES jobs(id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX Indexjob_history on job_history(job_id,execute_start_time_dt,execute_end_time_dt,status);

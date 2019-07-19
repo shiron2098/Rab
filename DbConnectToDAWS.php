@@ -25,17 +25,16 @@ class DbConnectToDAWS extends Rabbimq
     protected $User_Password;
     protected $Softprovider;
 
-    public function __construct($SqlParam,$HeadersLocal,$Username,$User_Password,$SoftProvider)
+    public function __construct($SqlParam,$HeadersLocal,$Username,$User_Password)
     {
 /*        ini_set('session.gc_maxlifetime', 315619200);
         ini_set('session.cookie_lifetime', 315619200);*/
 
-       if(!empty($SqlParam)&& !empty($HeadersLocal)&&!empty($Username)&&!empty($User_Password)&&!empty($SoftProvider)) {
+       if(!empty($SqlParam)&& !empty($HeadersLocal)&&!empty($Username)&&!empty($User_Password)) {
            $this->SqlParam = $SqlParam;
            $this->HeaderLocal = $HeadersLocal;
            $this->Username = $Username;
            $this->User_Password = $User_Password;
-           $this->Softprovider = $SoftProvider;
        }
 
 
@@ -56,21 +55,35 @@ class DbConnectToDAWS extends Rabbimq
 
         $this->timestamp = strtotime('now');
 
+
+        $results = print_r($this->ParamsToAuthenticateUser,
+            true);
+        $results2 = print_r($this->SqlParamToExecuteDbStatement,
+            true);
+        $this->logtext($results);
+        $this->logtext($results2);
+
     }
     public function Db_Connect(){
 
         /** @var array $connect */
 
-        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => $this->Softprovider,
+        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToDAWS::UrlNamespace,
             'trace' => TRUE,
             'exceptions' => false));
 
          /**AuthenticateUser @Param array  @response Object(Status,LoginType) */
 
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
+        $results2 = print_r($connect,
+            true);
+        $this->logtext($results2);
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
+        $results2 = print_r($ToParamResponseDb,
+            true);
+        $this->logtext($results2);
         if(!empty($ToParamResponseDb)) {
             $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
         }
@@ -135,9 +148,7 @@ class DbConnectToDAWS extends Rabbimq
                     throw new  Exception('Failed to connect ' . DbConnectToDAWS::UrlNamespace);
                 } catch (Exception $e) {
                     echo $e->getMessage();
-                    $fd = fopen("/home/shir/Documents/rab/Logi.log", 'a+');
-                    fwrite($fd,$e->getMessage(). DATE("d.m.Y H:i")."\r\n");
-                    fclose($fd);
+                    $this->logtext($e->getMessage());
                 }
             }
         }

@@ -27,15 +27,28 @@ abstract class MYSQL
         if(!empty($id)) {
             $result = mysqli_query(
                 $this->linkConnect,
-                "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,software_provider,connection_url,user_name,user_password FROM operators
+                "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,connection_url,user_name,user_password FROM operators
                   JOIN jobs on jobs.operator_id =  operators.id
-                  WHERE jobs.id = $id"
+                  WHERE jobs.operator_id = $id"
             );
              $row=mysqli_fetch_assoc($result);
 
              $this->DataOperators = $row;
             return $this->DataOperators;
 
+        }
+    }
+
+    protected function SelectToDbOperatorsDAWS($id)
+    {
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT id,code FROM operators where id=$id"
+
+        );
+        FOREACH ($result as $row) {
+                $oper[] = $row;
+                return $oper;
         }
     }
 
@@ -47,9 +60,17 @@ abstract class MYSQL
 
         );
         FOREACH ($result as $row) {
-            $file[] = $row;
+            if ($row['streams'] === null || $row['streams'] == 0) {
+                $file[] = $row;
+                $id = $row['id'];
+                $result = mysqli_query(
+                    $this->linkConnect,
+                    "UPDATE operators SET streams = 1 WHERE id=$id"
+                );
+                return $file;
+            }
+
         }
-        return $file;
     }
 
     protected function JobsOperators($data)
@@ -87,7 +108,6 @@ abstract class MYSQL
                     $this->IDJob_Scheduler = $row ['JobSchedulerid'];
                 }
             } else {
-                $this->logDB($this->IDJobs, $this->timestamp, self::statusERROR);
                 throw new Exception('error no date ID MYSQL');
             }
         } catch (Exception $e) {

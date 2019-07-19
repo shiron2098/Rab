@@ -44,16 +44,18 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                     if (!empty($responseTimeTableDate)) {
                         $this->CheckDataAndSendMessage($response);
                     } else {
-                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
+                        $text = 'Time jobschedule null' . $this->IDJobs;
+                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
                     }
                 }
             }
         } else {
             $text = '$Response null' . $this->IDOperators;
             $this->logtext($text);
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
+            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+           return $this->timetasklogstart;
         }
-        return Run::complete;
+        return $this->timetasklogstart;
     }
 
 
@@ -94,8 +96,9 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                 $this->SendAndCheckMessageMYSQL($response);
 
             } else {
-                $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
-                throw new Exception('TIme is not come job ' . $row['command'] . ' # ' . $this->IDJobs);
+                $text='TIme is not come job ' . $row['command'] . ' # ' . $this->IDJobs;
+                $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                throw new Exception($text);
 
 
             }
@@ -120,8 +123,9 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                 $this->timeMYSQLRabbit = time();
                 return $row;
             } else {
-                $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
-                throw new Exception('Response from Jobscheduler and OPerator null #' . $this->IDOperators);
+                $text = 'Response from Jobscheduler and OPerator null #' . $this->IDOperators;
+                $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                throw new Exception($text);
             }
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -138,8 +142,9 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             if (!empty($row = mysqli_fetch_assoc($result))) {
                 return $row;
             } else {
-                $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
-                throw new Exception('Response of job_scheduler null');
+                $text= 'Response of job_scheduler null' . $this->IDJobs;
+                $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                throw new Exception($text);
             }
         } catch (Exception $e) {
             echo $e->getMessage();

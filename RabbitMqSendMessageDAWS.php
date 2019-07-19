@@ -16,12 +16,12 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
 
     protected $DataOperators;
 
-    public function Connect($logstart)
+    public function Connect($logstart,$id)
     {
         if (!empty($logstart) && isset($logstart)) {
             $this->timetasklogstart = $logstart;
             $WorkerOfDb = new WorkerReceiver1();
-            $responseOfRabbit = $WorkerOfDb->Index();
+            $responseOfRabbit = $WorkerOfDb->Index($id);
 
             if (!empty($responseOfRabbit)) {
                 try {
@@ -31,7 +31,7 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
                                 $responseDATAMYSQL = $this->DataFromOperators($responseJson->Code->operatorid);
                                 $this->IdOperatorsFull($responseJson->Code->Jobsid);
                                 sleep(5);
-                                $DAWS = new DbConnectToDAWS($responseJson->Code->command, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password'], $responseDATAMYSQL['software_provider']);
+                                $DAWS = new DbConnectToDAWS($responseJson->Code->command, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
                                 $response = $DAWS->ResponseOfDbToLogFile();
                                 if (!empty($response) && isset($response)) {
                                     $_SESSION['Zapros'] = false;
@@ -42,16 +42,18 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
                                     $text = 'message delivery is complete RabbitDAWS #' . $responseJson->Code->Jobsid;
                                     $this->logtext($text);
                                 } else {
-                                    $this->logDB($responseJson->Code->Jobsid, $this->timetasklogstart, self::statusERROR);
-                                    throw new Exception('error download into rabbit because the message exists DAWS' . $responseJson->Code->Jobsid);
+                                    $text = 'response server DAWS null #' . $responseJson->Code->Jobsid;
+                                    $this->logDB($responseJson->Code->Jobsid, $this->timetasklogstart, self::statusERROR,$text);
+                                    $this->logtext($text);
+                                    /*throw new Exception('error download into rabbit because the message exists DAWS' . $responseJson->Code->Jobsid);*/
                                 }
                             } else {
-                                $this->logDB($responseJson->Code->Jobsid, $this->timetasklogstart, self::statusERROR);
                                 throw new Exception('Response of mysql array null');
                             }
                         }
                 } catch (Exception $e) {
                     echo $e->getMessage();
+                    $this->logDB($responseJson->Code->Jobsid, $this->timetasklogstart, self::statusERROR,$e->getMessage());
                     $this->logtext($e->getMessage());
                 }
             }

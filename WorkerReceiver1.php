@@ -22,11 +22,11 @@ class WorkerReceiver1 extends \CheckDataMYSQL
     private $response;
     protected $file;
 
-    public function Index()
+    public function Index($id)
     {
         $connection = new AMQPStreamConnection(self::hostrabbit, self::port, self::username, self::passwordrabbit,self::vhost);
         $channel = $connection->channel();
-        $responseOper = $this->SelectToDbOperators();
+        $responseOper = $this->SelectToDbOperatorsDAWS($id);
         if (!empty($responseOper) && isset($responseOper)) {
             foreach ($responseOper as $rabbitmq) {
                 $channel->exchange_declare(self::exchange, self::type, false, false, false);
@@ -85,7 +85,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
             return $file;
         }else{
             $text = '$file array WorkerReceiver null';
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR);
+            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
             $this->logtext($text);
         }
     }

@@ -9,12 +9,19 @@ class CreateTask extends CheckDataMYSQL
     protected $commands;
     protected $softwareprovider;
 
+
+
+
+
+
+
+
     public function Tointo()
     {
-        $ret = '24';
+        $ret = '25';
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into operators (name,code,software_provider,connection_url,user_name,user_password) values ('Anton2','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2','Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
+            "insert into operators (name,code,software_provider_id,connection_url,user_name,user_password) values ('Anton','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2','Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
         );
         $this->RowsNewColumnInsert();
         $result = mysqli_query(
@@ -53,7 +60,7 @@ class CreateTask extends CheckDataMYSQL
 
     public function TointoJob_Schedule()
     {
-        $time = '180';
+        $time = '5';
         $result = mysqli_query(
             $this->linkConnect,
             "insert into job_schedule (job_id,execute_interval) values ('" . $this->IDJobs . "',$time)"
@@ -77,7 +84,17 @@ class CreateTask extends CheckDataMYSQL
             $this->linkConnect,
             "insert into commands (code,description) values ('Get VVI_View','VVI_View')"
         );
-        return $this->RowsNewColumnInsert();
+        if($result == false){
+            $result = mysqli_query(
+                $this->linkConnect,
+            "SELECT * FROM commands WHERE code = 'Get VVI_View'"
+        );
+            foreach ($result as $res){
+                $this->commands = $res['id'];
+            }
+        }else{
+            return $this->RowsNewColumnInsert();
+        }
 
     }
 
@@ -122,7 +139,7 @@ class CreateTask extends CheckDataMYSQL
                 $this->commands = $resul;
                 return $this->commands;
             }
-        } elseif (empty ($this->IDJobs)) {
+        } elseif (empty ($this->IDJobs)|| !empty($this->IDJobs)) {
             foreach ($row as $resul) {
                 $this->IDJobs = $resul;
                 return $this->IDJobs;
