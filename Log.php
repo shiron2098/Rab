@@ -10,7 +10,7 @@ class Log extends MYSQL
     const logfile = '/log/file.log';
     const FileRepeatToTask =  __DIR__ . '/log/Repeat.log';
 
-
+    protected $timestamp;
     protected $timetasklogstart;
 
     protected function logDB($id,$timelog,$status,$text)

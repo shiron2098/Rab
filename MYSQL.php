@@ -5,13 +5,14 @@ include_once 'Rabbimq.php';
 
 abstract class MYSQL
 {
-     protected $linkConnect;
-    const host = 'localhost';
+    const host = '127.0.0.1';
     const user = 'ret';
     const password = '123';
     const database = 'daws2';
 
     protected $DataOperators;
+    protected $linkConnect;
+    protected $rows;
 
     public function Dbconnect()
     {
@@ -59,6 +60,7 @@ abstract class MYSQL
             "SELECT * FROM operators"
 
         );
+        $this->rows = $result->num_rows;
         FOREACH ($result as $row) {
             if ($row['streams'] === null || $row['streams'] == 0) {
                 $file[] = $row;
@@ -75,21 +77,23 @@ abstract class MYSQL
 
     protected function JobsOperators($data)
     {
-        foreach ($data as $dataOperators) {
-            $this->Userid = $dataOperators['id'];
-            $result = mysqli_query(
-                $this->linkConnect,
-                "SELECT * FROM jobs WHERE operator_id = $this->Userid"
-            );
-            if (!empty($result)) {
-                foreach ($result as $date)
-                    $file[$dataOperators['name']][] = $date;
-            } else {
-                $a = 'error empty response';
-                return $a;
+        if (!empty($data)) {
+            foreach ($data as $dataOperators) {
+                $this->Userid = $dataOperators['id'];
+                $result = mysqli_query(
+                    $this->linkConnect,
+                    "SELECT * FROM jobs WHERE operator_id = $this->Userid"
+                );
+                if (!empty($result)) {
+                    foreach ($result as $date)
+                        $file[$dataOperators['name']][] = $date;
+                } else {
+                    $a = 'error empty response';
+                    return $a;
+                }
             }
+            return $file;
         }
-        return $file;
     }
     Protected function IdOperatorsFull($idtask)
     {

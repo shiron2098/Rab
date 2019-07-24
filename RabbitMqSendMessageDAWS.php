@@ -12,7 +12,7 @@ use \app\WorkerReceiver1;
 
 class RabbitMqSendMessageDAWS extends WorkerReceiver1
 {
-    const NameFile = __DIR__ . "/data";
+    const NameFile = "data";
 
     protected $DataOperators;
 
@@ -30,15 +30,15 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
                             if (!empty($responseJson) && isset($responseJson)) {
                                 $responseDATAMYSQL = $this->DataFromOperators($responseJson->Code->operatorid);
                                 $this->IdOperatorsFull($responseJson->Code->Jobsid);
-                                sleep(5);
                                 $DAWS = new DbConnectToDAWS($responseJson->Code->command, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
+                                /*sleep(7);*/
                                 $response = $DAWS->ResponseOfDbToLogFile();
                                 if (!empty($response) && isset($response)) {
                                     $_SESSION['Zapros'] = false;
                                     $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
                                     $this->CreateExchange(self::exchange, self::type);
                                     $this->CreateQueue(self::NameConfigDAWS . $responseDATAMYSQL['operatorid'], false, false, false, $responseDATAMYSQL['name'], false);
-                                    $this->MessageOut($response, $responseJson);
+                                    $this->MessageOut($response, $responseJson, $DAWS->PathOfDataVendmax);
                                     $text = 'message delivery is complete RabbitDAWS #' . $responseJson->Code->Jobsid;
                                     $this->logtext($text);
                                 } else {

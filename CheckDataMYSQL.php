@@ -9,11 +9,23 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     const NoConnect = 'No connect';
     const FileResponseName = __DIR__ . 'Response';
     const complete = 'jobs complete to rabbit';
+    const PASSIVETrue = TRUE;
+    const passivefalse = False;
+    const Time = 'now';
+    const hostrabbit = 'localhost';
+    const port = '5672';
+    const username = 'shir';
+    const passwordrabbit = '1995';
+    const vhost = '/';
+    const exchange = 'Type';
+    const type = 'direct';
+    const NameConfig = 'JobOperator#';
+    const NameConfigDAWS = 'ResponseOperator#';
 
 
     protected $TimeTaskUpdate;
     protected $timetask;
-    private   $timestamp;
+    protected   $timestamp;
     protected $timetasklogstart;
     protected $TimeTaskToRepeat;
     protected $timeMYSQLRabbit;
@@ -50,7 +62,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                 }
             }
         } else {
-            $text = '$Response null' . $this->IDOperators;
+            $text = '$Response null#' . $this->IDOperators;
             $this->logtext($text);
             $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
            return $this->timetasklogstart;
@@ -96,7 +108,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                 $this->SendAndCheckMessageMYSQL($response);
 
             } else {
-                $text='TIme is not come job ' . $row['command'] . ' # ' . $this->IDJobs;
+                $text='TIme is not come job ' . $row['commandzzz'] . ' # ' . $this->IDJobs;
                 $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
                 throw new Exception($text);
 

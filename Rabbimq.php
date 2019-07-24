@@ -98,10 +98,10 @@ abstract class Rabbimq extends Log
         }
     }
     /////////////////////////////
-    public function MessageOut($ResponseToDb,$data)
+    public function MessageOut($ResponseToDb,$data,$PathOfDawsDATA)
     {
         if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
-            $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb);
+            $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb,$PathOfDawsDATA);
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
@@ -113,7 +113,6 @@ abstract class Rabbimq extends Log
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
                         $this->logtext($responseTableDate);
-                        $this->UpdateOperStreams();
 
                         return $responseTableDate;
                     }
@@ -148,7 +147,7 @@ abstract class Rabbimq extends Log
         }
     }
 
-    public function MassivMessageTODAWS($ResponseToDb)
+    public function MassivMessageTODAWS($ResponseToDb,$PathOfDawsDATA)
     {
         try {
             if (isset($ResponseToDb) && !empty($ResponseToDb)) {
@@ -156,17 +155,23 @@ abstract class Rabbimq extends Log
                     return $ResponseToDb;
 
                 } else if ($ResponseToDb['ToMessage'] === 1) {
-                    if (file_exists(RabbitMqSendMessageDAWS::NameFile)) {
-                        $filaname = RabbitMqSendMessageDAWS::NameFile;
+                    if (file_exists($PathOfDawsDATA)) {
+                        $filaname = $PathOfDawsDATA . RabbitMqSendMessageDAWS::NameFile;
+                        $this->logtext(__DIR__ .'/'. $PathOfDawsDATA);
                         $Read = file_get_contents($filaname);
                         $file = [
                             'timestamp' => $ResponseToDb['timestamp'],
                             'code' => $Read,
                         ];
                         unlink($filaname);
+                        rmdir(__DIR__ .'/'. $PathOfDawsDATA);
                         return $file;
                     } else {
-                        throw new Exception('File not create in Vendmax');
+                        $text = 'File not create in Vendmax #' . $this->IDJobs;
+                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                        throw new Exception($text);
+
+
                     }
                 }
             }

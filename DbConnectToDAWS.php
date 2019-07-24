@@ -13,7 +13,10 @@ class DbConnectToDAWS extends Rabbimq
     const HeadersLocation = "http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2";
     const UrlNamespace = "http://tempuri.org/";
     const NameZip = 'code.zip';
-    const PathToDbConfigurations =__DIR__;
+    const PathToDbConfigurations =__DIR__ . '/File/';
+
+    Public $PathOfDataVendmax;
+    private   $zip;
     protected $SqlParam;
     protected $ParamsToAuthenticateUser = [];
     protected $SqlParamToExecuteDbStatement = [];
@@ -46,44 +49,32 @@ class DbConnectToDAWS extends Rabbimq
         );
 
 
+        $this->timestamp = strtotime('now');
+
+
+    }
+    public function Db_Connect(){
+
+        /** @var array $connect */
         /** @var array SqlParamForExecuteDbStatement */
         $this->SqlParamToExecuteDbStatement = array("listOfRequests"=>array("ServiceCallInfo"=>array("CallType"=>"SQL","Sql"=>$this->SqlParam ,
             'Parameters'=> array('OfPairOfString' =>array('PairOfString' =>  'true')),
             'ProcessResultToXml'=> True,'HasResult' => true,'CompressResult'=> false,
             'accept-encoding' => 'deflate',"Sid"=>1)));
 
-
-        $this->timestamp = strtotime('now');
-
-
-        $results = print_r($this->ParamsToAuthenticateUser,
-            true);
-        $results2 = print_r($this->SqlParamToExecuteDbStatement,
-            true);
-        $this->logtext($results);
-        $this->logtext($results2);
-
-    }
-    public function Db_Connect(){
-
-        /** @var array $connect */
-
         $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToDAWS::UrlNamespace,
             'trace' => TRUE,
             'exceptions' => false));
 
          /**AuthenticateUser @Param array  @response Object(Status,LoginType) */
-
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
-        $results2 = print_r($connect,
-            true);
-        $this->logtext($results2);
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
+        /*sleep(5);*/
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
-        $results2 = print_r($ToParamResponseDb,
+/*        $results2 = print_r($ToParamResponseDb,
             true);
-        $this->logtext($results2);
+        $this->logtext($results2);*/
         if(!empty($ToParamResponseDb)) {
             $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
         }
@@ -106,7 +97,11 @@ class DbConnectToDAWS extends Rabbimq
 
             }
         }
-        return $this->ResponseDB;
+        do
+            if($this->ResponseDB !== null){
+                return $this->ResponseDB;
+            }while($this->Db_Connect());
+
     }
     /** Response Db_Connect Take out from archive */
     public function ResponseOfDbToLogFile()
@@ -114,17 +109,24 @@ class DbConnectToDAWS extends Rabbimq
         $ResponseDbDaws = $this->Db_Connect();
         if (isset($ResponseDbDaws) && !empty($ResponseDbDaws)) {
             if ($this->boolean === 1) {
-                file_put_contents(DbConnectToDAWS::NameZip, $ResponseDbDaws);
+                $this->zip = 'zip' . rand(100,10000);
+                file_put_contents($this->zip, $ResponseDbDaws);
                 $zip = new ZipArchive();
-                $filename = DbConnectToDAWS::NameZip;
+                $filename = $this->zip;
                 if ($zip->open($filename) === TRUE) {
-                    $zip->extractTo(DbConnectToDAWS::PathToDbConfigurations);
+                    $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToDAWS::PathToDbConfigurations;
+                    $subdir1 = $filename[0];
+                   $this->PathOfDataVendmax = $folder = 'File/' . $subdir1 . '/';
+                    if (!file_exists($folder)) {
+                        mkdir($folder, 0777, true);
+                    }
+                    $zip->extractTo($this->PathOfDataVendmax);
                     $zip->close();
                     $file = [
                         'timestamp' => $this->timestamp,
                         'ToMessage' => 1];
                     $_SESSION['FileZip'] = true;
-                    unlink($filename);
+                    unlink($this->zip);
                     return $file;
                 } else {
                     try {

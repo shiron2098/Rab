@@ -18,10 +18,10 @@ class CreateTask extends CheckDataMYSQL
 
     public function Tointo()
     {
-        $ret = '25';
+        $ret = '28';
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into operators (name,code,software_provider_id,connection_url,user_name,user_password) values ('Anton','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2','Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
+            "insert into operators (name,code,software_provider_id,connection_url,user_name,user_password) values ('vmsasha3','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=vmsasha3','Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
         );
         $this->RowsNewColumnInsert();
         $result = mysqli_query(
@@ -72,7 +72,7 @@ class CreateTask extends CheckDataMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into command_details (software_provider_id,command_id,execute_statement) values ($this->softwareprovider,$this->commands,'select * from VVI_View')"
+            "insert into command_details (software_provider_id,command_id,execute_statement) values ($this->softwareprovider,$this->commands,'select * from CUS_View')"
         );
         return $this->RowsNewColumnInsert();
 
@@ -82,12 +82,12 @@ class CreateTask extends CheckDataMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into commands (code,description) values ('Get VVI_View','VVI_View')"
+            "insert into commands (code,description) values ('Get CUS_View','CUS_View')"
         );
         if($result == false){
             $result = mysqli_query(
                 $this->linkConnect,
-            "SELECT * FROM commands WHERE code = 'Get VVI_View'"
+            "SELECT * FROM commands WHERE code = 'Get CUS_View'"
         );
             foreach ($result as $res){
                 $this->commands = $res['id'];

@@ -15,6 +15,13 @@ join job_history on job_history.job_id = jobs.command_id
 where jobs.operator_id = 1
 
 
+
+select top 1000 * from POS_View
+select top 1000 * from LOC_View
+select top 1000 * from VEQ_View
+select top 1000 * from NVE_View
+
+
 select * from operators
 order by id desc
 limit 1
