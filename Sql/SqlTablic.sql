@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS commands(
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX CodeIndexCommands on commands(code);
 
-CREATE TABLE IF NOT EXISTS command_details(
+/*CREATE TABLE IF NOT EXISTS command_details(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     software_provider_id INTEGER NOT NULL,
     command_id  INTEGER NOT NULL,
@@ -34,14 +34,14 @@ CREATE TABLE IF NOT EXISTS command_details(
     FOREIGN KEY (software_provider_id) REFERENCES software_providers(id),
     FOREIGN KEY (command_id) REFERENCES commands(id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
-CREATE INDEX Indexcommand_details on command_details(software_provider_id,command_id);
+CREATE INDEX Indexcommand_details on command_details(software_provider_id,command_id);*/
 
 CREATE TABLE IF NOT EXISTS jobs (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     operator_id INTEGER NOT NULL,
     last_execute_dt TIMESTAMP,
     command_id INTEGER NOT NULL,
-    FOREIGN KEY (command_id) REFERENCES command_details (id),
+    FOREIGN KEY (command_id) REFERENCES commands (id),
     FOREIGN KEY (operator_id) REFERENCES operators (id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 
@@ -65,7 +65,6 @@ CREATE TABLE IF NOT EXISTS job_history (
     execute_end_time_dt TIMESTAMP NOT NULL,
     status VARCHAR (10) NOT NULL,
     description VARCHAR(255) NOT NULL,
-    FOREIGN KEY (job_id) REFERENCES jobs(id)
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX Indexjob_history on job_history(job_id,execute_start_time_dt,execute_end_time_dt,status);
 COMMIT;

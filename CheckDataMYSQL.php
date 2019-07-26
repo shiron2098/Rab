@@ -22,10 +22,12 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     const NameConfig = 'JobOperator#';
     const NameConfigDAWS = 'ResponseOperator#';
 
-
+    private  $checkrowstime;
+    protected  $jobcheckrowtime;
     protected $TimeTaskUpdate;
     protected $timetask;
     protected   $timestamp;
+    private  $check;
     protected $timetasklogstart;
     protected $TimeTaskToRepeat;
     protected $timeMYSQLRabbit;
@@ -34,6 +36,9 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     {
 
         $this->time();
+        $this->Dbconnect();
+        $this->check = 0;
+        $this->checkrowstime=0;
         $this->Dbconnect();
 
 
@@ -45,7 +50,12 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
         if (!empty($response) && isset($response)) {
             foreach ($response as $arrayTime) {
                 foreach ($arrayTime as $data) {
-                   $this->timestamp = Date('Y-m-d H:i:s', time());
+                    $this->check++;
+/*                   $this->timestamp = Date('Y-m-d H:i:s', time());*/
+                    /*$date = new DateTime('now');*/
+
+                   $this->timestamp =  DateTime::createFromFormat( 'U.u', sprintf('%.f', microtime(true)) )->format('Y-m-d H:i:s.u');
+                 /*   $this->timestamp = $date->format('Y-m-d H:i:s.u');*/
                    $file[$data ['command_id']]= $this->timestamp;
                    $this->timetasklogstart= $file;
                     $this->IDOperators = $data['id'];
@@ -66,6 +76,9 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             $this->logtext($text);
             $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
            return $this->timetasklogstart;
+        }
+        if($this->check === $this->checkrowstime){
+            $this->UpdateOperStreamsUp();
         }
         return $this->timetasklogstart;
     }
@@ -106,13 +119,11 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                 $response = ['time' => $this->timeMYSQLRabbit,
                     'code' => $row];
                 $this->SendAndCheckMessageMYSQL($response);
-
             } else {
                 $text='TIme is not come job ' . $row['commandzzz'] . ' # ' . $this->IDJobs;
                 $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                $this->checkrowstime++;
                 throw new Exception($text);
-
-
             }
 
         } catch (Exception $e) {
@@ -125,9 +136,10 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,command_details.execute_statement as command FROM operators
+            "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,commands.code as command,software_providers.code as software_provider FROM operators
                   JOIN jobs on jobs.operator_id =  operators.id
-                  join command_details on command_details.id = jobs.id
+                  join commands on commands.id = jobs.command_id
+                  join software_providers on software_providers.id = operators.software_provider_id
                   WHERE jobs.id = $idtask"
         );
         try {

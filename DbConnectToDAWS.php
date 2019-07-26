@@ -112,6 +112,7 @@ class DbConnectToDAWS extends Rabbimq
                 $this->zip = 'zip' . rand(100,10000);
                 file_put_contents($this->zip, $ResponseDbDaws);
                 $zip = new ZipArchive();
+                sleep(2);
                 $filename = $this->zip;
                 if ($zip->open($filename) === TRUE) {
                     $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToDAWS::PathToDbConfigurations;
@@ -124,7 +125,8 @@ class DbConnectToDAWS extends Rabbimq
                     $zip->close();
                     $file = [
                         'timestamp' => $this->timestamp,
-                        'ToMessage' => 1];
+                        'ToMessage' => 1,
+                        'PathToFile' => $this->PathOfDataVendmax];
                     $_SESSION['FileZip'] = true;
                     unlink($this->zip);
                     return $file;
@@ -147,7 +149,7 @@ class DbConnectToDAWS extends Rabbimq
             else
             {
                 try {
-                    throw new  Exception('Failed to connect ' . DbConnectToDAWS::UrlNamespace);
+                    throw new  Exception('Failed to connect DAWS' . DbConnectToDAWS::UrlNamespace);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     $this->logtext($e->getMessage());

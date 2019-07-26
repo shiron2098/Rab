@@ -98,10 +98,10 @@ abstract class Rabbimq extends Log
         }
     }
     /////////////////////////////
-    public function MessageOut($ResponseToDb,$data,$PathOfDawsDATA)
+    public function MessageOut($ResponseToDb,$data)
     {
         if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
-            $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb,$PathOfDawsDATA);
+            $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb);
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
@@ -113,6 +113,7 @@ abstract class Rabbimq extends Log
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
                         $this->logtext($responseTableDate);
+
 
                         return $responseTableDate;
                     }
@@ -146,8 +147,21 @@ abstract class Rabbimq extends Log
             $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
         }
     }
+    public function UpdateOperStreamsUp(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "UPDATE operators SET streams = 2 WHERE id=$this->IDOperators"
+        );
+        if($result !== false){
+            $text = 'Update to complete streams 0';
+            $this->logtext($text);
+        }else{
+            $text = 'update error streams';
+            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+        }
+    }
 
-    public function MassivMessageTODAWS($ResponseToDb,$PathOfDawsDATA)
+    public function MassivMessageTODAWS($ResponseToDb)
     {
         try {
             if (isset($ResponseToDb) && !empty($ResponseToDb)) {
@@ -155,23 +169,26 @@ abstract class Rabbimq extends Log
                     return $ResponseToDb;
 
                 } else if ($ResponseToDb['ToMessage'] === 1) {
-                    if (file_exists($PathOfDawsDATA)) {
-                        $filaname = $PathOfDawsDATA . RabbitMqSendMessageDAWS::NameFile;
-                        $this->logtext(__DIR__ .'/'. $PathOfDawsDATA);
-                        $Read = file_get_contents($filaname);
-                        $file = [
-                            'timestamp' => $ResponseToDb['timestamp'],
-                            'code' => $Read,
-                        ];
-                        unlink($filaname);
-                        rmdir(__DIR__ .'/'. $PathOfDawsDATA);
-                        return $file;
-                    } else {
-                        $text = 'File not create in Vendmax #' . $this->IDJobs;
-                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
-                        throw new Exception($text);
+                    sleep(1);
+                    if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
+                        if (file_exists($ResponseToDb['PathToFile'])) {
+                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageDAWS::NameFile;
+                            $this->logtext(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+                            $Read = file_get_contents($filaname);
+                            $file = [
+                                'timestamp' => $ResponseToDb['timestamp'],
+                                'code' => $Read,
+                            ];
+                            unlink($filaname);
+                            rmdir(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+                            return $file;
+                        } else {
+                            $text = 'File not create in Vendmax #' . $this->IDJobs;
+                            $this->logDB($this->IDJobs, $this->timetasklogstart, self::statusERROR, $text);
+                            throw new Exception($text);
 
 
+                        }
                     }
                 }
             }
@@ -229,7 +246,7 @@ abstract class Rabbimq extends Log
                     return $_SESSION['Zapros'];
                 }*/
             }else{
-            $text= 'DataOperators(Rabbimq.php) operatorid null';
+            $text= 'DataOperators operatorid null';
             $this->logtext($text);
             $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
         }

@@ -25,6 +25,7 @@ abstract class MYSQL
         $this->linkConnect = $link;
     }
     public function DataFromOperators($id){
+        $this->Dbconnect();
         if(!empty($id)) {
             $result = mysqli_query(
                 $this->linkConnect,
@@ -137,5 +138,25 @@ abstract class MYSQL
             $this->logtext($e->getMessage());
         }
     }
+
+    protected function CheckStreamsSelect(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
+
+        );
+        $this->rows = $result->num_rows;
+        FOREACH ($result as $row) {
+
+            if ($row['streams'] === null || $row['streams'] == 1) {
+                $file[] = $row;
+            }
+            if($row['streams'] === null || $row['streams'] == 2){
+                $file[] = $row;
+            }
+        }
+        return $file;
+    }
+
 
 }

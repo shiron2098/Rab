@@ -14,6 +14,8 @@ SELECT * FROM jobs
 join job_history on job_history.job_id = jobs.command_id
 where jobs.operator_id = 1
 
+select * from VVI_View
+
 
 
 select top 1000 * from POS_View

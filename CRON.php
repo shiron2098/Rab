@@ -5,6 +5,7 @@ require_once('RabbitMqSendMessageDAWS.php');
 require_once 'MyWorker.php';
 require_once 'Mywork.php';
 require_once 'MyDataProvider.php';
+ignore_user_abort(true);
 
 
 class CRON extends CreateTask
@@ -21,15 +22,19 @@ class CRON extends CreateTask
                             $this->TointoJob_Schedule();
                         }*/
 
-       $data = $this->SelectToDbOperators();
-                $response = $this->JobsOperators($data);
-                $responseRunAndCheck = $this->RunAndCheck($response);
-               if ($responseRunAndCheck !== null) {
-                 /*  sleep(2);*/
+    $data = $this->SelectToDbOperators();
+    $response = $this->JobsOperators($data);
+    $responseRunAndCheck = $this->RunAndCheck($response);
+            sleep(2);
+            if ($responseRunAndCheck !== null) {
                     $DAWS = new RabbitMqSendMessageDAWS();
-                    $DAWS->Connect($this->timetasklogstart,$this->IDOperators);
+                   $responseDAWS = $DAWS->Connect($this->timetasklogstart,$this->IDOperators);
+                   $this->logtext($responseDAWS);
                 }
-        $this->UpdateOperStreams();
+                      sleep(2);
+               if(!empty($responseDAWS)) {
+                   $this->UpdateOperStreams();
+               }
     }
 
 }
