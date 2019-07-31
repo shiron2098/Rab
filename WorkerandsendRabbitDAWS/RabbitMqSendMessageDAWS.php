@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once('WorkerReceiver1.php');
-require_once ('DbConnectToDAWS.php');
+require_once('DbConnectToDAWS.php');
 require_once('VendmaxCommands.php');
 require_once('NayaxCommands.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;

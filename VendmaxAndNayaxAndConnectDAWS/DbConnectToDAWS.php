@@ -13,7 +13,7 @@ class DbConnectToDAWS extends Rabbimq
     const HeadersLocation = "http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2";
     const UrlNamespace = "http://tempuri.org/";
     const NameZip = 'code.zip';
-    const PathToDbConfigurations =__DIR__ . '/File/';
+    const PathToDbConfigurations = __DIR__ . '/File/';
 
     Public $PathOfDataVendmax;
     private   $zip;
