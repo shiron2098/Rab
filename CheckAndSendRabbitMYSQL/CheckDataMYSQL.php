@@ -47,7 +47,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                     $responseTimeTableDate = $this->JobScheduleTime($this->IDJobs);
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
-                       $this->CheckDataAndSendMessage($response);
+                        return $response;
                     } else {
                         $text = '[Job id #' . $this->IDJobs . ']' . 'Schedule is not defined';
                         $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
@@ -99,7 +99,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 
                 $response = ['time' => $this->timeMYSQLRabbit,
                     'code' => $row];
-             $responseSendAndCheckMessageMYSQL = $this->SendAndCheckMessageMYSQL($response);
+             $this->SendAndCheckMessageMYSQL($response);
             } else {
                 $text='Task tried to be performed out of schedule ' . $row['command'] . '#' . $this->IDJobs;
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
