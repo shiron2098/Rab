@@ -1,8 +1,9 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-include_once 'Rabbimq.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+include_once 'AbstractClass/Rabbimq.php';
 
-
+/*require_once __DIR__ . '/vendor/autoload.php';
+include_once 'Rabbimq.php';*/
 abstract class MYSQL
 {
     const host = '127.0.0.1';

@@ -3,9 +3,9 @@
 use app\WorkerReceiver1;
 use app\generic_command_interface;
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once "generic_command_interface.php";
-include_once('DbConnectToDAWS.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once "Interface/generic_command_interface.php";
+include_once('VendmaxAndNayaxAndConnectDAWS/DbConnectToDAWS.php');
 
 
 class VendmaxCommands extends DbConnectToDAWS implements generic_command_interface

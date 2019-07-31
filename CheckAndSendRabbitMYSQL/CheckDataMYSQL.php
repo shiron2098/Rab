@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 include_once 'RabbitSendSqlTakeInDbMYSQL.php';
 
 
@@ -99,7 +99,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 
                 $response = ['time' => $this->timeMYSQLRabbit,
                     'code' => $row];
-             $this->SendAndCheckMessageMYSQL($response);
+             return $response;
             } else {
                 $text='Task tried to be performed out of schedule ' . $row['command'] . '#' . $this->IDJobs;
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);

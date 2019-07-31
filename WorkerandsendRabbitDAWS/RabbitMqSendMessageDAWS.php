@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once('WorkerReceiver1.php');
-require_once('DbConnectToDAWS.php');
-require_once('VendmaxCommands.php');
-require_once('NayaxCommands.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once('WorkerandsendRabbitDAWS/WorkerReceiver1.php');
+require_once('VendmaxAndNayaxAndConnectDAWS/DbConnectToDAWS.php');
+require_once('VendmaxAndNayaxAndConnectDAWS/VendmaxCommands.php');
+require_once('VendmaxAndNayaxAndConnectDAWS/NayaxCommands.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
@@ -15,7 +15,6 @@ use \app\WorkerReceiver1;
 class RabbitMqSendMessageDAWS extends WorkerReceiver1
 {
     const NameFile = "data";
-    const provider = "vendmax";
 
     protected $DataOperators;
     private  $DataSql;

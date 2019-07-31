@@ -1,6 +1,6 @@
 <?php
 namespace app;
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 /*use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $connection = new AMQPStreamConnection('localhost', 5672, 'Shiro', '1995');
@@ -12,7 +12,7 @@ $a =json_decode($result->body);
 
 $channel->close();
 $connection->close();*/
-include_once('CheckDataMYSQL.php');
+include_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
 
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;

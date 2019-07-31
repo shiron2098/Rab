@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once('Rabbimq.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once('AbstractClass/Rabbimq.php');
 /*
 $ad  = $aa->__getFunctions();*/
 /*'userName' => 'admin',

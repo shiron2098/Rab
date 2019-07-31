@@ -1,11 +1,12 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once('Log.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once('LogClass/Log.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 
-
+/*require_once __DIR__ . '/vendor/autoload.php';
+require_once('Log.php');*/
 abstract class Rabbimq extends Log
 {
 /*    const PASSIVETrue = TRUE;
