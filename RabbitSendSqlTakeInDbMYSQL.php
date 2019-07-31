@@ -11,6 +11,7 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
 {
 
     protected $ResponseMySQL;
+    protected $TextOK;
 
     public function SendAndCheckMessageMYSQL($response)
     {
@@ -28,23 +29,21 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
                         $this->CreateExchange(self::exchange, self::type);
                         $this->CreateQueue(self::NameConfig . $this->IDOperators, false, false, false, $this->DataOperators['code'], false);
                         $this->MessageOut($this->ResponseMySQL,$this->IDJobs);
-                        $text = 'message delivery is complete Rabbit #' . $this->IDJobs;
+                        $this->TextOK = $text = '[Job id #' . $this->IDJobs . ']' . 'Result was delivered to Data queue successfully.';
                         $this->logtext($text);
-                        /*                   include_once('RabbitMqSendMessageDAWS.php');*/
                         return $text;
                     } else {
-                        $text = 'error download into rabbit because the message exists MYSQL #' . $this->IDJobs;
-                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                        $text = '[Job id #' . $this->IDJobs . ']' . 'Command Execution is already in progress';
+                        $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
                         throw new Exception($text . $this->IDJobs);
-
                         }
                     } else {
-                        $text='Response mysql code and id null';
-                        $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                        $text='Code and ID are NULL';
+                        $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
                         throw new Exception($text);
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception $e){
                 echo $e->getMessage();
                 $this->logtext($e->getMessage());
             }

@@ -3,6 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once('WorkerReceiver1.php');
 require_once ('DbConnectToDAWS.php');
 require_once('VendmaxCommands.php');
+require_once('NayaxCommands.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
@@ -18,12 +19,13 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
 
     protected $DataOperators;
     private  $DataSql;
+    protected  $idcolumnjob;
 
-    public function Connect($logstart,$id)
+    public function Connect($idcolumnjob_history,$id)
     {
-        if (!empty($logstart) && isset($logstart)) {
-            $this->timetasklogstart = $logstart;
+        if (!empty($idcolumnjob_history) && isset($idcolumnjob_history)) {
             $WorkerOfDb = new WorkerReceiver1();
+            $this->idcolumnjob = $idcolumnjob_history;
             $responseOfRabbit = $WorkerOfDb->Index($id);
             if (!empty($responseOfRabbit)) {
                 try {
@@ -32,48 +34,57 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
                             $responseJson = json_decode($array);
                             if (!empty($responseJson) && isset($responseJson)) {
                                 $responseDATAMYSQL = $this->DataFromOperators($responseJson->Code->operatorid);
-                                $VendmaxCommands = new VendmaxCommands($responseJson->Code->Jobsid,$responseJson->Code->operatorid,$responseJson->Code->command,$responseJson->Code->software_provider);
-                                if($responseJson->Code->software_provider == self::provider){
-                                    switch($responseJson->Code->command){
-                                        case 'Get CUS_View':
-                                            $response = $VendmaxCommands->Get_Products();
+								switch($responseJson->Code->software_provider){
+									case 'Vendmax':
+											$commands = new VendmaxCommands($responseJson->Code->Jobsid,$responseJson->Code->operatorid,$responseJson->Code->command,$responseJson->Code->software_provider);
                                             break;
 
-                                        case 'Get VVI_View':
-                                            $response = $VendmaxCommands->Get_Customers();
+                                    case 'Nayax':
+                                            $commands = new NayaxCommands($responseJson->Code->Jobsid,$responseJson->Code->operatorid,$responseJson->Code->command,$responseJson->Code->software_provider);
                                             break;
+								}
 
-                                        case 'Get code, cat, description, cost, in_service_date, out_service_date':
-                                            $response = $VendmaxCommands->Get_VendVisits();
-                                            break;
-                                        case 'Get POS_View':
-                                            $response = $VendmaxCommands->Get_Select();
-                                    }
+                                
+                                switch($responseJson->Code->command){
+                                    case 'get_products':
+                                        $response = $commands->get_products();
+                                        break;
+
+                                    case 'get_customers':
+                                        $response = $commands->get_customers();
+                                        break;
+
+                                    case 'get_points_of_sale':
+                                        $response = $commands->get_pointsofsale();
+                                        break;
+                                    case 'get_locations':
+                                        $response = $commands->get_locations();
                                 }
 
 
                                 /*sleep(7);*/
                                 if (!empty($response) && isset($response)) {
                                     $_SESSION['Zapros'] = false;
+                                    $this->TextOK = $text = '[Job id #' . $this->DataOperators['Jobsid'] . ']' . 'Result was delivered to Data queue successfully.';
                                     $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
                                     $this->CreateExchange(self::exchange, self::type);
                                     $this->CreateQueue(self::NameConfigDAWS . $responseDATAMYSQL['operatorid'], false, false, false, $responseDATAMYSQL['name'], false);
                                     $this->MessageOut($response, $responseJson);
-                                    $text = 'message delivery is complete RabbitDAWS #' . $responseJson->Code->Jobsid;
                                     $this->logtext($text);
                                 } else {
-                                    $text = 'response server DAWS null #' . $responseJson->Code->Jobsid;
-                                    $this->logDB($responseJson->Code->Jobsid, $this->timetasklogstart, self::statusERROR,$text);
+                                    $text = '[Job id #' . $responseJson->Code->Jobsid . ']' . 'Provider returned no data';
+                                    $this->logDB($responseJson->Code->Jobsid, $this->time(), self::statusERROR,$text);
                                     $this->logtext($text);
-                                    /*throw new Exception('error download into rabbit because the message exists DAWS' . $responseJson->Code->Jobsid);*/
                                 }
                             } else {
-                                throw new Exception('Response of mysql array null');
+                                $text = 'MYSQL is not responding';
+                                $this->logDB($responseJson->Code->Jobsid, $this->time(), self::statusERROR,$text);
+                                throw new Exception($text);
                             }
                         }
                 } catch (Exception $e) {
                     echo $e->getMessage();
-                    $this->logDB($responseJson->Code->Jobsid, $this->timetasklogstart, self::statusERROR,$e->getMessage());
+                    $this->logDB($responseJson->Code->Jobsid, $this->time(), self::statusERROR,$e->getMessage());
                     $this->logtext($e->getMessage());
                 }
             }else{
@@ -83,6 +94,4 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
         return $text;
     }
 }
-/*$a = new RabbitMqSendMessageDAWS();
-$a->Connect(1,1);*/
 ?>

@@ -7,40 +7,60 @@ class Log extends MYSQL
 {
     const statusOK = 'OK';
     const statusERROR = 'ERROR';
+    const statusRUN = 'RUN';
     const logfile = '/log/file.log';
-    const FileRepeatToTask =  __DIR__ . '/log/Repeat.log';
+    const FileRepeatToTask = __DIR__ . '/log/Repeat.log';
 
     protected $timestamp;
     protected $timetasklogstart;
+    protected $idcolumnjob;
     private $operratorname;
     private $commandname;
     private $software_provider;
     protected $IDJobs;
 
-    protected function logDB($id,$timelog,$status,$text)
+    protected function logDB($id, $timelog, $status, $text)
     {
         $this->LogData($id);
-        $this->IDJobs=$id;
-        if (!empty($id) && !empty($timelog) && !empty($status)&& !empty($text) && !empty($this->operratorname) && !empty ($this->commandname) && !empty($this->software_provider)) {
-        foreach ($timelog as $key => $value) {
-                if ($key == $id) {
-                    $result = mysqli_query(
-                        $this->linkConnect,
-                        "insert into job_history (job_id,command_name,operator_id,operator_name,software_provider,execute_start_time_dt,status,description) 
-                               values ('" . $id . "','". $this->commandname ."','". $this->IDOperators ."','". $this->operratorname ."','". $this->software_provider."','" . $value . "','" . $status . "','" . $text  . "')"
-                    );
-                    if ($result === false) {
-                        $text = 'Log error downloads to DATABASE MYSQL';
-                        $this->logtext($text);
-                    }
-                    if ($status === static::statusOK) {
-                        $text = 'log downloads complete in DATABASE MYSQL';
-                        $this->logtext($text);
-                        return $text;
-                    } else {
-                        return null;
+        $this->IDJobs = $id;
+        if (!empty($id) && !empty($timelog) && !empty($status) && !empty($text) && !empty($this->operratorname) && !empty ($this->commandname) && !empty($this->software_provider)) {
+            if ($status === self::statusRUN) {
+                $result = mysqli_query(
+                    $this->linkConnect,
+                    "insert into job_history (job_id,command_name,operator_id,operator_name,software_provider,execute_start_time_dt,status,description) 
+                               values ('" . $id . "','" . $this->commandname . "','" . $this->IDOperators . "','" . $this->operratorname . "','" . $this->software_provider . "','" . $timelog . "','" . $status . "','" . $text . "')"
+                );
+              $id= $this->Insertidrows();
+              $this->idcolumnjob[$this->IDJobs] = $id;
+                if ($status === self::statusRUN) {
+                    $text = 'log downloads complete in DATABASE MYSQL ';
+                    $this->logtext($text);
+                    return $text;
+                } else {
+                    return null;
+                }
+            }
+            if ($status === self::statusOK || $status === self::statusERROR) {
+                $this->time();
+                if(!empty($this->idcolumnjob)) {
+                    foreach ($this->idcolumnjob as $key => $value) {
+                        if ($key == $id)
+                            $result = mysqli_query(
+                                $this->linkConnect,
+                                "UPDATE job_history SET execute_end_time_dt = '" . $this->timestamp . "',status = '" . $status . "',description = '" . $text . "' WHERE id=$value"
+                            );
                     }
                 }
+            }
+            if ($status === static::statusOK) {
+                $text = 'log update complete in DATABASE MYSQL';
+                $this->logtext($text);
+                return $text;
+            }
+            if ($result === false || $status === self::statusERROR) {
+                $text = 'Log error downloads to DATABASE MYSQL';
+                $this->logtext($text);
+
             }
         } else {
             return null;
@@ -74,5 +94,8 @@ class Log extends MYSQL
             echo $e->getMessage();
             $this->logtext($e->getMessage());
         }
+    }
+    public function UpdateLogDb(){
+
     }
 }

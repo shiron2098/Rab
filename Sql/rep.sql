@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS job_history (
     operator_name VARCHAR(100) NOT NULL,
     software_provider VARCHAR(50) NOT NULL,
     execute_start_time_dt DATETIME(3) NOT NULL,
-    execute_end_time_dt TIMESTAMP(3) NOT NULL,
+    execute_end_time_dt DATETIME(3),
     status VARCHAR (10) NOT NULL,
     description VARCHAR(255) NOT NULL
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;

@@ -2,9 +2,6 @@
 session_start();
 require_once('CreateTask.php');
 require_once('RabbitMqSendMessageDAWS.php');
-require_once 'MyWorker.php';
-require_once 'Mywork.php';
-require_once 'MyDataProvider.php';
 
 
 class Run extends CreateTask
@@ -27,11 +24,15 @@ class Run extends CreateTask
 
         );
         $this->rows = $result->num_rows;
-        $provider = new MyDataProvider();
-        $pool = new Pool($this->rows, 'MyWorker', [$provider]);
+        for($i=0;$i<$this->rows;$i++) {
+            exec('php Inception.php > /dev/null 2>/dev/null &');
+            sleep(1);
+        }
+/*        $provider = new DataProvider();
+        $pool = new Pool($this->rows, 'Workers', [$provider]);*/
         $start = microtime(true);
-         $pool->submit(new MyWork($this->rows));
-        $pool->shutdown();
+/*         $pool->submit(new Work($this->rows));
+        $pool->shutdown();*/
         printf("Done for %.2f seconds" . PHP_EOL, microtime(true) - $start);
     }
 

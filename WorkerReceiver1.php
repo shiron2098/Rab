@@ -41,7 +41,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
                     null
                 );
 
-                echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";
+               /* echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";*/
 
                 /*      $callback = function ($msg) {
                           echo ' [x] ', $msg->body, "\n";
@@ -85,7 +85,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
             return $file;
         }else{
             $text = '$file array WorkerReceiver null';
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
             $this->logtext($text);
         }
     }

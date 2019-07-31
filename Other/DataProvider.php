@@ -1,6 +1,6 @@
 <?php
 
-class MyDataProvider extends Threaded
+class DataProvider extends Threaded
 {
     /**
      * @var int
@@ -8,12 +8,12 @@ class MyDataProvider extends Threaded
     private $total = 5;
 
     /**
-     * @var int Сколько элементов было обработано
+     * @var int
      */
     private $processed = 0;
 
     /**
-     * Переходим к следующему элементу и возвращаем его
+     *
      *
      * @return mixed
      */

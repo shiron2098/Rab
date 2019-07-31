@@ -6,8 +6,8 @@ namespace app;
 
 interface generic_command_interface{
 
-    public function Get_Products();
-    public function Get_Customers();
-    public function Get_VendVisits();
-    public function Get_Select();
+    public function get_products();
+    public function get_customers();
+    public function get_pointsofsale();
+    public function get_locations();
 }

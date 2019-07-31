@@ -10,10 +10,10 @@ include_once('DbConnectToDAWS.php');
 
 class VendmaxCommands extends DbConnectToDAWS implements generic_command_interface
 {
-    const product = "select * from CUS_View";
-    const costumer = "select top 1000 * from POS_View";
-    const findfizit = "select code, cat, description, cost, in_service_date, out_service_date from products";
-    const select = "select top 1000 * from POS_View";
+    const costumer = "select * from CUS_View";
+    const potsofsale = "select top 1000 * from POS_View";
+    const product = "select * from PRO_View";
+    const locations = "select top 1000 * from LOC_View";
 
     public $command;
     public $softwireprovider;
@@ -27,25 +27,29 @@ class VendmaxCommands extends DbConnectToDAWS implements generic_command_interfa
          $this->softwireprovider = $software_provider;
      }
 
-    private function ExecuteStatment($SQL){
+    private function ExecuteStatment($SQL)
+    {
         $responseDATAMYSQL = $this->DataFromOperators($this->IDOperators);
         $this->IdOperatorsFull($this->IDJobs);
         $DAWS = new DbConnectToDAWS($SQL, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
         $response = $DAWS->ResponseOfDbToLogFile();
         return $response;
     }
-    public function Get_Products(){
+    public function get_products()
+    {
         return $this->ExecuteStatment(VendmaxCommands::product);
     }
-    public function Get_Customers(){
+    public function get_customers()
+    {
        return $this->ExecuteStatment(VendmaxCommands::costumer);
     }
-    public function Get_VendVisits(){
-        return  $this->ExecuteStatment(VendmaxCommands::findfizit);
-    }
-    public function Get_Select()
+    public function get_pointsofsale()
     {
-        return  $this->ExecuteStatment(VendmaxCommands::select);
+        return  $this->ExecuteStatment(VendmaxCommands::potsofsale);
+    }
+    public function get_locations()
+    {
+        return  $this->ExecuteStatment(VendmaxCommands::locations);
     }
 
 }

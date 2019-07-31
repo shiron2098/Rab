@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once ('Rabbimq.php');
+require_once('Rabbimq.php');
 /*
 $ad  = $aa->__getFunctions();*/
 /*'userName' => 'admin',
@@ -87,7 +87,9 @@ class DbConnectToDAWS extends Rabbimq
             try {
                 if (!empty($ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage)) {
                     $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage;
-                    throw new Exception('Error message of db Daws' . PHP_EOL);
+                    $text = 'DAWS query execution failed';
+                    $this->logtext($text);
+                    throw new Exception($text . PHP_EOL);
                 } else {
                     if(!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response))
                     $this->boolean = 0;
@@ -132,7 +134,7 @@ class DbConnectToDAWS extends Rabbimq
                     return $file;
                 } else {
                     try {
-                        throw new  Exception('Failed to unzip zip' . DbConnectToDAWS::NameZip);
+                        throw new  Exception('Result create zip failed' . DbConnectToDAWS::NameZip);
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
@@ -149,7 +151,7 @@ class DbConnectToDAWS extends Rabbimq
             else
             {
                 try {
-                    throw new  Exception('Failed to connect DAWS' . DbConnectToDAWS::UrlNamespace);
+                    throw new  Exception('Cannot Connect to DAWS' . DbConnectToDAWS::UrlNamespace);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     $this->logtext($e->getMessage());
