@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once('WorkerReceiver1.php');
-require_once ('DbConnectToDAWS.php');
+require_once('DbConnectProvider.php');
 require_once('VendmaxCommands.php');
 require_once('NayaxCommands.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -12,7 +12,7 @@ use \app\WorkerReceiver1;
 /*'SELECT pro.code,pro.description FROM Products pro'
 'http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2'*/
 
-class RabbitMqSendMessageDAWS extends WorkerReceiver1
+class RabbitMqSendMessageConnect extends WorkerReceiver1
 {
     const NameFile = "data";
     const provider = "vendmax";
@@ -64,7 +64,7 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
 
                                 /*sleep(7);*/
                                 if (!empty($response) && isset($response)) {
-                                    $_SESSION['Zapros'] = false;
+                                    $_SESSION['Check'] = false;
                                     $this->TextOK = $text = '[Job id #' . $this->DataOperators['Jobsid'] . ']' . 'Result was delivered to Data queue successfully.';
                                     $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
                                     $this->CreateExchange(self::exchange, self::type);

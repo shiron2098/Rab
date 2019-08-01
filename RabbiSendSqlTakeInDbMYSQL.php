@@ -24,17 +24,17 @@ class RabbiSendSqlTakeInDbMYSQL extends MysqlDbConnect
 
             try {
                 $this->CheckRabbit();
-                if (isset($_SESSION['Zapros'])) {
+                if (isset($_SESSION['Check'])) {
                     if (!empty($this->ResponseMySQL['code']['operatorid']) && !empty($this->ResponseMySQL['code']['Jobsid'])){
-                    if ($_SESSION['Zapros'] !== true) {
+                    if ($_SESSION['Check'] !== true) {
                             $this->AMQPConnect('localhost', '5672', 'shir', '1995', '/');
                         $this->CreateExchange('Type', 'direct');
                         $this->CreateQueue('ConfigOperator#' . $this->ResponseMySQL['code']['operatorid'], false, false, false, $this->ResponseMySQL['code']['code'], false);
                         $this->MessageOut($this->ResponseMySQL);
                         $text = 'message delivery is complete Rabbit #' . $this->ResponseMySQL['code']['Jobsid'];
-                        $_SESSION['Zapros'] = true;
+                        $_SESSION['Check'] = true;
                         $this->log($text);
-                        /*                   include_once('RabbitMqSendMessageDAWS.php');*/
+                        /*                   include_once('RabbitMqSendMessageConnect.phpphp');*/
                         return $text;
                     } else {
 /*                            $this->SearchRepeat($this->ResponseMySQL['code']['Jobsid'] . PHP_EOL);

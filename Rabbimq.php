@@ -170,16 +170,16 @@ abstract class Rabbimq extends Log
                     sleep(1);
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
-                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageDAWS::NameFile;
-                            $this->logtext(__DIR__ . 'Rabbimq.php/' . $ResponseToDb['PathToFile']);
+                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile;
+                            $this->logtext(__DIR__ . '/' . $ResponseToDb['PathToFile']);
                             $Read = file_get_contents($filaname);
-                            $file = [
+                            $arrayResponseFromProvider = [
                                 'timestamp' => $ResponseToDb['timestamp'],
                                 'code' => $Read,
                             ];
                             unlink($filaname);
-                            rmdir(__DIR__ . 'Rabbimq.php/' . $ResponseToDb['PathToFile']);
-                            return $file;
+                            rmdir(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+                            return $arrayResponseFromProvider;
                         } else {
                             $text = '[Job id #' . $this->IDJobs . ']'. 'Result data unpack failed ';
                             $this->logDB($this->IDJobs, $this->time(), self::statusERROR, $text);
@@ -216,11 +216,11 @@ abstract class Rabbimq extends Log
                                 if (empty($this->jsonresponse)) {
                                     $this->channel->close();
                                     $this->connection->close();
-                                    return $_SESSION['Zapros'] = false;
+                                    return $_SESSION['Check'] = false;
                                 }
-                                $_SESSION['Zapros'] = false;
+                                $_SESSION['Check'] = false;
                             } else {
-                                $_SESSION['Zapros'] = true;
+                                $_SESSION['Check'] = true;
                                 $this->int = 1;
                                 $this->channel->close();
                                 $this->connection->close();
@@ -230,18 +230,18 @@ abstract class Rabbimq extends Log
                             $text= 'MYSQL code and command null or Rabbitmq Body code and command null';
                             $this->logtext($text);
                             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-                            return $_SESSION['ZApros']= true;
+                            return $_SESSION['Check']= true;
                         }
                     }else{
                         $this->channel->close();
                         $this->connection->close();
-                        return $_SESSION['Zapros'] = false;
+                        return $_SESSION['Check'] = false;
                     }
                 }
 
 
-/*                if (isset($_SESSION['Zapros']) === true) {
-                    return $_SESSION['Zapros'];
+/*                if (isset($_SESSION['Check']) === true) {
+                    return $_SESSION['Check'];
                 }*/
             }else{
             $text= 'Operator not found';

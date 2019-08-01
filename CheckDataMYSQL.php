@@ -43,10 +43,10 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                     $this->IDOperators = $data['id'];
                     $this->IdOperatorsFull($this->IDOperators);
                     $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'On processing');
-                    $response = $this->DataFromVendmax($this->IDJobs);
                     $responseTimeTableDate = $this->JobScheduleTime($this->IDJobs);
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
+                        $response = $this->DataForRabbit($this->IDJobs);
                        $this->CheckDataAndSendMessage($response);
                     } else {
                         $text = '[Job id #' . $this->IDJobs . ']' . 'Schedule is not defined';
@@ -99,7 +99,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 
                 $response = ['time' => $this->timeMYSQLRabbit,
                     'code' => $row];
-             $responseSendAndCheckMessageMYSQL = $this->SendAndCheckMessageMYSQL($response);
+              $this->SendAndCheckMessageMYSQL($response);
             } else {
                 $text='Task tried to be performed out of schedule ' . $row['command'] . '#' . $this->IDJobs;
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
@@ -113,7 +113,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
         }
     }
 
-    protected function DataFromVendmax($idtask)
+    protected function DataForRabbit($idtask)
     {
         $result = mysqli_query(
             $this->linkConnect,

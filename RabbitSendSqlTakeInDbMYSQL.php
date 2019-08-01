@@ -22,9 +22,9 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
 
             try {
                 $this->CheckRabbit($this->ResponseMySQL);
-                if (isset($_SESSION['Zapros'])) {
+                if (isset($_SESSION['Check'])) {
                     if (!empty($this->ResponseMySQL['code']['command']) && !empty($this->ResponseMySQL['code']['Jobsid'])&& !empty($this->ResponseMySQL['code']['operatorid'])){
-                    if ($_SESSION['Zapros'] !== true) {
+                    if ($_SESSION['Check'] !== true) {
                         $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
                         $this->CreateExchange(self::exchange, self::type);
                         $this->CreateQueue(self::NameConfig . $this->IDOperators, false, false, false, $this->DataOperators['code'], false);

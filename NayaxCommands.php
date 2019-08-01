@@ -7,7 +7,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once "generic_command_interface.php";
 
 
-class NayaxCommands extends DbConnectToDAWS implements generic_command_interface
+class NayaxCommands extends DbConnectProvider implements generic_command_interface
 {
     public $command;
     public $softwireprovider;

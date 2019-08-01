@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once('CreateTask.php');
-require_once('RabbitMqSendMessageDAWS.php');
+require_once('RabbitMqSendMessageConnect.php');
 
 
 class Run extends CreateTask
