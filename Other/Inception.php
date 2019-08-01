@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once('CreateTask.php');
-require_once('RabbitMqSendMessageDAWS.php');
+require_once('CreateOperator/CreateTask.php');
+require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');
 ignore_user_abort(true);
 
 
@@ -22,7 +22,7 @@ class Inception extends CreateTask
     $response = $this->JobsOperators($data);
     $responseRunAndCheck = $this->RunAndCheck($response);
            if (!empty($responseRunAndCheck)) {
-                    $DAWS = new RabbitMqSendMessageDAWS();
+                    $DAWS = new RabbitMqSendMessageConnect();
                    $responseDAWS = $DAWS->Connect($this->idcolumnjob,$this->IDOperators);
                    $this->logtext($responseDAWS);
                 }else{

@@ -170,7 +170,7 @@ abstract class Rabbimq extends Log
                 } else if ($ResponseToDb['ToMessage'] === 1) {
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
-                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageDAWS::NameFile;
+                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile;
                             $this->logtext(__DIR__  . '/'. $ResponseToDb['PathToFile']);
                             $Read = file_get_contents($filaname);
                             $file = [

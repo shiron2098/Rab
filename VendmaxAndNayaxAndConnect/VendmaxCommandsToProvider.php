@@ -5,10 +5,10 @@ use app\generic_command_interface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once "Interface/generic_command_interface.php";
-include_once('VendmaxAndNayaxAndConnectDAWS/DbConnectToDAWS.php');
+include_once('VendmaxAndNayaxAndConnect/DbConnectToProvider.php');
 
 
-class VendmaxCommands extends DbConnectToDAWS implements generic_command_interface
+class VendmaxCommands extends DbConnectToProvider implements generic_command_interface
 {
     const costumer = "select * from CUS_View";
     const potsofsale = "select top 1000 * from POS_View";
@@ -31,7 +31,7 @@ class VendmaxCommands extends DbConnectToDAWS implements generic_command_interfa
     {
         $responseDATAMYSQL = $this->DataFromOperators($this->IDOperators);
         $this->IdOperatorsFull($this->IDJobs);
-        $DAWS = new DbConnectToDAWS($SQL, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
+        $DAWS = new DbConnectToProvider($SQL, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
         $response = $DAWS->ResponseOfDbToLogFile();
         return $response;
     }

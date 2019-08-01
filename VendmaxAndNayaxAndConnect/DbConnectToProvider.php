@@ -7,7 +7,7 @@ $ad  = $aa->__getFunctions();*/
             'userPassword' => "00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466",
             'sid' => 1,*/
 
-class DbConnectToDAWS extends Rabbimq
+class DbConnectToProvider extends Rabbimq
 {
     const WSDL = "http://web-server:8083/vmodataaccessws.asmx?WSDL";
     const HeadersLocation = "http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2";
@@ -62,7 +62,7 @@ class DbConnectToDAWS extends Rabbimq
             'ProcessResultToXml'=> True,'HasResult' => true,'CompressResult'=> false,
             'accept-encoding' => 'deflate',"Sid"=>1)));
 
-        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToDAWS::UrlNamespace,
+        $connect = new SoapClient(DbConnectToProvider::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToProvider::UrlNamespace,
             'trace' => TRUE,
             'exceptions' => false));
 
@@ -112,7 +112,7 @@ class DbConnectToDAWS extends Rabbimq
                 $zip = new ZipArchive();
                 $filename = $this->zip;
                 if ($zip->open($filename) === TRUE) {
-                    $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToDAWS::PathToDbConfigurations;
+                    $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToProvider::PathToDbConfigurations;
                     $subdir1 = $filename[0];
                    $this->PathOfDataVendmax = $folder = 'File/' . $subdir1 . '/';
                     if (!file_exists($folder)) {
@@ -129,7 +129,7 @@ class DbConnectToDAWS extends Rabbimq
                     return $file;
                 } else {
                     try {
-                        throw new  Exception('Result create zip failed' . DbConnectToDAWS::NameZip);
+                        throw new  Exception('Result create zip failed' . DbConnectToProvider::NameZip);
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
@@ -146,7 +146,7 @@ class DbConnectToDAWS extends Rabbimq
             else
             {
                 try {
-                    throw new  Exception('Cannot Connect to DAWS' . DbConnectToDAWS::UrlNamespace);
+                    throw new  Exception('Cannot Connect to DAWS' . DbConnectToProvider::UrlNamespace);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     $this->logtext($e->getMessage());

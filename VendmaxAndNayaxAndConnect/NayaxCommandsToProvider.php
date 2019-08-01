@@ -5,7 +5,7 @@ use app\generic_command_interface;
 require_once "Interface/generic_command_interface.php";
 
 
-class NayaxCommands extends DbConnectToDAWS implements generic_command_interface
+class NayaxCommands extends DbConnectToProvider implements generic_command_interface
 {
     public $command;
     public $softwireprovider;

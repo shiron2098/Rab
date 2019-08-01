@@ -2,7 +2,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 require_once('Other/Inception.php');
-require_once('WorkerandsendRabbitDAWS/RabbitMqSendMessageDAWS.php');
+require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');
 require_once('RequestProcessor.php');
 ignore_user_abort(true);
 

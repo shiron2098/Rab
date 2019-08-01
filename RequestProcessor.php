@@ -4,9 +4,9 @@ use app\WorkerReceiver1;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once('Other/Inception.php');
-require_once('WorkerandsendRabbitDAWS/RabbitMqSendMessageDAWS.php');
+require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');
 
-class RequestProcessor extends RabbitMqSendMessageDAWS
+class RequestProcessor extends RabbitMqSendMessageConnect
 {
     public $responseDATAMYSQL;
     public $responseJson;
