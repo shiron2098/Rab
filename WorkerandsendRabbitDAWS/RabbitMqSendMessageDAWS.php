@@ -18,7 +18,7 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
 
     protected $DataOperators;
     private  $DataSql;
-    protected  $idcolumnjob;
+    public  $idcolumnjob;
 
     public function Connect($idcolumnjob_history,$id)
     {

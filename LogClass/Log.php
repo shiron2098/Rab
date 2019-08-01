@@ -13,7 +13,7 @@ class Log extends MYSQL
 
     protected $timestamp;
     protected $timetasklogstart;
-    protected $idcolumnjob;
+    public $idcolumnjob;
     private $operratorname;
     private $commandname;
     private $software_provider;

@@ -31,7 +31,7 @@ abstract class Rabbimq extends Log
     private $routing_key;
     private $int;
     protected $jsonresponse;
-    protected $IDOperators;
+    public $IDOperators;
     protected $IDJobs;
     protected $IDJob_Scheduler;
     protected $checktrabbitmsg;
@@ -108,10 +108,10 @@ abstract class Rabbimq extends Log
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);
+                /*    $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);*/
                 $this->channel->close();
                 $this->connection->close();
-                if(!empty($responseLOG)) {
+/*                if(!empty($responseLOG)) {
                     $results = print_r($responseLOG, true);
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
@@ -120,7 +120,7 @@ abstract class Rabbimq extends Log
 
                         return $responseTableDate;
                     }
-                }
+                }*/
 
 
             }
@@ -172,14 +172,14 @@ abstract class Rabbimq extends Log
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
                             $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageDAWS::NameFile;
-                            $this->logtext(__DIR__ . 'Rabbimq.php/' . $ResponseToDb['PathToFile']);
+                            $this->logtext(__DIR__  . '/'. $ResponseToDb['PathToFile']);
                             $Read = file_get_contents($filaname);
                             $file = [
                                 'timestamp' => $ResponseToDb['timestamp'],
                                 'code' => $Read,
                             ];
                             unlink($filaname);
-                            rmdir(__DIR__ . 'Rabbimq.php/' . $ResponseToDb['PathToFile']);
+                            rmdir(__DIR__  . '/' . $ResponseToDb['PathToFile']);
                             return $file;
                         } else {
                             $text = '[Job id #' . $this->IDJobs . ']'. 'Result data unpack failed ';

@@ -25,13 +25,14 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
                 if (isset($_SESSION['Zapros'])) {
                     if (!empty($this->ResponseMySQL['code']['command']) && !empty($this->ResponseMySQL['code']['Jobsid'])&& !empty($this->ResponseMySQL['code']['operatorid'])){
                     if ($_SESSION['Zapros'] !== true) {
-                        $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
+/*                        $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
                         $this->CreateExchange(self::exchange, self::type);
                         $this->CreateQueue(self::NameConfig . $this->IDOperators, false, false, false, $this->DataOperators['code'], false);
                         $this->MessageOut($this->ResponseMySQL,$this->IDJobs);
                         $this->TextOK = $text = '[Job id #' . $this->IDJobs . ']' . 'Result was delivered to Data queue successfully.';
                         $this->logtext($text);
-                        return $text;
+                        return $text;*/
+                        return $this->ResponseMySQL;
                     } else {
                         $text = '[Job id #' . $this->IDJobs . ']' . 'Command Execution is already in progress';
                         $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
