@@ -1,13 +1,14 @@
 <?php
-require_once('CreateOperator/CreateTask.php');
-require_once('WorkerandsendRabbitDAWS/RabbitMqSendMessageDAWS.php');
+session_start();
+require_once('CreateTask.php');
+require_once('RabbitMqSendMessageDAWS.php');
 ignore_user_abort(true);
 
 
 class Inception extends CreateTask
 {
 
-    public function index()
+    public function Main()
     {
 /*                     $this->TointoSoftware_providers();
                         $this->Tointo();
@@ -33,6 +34,6 @@ class Inception extends CreateTask
     }
 
 }
-/*$a = new Inception();
-$a->index();*/
+$a = new Inception();
+$a->Main();
 ?>

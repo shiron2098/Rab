@@ -168,7 +168,6 @@ abstract class Rabbimq extends Log
                     return $ResponseToDb;
 
                 } else if ($ResponseToDb['ToMessage'] === 1) {
-                    sleep(1);
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
                             $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageDAWS::NameFile;

@@ -61,7 +61,6 @@ class RabbitMqSendMessageDAWS extends WorkerReceiver1
                                 }
 
 
-                                /*sleep(7);*/
                                 if (!empty($response) && isset($response)) {
                                     $_SESSION['Zapros'] = false;
                                     $this->TextOK = $text = '[Job id #' . $this->DataOperators['Jobsid'] . ']' . 'Result was delivered to Data queue successfully.';

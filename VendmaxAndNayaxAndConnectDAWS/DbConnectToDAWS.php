@@ -70,16 +70,12 @@ class DbConnectToDAWS extends Rabbimq
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
-        /*sleep(5);*/
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
-/*        $results2 = print_r($ToParamResponseDb,
-            true);
-        $this->logtext($results2);*/
+
         if(!empty($ToParamResponseDb)) {
             $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
         }
         if(!empty($this->ResponseDB)){
-            $this->ResponseDB;
             $this->boolean = 1;
         }
         else
@@ -114,7 +110,6 @@ class DbConnectToDAWS extends Rabbimq
                 $this->zip = 'zip' . rand(100,10000);
                 file_put_contents($this->zip, $ResponseDbDaws);
                 $zip = new ZipArchive();
-                sleep(2);
                 $filename = $this->zip;
                 if ($zip->open($filename) === TRUE) {
                     $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToDAWS::PathToDbConfigurations;
