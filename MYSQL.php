@@ -30,7 +30,7 @@ abstract class MYSQL
         if(!empty($id)) {
             $result = mysqli_query(
                 $this->linkConnect,
-                "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,connection_url,user_name,user_password FROM operators
+                "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,connection_url,user_name,user_passwordFROM operators
                   JOIN jobs on jobs.operator_id =  operators.id
                   WHERE jobs.operator_id = $id"
             );

@@ -82,13 +82,19 @@ abstract class Rabbimq extends Log
     }
 
     /////////////////////////////
-    public function MessageToDaws($Massiv){
+    public function MessageToDaws($Massiv,$dataOperators){
         try {
-            if (!empty($Massiv['timestamp'])&& isset($Massiv['timestamp'])) {
+            if (!empty($Massiv['timestamp'])&& isset($Massiv['timestamp']) && !empty($dataOperators) && isset($dataOperators)) {
                 $messageBody = json_encode([
                     'Timestamp read from DAWS' => date('d.m.Y H:i:s',$Massiv['timestamp']),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
-                    'Code' => $Massiv['code'],
+                    'Code' => [
+                        'operatorid' => $dataOperators->Code->operatorid,
+                        'jobsid' => $dataOperators->Code->Jobsid,
+                        'command' => $dataOperators->Code->command,
+                        'software_provider' => $dataOperators->Code->software_provider,
+                        'filepath' => $Massiv['code'],
+                        ]
                 ]);
                 return $messageBody;
             } else {
@@ -105,7 +111,7 @@ abstract class Rabbimq extends Log
         if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
             $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb);
             if(!empty($ReponseFromMessage)) {
-                $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
+                $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage,$data), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
                     $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);
                 $this->channel->close();
@@ -167,18 +173,19 @@ abstract class Rabbimq extends Log
                     return $ResponseToDb;
 
                 } else if ($ResponseToDb['ToMessage'] === 1) {
-                    sleep(1);
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
                             $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile;
                             $this->logtext(__DIR__ . '/' . $ResponseToDb['PathToFile']);
-                            $Read = file_get_contents($filaname);
+                           $perem = Date('Y-m-d H:i:s', time());
+                            $renameFile = rename($filaname,$ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile . $perem);
+                            $renameFile = $ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile . $perem;
                             $arrayResponseFromProvider = [
                                 'timestamp' => $ResponseToDb['timestamp'],
-                                'code' => $Read,
+                                'code' => $renameFile,
                             ];
-                            unlink($filaname);
-                            rmdir(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+/*                            unlink($filaname);
+                            rmdir(__DIR__ . '/' . $ResponseToDb['PathToFile']);*/
                             return $arrayResponseFromProvider;
                         } else {
                             $text = '[Job id #' . $this->IDJobs . ']'. 'Result data unpack failed ';

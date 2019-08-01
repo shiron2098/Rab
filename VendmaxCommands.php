@@ -17,10 +17,12 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
 
     public $command;
     public $softwireprovider;
+    public $operatorname;
 
-     public function __construct($jobid,$operatorid,$command,$software_provider)
+     public function __construct($jobid,$operatorid,$command,$software_provider,$operatorname)
      {
          /*parent::__construct();*/
+         $this->operatorname = $operatorname;
          $this->IDOperators =$operatorid;
          $this->IDJobs = $jobid;
          $this->command = $command;

@@ -119,7 +119,7 @@ class DbConnectProvider extends Rabbimq
                 if ($zip->open($filename) === TRUE) {
                     $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectProvider::PathToDbConfigurations;
                     $subdir1 = $filename[0];
-                   $this->PathOfDataVendmax = $folder = 'File/' . $subdir1 . '/';
+                   $this->PathOfDataVendmax = $folder = __DIR__ . '/File/' . $subdir1 . '/';
                     if (!file_exists($folder)) {
                         mkdir($folder, 0777, true);
                     }

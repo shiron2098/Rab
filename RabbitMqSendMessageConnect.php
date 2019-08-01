@@ -36,7 +36,7 @@ class RabbitMqSendMessageConnect extends WorkerReceiver1
                                 $responseDATAMYSQL = $this->DataFromOperators($responseJson->Code->operatorid);
 								switch($responseJson->Code->software_provider){
 									case 'Vendmax':
-											$commands = new VendmaxCommands($responseJson->Code->Jobsid,$responseJson->Code->operatorid,$responseJson->Code->command,$responseJson->Code->software_provider);
+											$commands = new VendmaxCommands($responseJson->Code->Jobsid,$responseJson->Code->operatorid,$responseJson->Code->command,$responseJson->Code->software_provider,$responseJson->Code->name);
                                             break;
 
                                     case 'Nayax':
