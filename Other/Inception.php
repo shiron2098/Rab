@@ -1,6 +1,6 @@
 <?php
 require_once('CreateOperator/CreateTask.php');
-/*require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');*/
+/*require_once('Worker/RabbitMqSendMessageConnect.php');*/
 ignore_user_abort(true);
 
 

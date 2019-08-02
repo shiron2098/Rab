@@ -7,7 +7,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 {
 
 
-    private  $checkrowstime;
+    public  $checkrowstime;
     protected $jobcheckrowtime;
     protected $TimeTaskUpdate;
     protected $timetask;
@@ -39,7 +39,6 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                     $this->IDOperators = $data['id'];
                     $this->IdOperatorsFull($this->IDOperators);
                     $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'On processing');
-                    $response = $this->DataFromVendmax($this->IDJobs);
                     $responseTimeTableDate = $this->JobScheduleTime();
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
@@ -99,8 +98,8 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             } else {
                 $text='[Job id #' . $this->IDJobs . ']' . 'Task tried to be performed out of schedule ';
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-                $this->checkrowstime++;
                 $this->UpdateOperStreams();
+                $this->checkrowstime++;
                 throw new Exception($text);
             }
 

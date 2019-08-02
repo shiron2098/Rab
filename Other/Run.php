@@ -1,7 +1,10 @@
 <?php
 session_start();
-require_once('CreateTask.php');
-require_once('RabbitMqSendMessageConnect.phpphp');
+require_once('CreateOperator/CreateTask.php');
+require_once('RequestProcessor.php');
+require_once('DataProvider.php');
+require_once('Work.php');
+require_once('Workers.php');
 
 
 class Run extends CreateTask
@@ -24,15 +27,11 @@ class Run extends CreateTask
 
         );
         $this->rows = $result->num_rows;
-        for($i=0;$i<$this->rows;$i++) {
-            exec('php Inception.php > /dev/null 2>/dev/null &');
-            sleep(1);
-        }
-/*        $provider = new DataProvider();
-        $pool = new Pool($this->rows, 'Workers', [$provider]);*/
+        $provider = new DataProvider();
+        $pool = new Pool($this->rows, 'Workers', [$provider]);
         $start = microtime(true);
-/*         $pool->submit(new Work($this->rows));
-        $pool->shutdown();*/
+         $pool->submit(new Work($this->rows));
+        $pool->shutdown();
         printf("Done for %.2f seconds" . PHP_EOL, microtime(true) - $start);
     }
 

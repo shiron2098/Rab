@@ -12,6 +12,7 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
 
     protected $ResponseMySQL;
     protected $TextOK;
+    public $checkrowstime;
 
     public function SendAndCheckMessageMYSQL($response)
     {
@@ -35,6 +36,7 @@ class RabbitSendSqlTakeInDbMYSQL extends Rabbimq
                     } else {
                         $text = '[Job id #' . $this->IDJobs . ']' . 'Command Execution is already in progress';
                         $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
+                        $this->checkrowstime++;
                         throw new Exception($text . $this->IDJobs);
                         }
                     } else {

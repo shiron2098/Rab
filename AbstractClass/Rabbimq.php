@@ -111,10 +111,10 @@ abstract class Rabbimq extends Log
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage,$data), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);
+              /*      $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);*/
                 $this->channel->close();
                 $this->connection->close();
-                if(!empty($responseLOG)) {
+/*                if(!empty($responseLOG)) {
                     $results = print_r($responseLOG, true);
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
@@ -123,7 +123,7 @@ abstract class Rabbimq extends Log
 
                         return $responseTableDate;
                     }
-                }
+                }*/
 
 
             }

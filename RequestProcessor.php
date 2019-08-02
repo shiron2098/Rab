@@ -4,11 +4,11 @@ use app\WorkerReceiver1;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once('Other/Inception.php');
-require_once('WorkerandsendRabbit/WorkerReceiver1.php');
+require_once('Worker/WorkerReceiver1.php');
 require_once ('VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php');
 require_once('VendmaxAndNayaxAndConnect/NayaxCommandsToProvider.php');
 require_once('VendmaxAndNayaxAndConnect/DbConnectProvider.php');
-/*require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');*/
+/*require_once('Worker/RabbitMqSendMessageConnect.php');*/
 
 class RequestProcessor extends WorkerReceiver1
 {
@@ -88,13 +88,13 @@ class RequestProcessor extends WorkerReceiver1
     {
         if (!empty($response) && isset($response)) {
             $_SESSION['Check'] = false;
-            $this->TextOK = $text = '[Job id #' . $this->DataOperators['Jobsid'] . ']' . 'Result was delivered to Data queue successfully.';
+            $this->TextOK = $text = '[Job id #' . $this->responseJson->Code->Jobsid . ']' . 'Result was delivered to Data queue successfully.';
             $this->AMQPConnect(self::hostrabbit, self::port, self::username, self::passwordrabbit, self::vhost);
             $this->CreateExchange(self::exchange, self::type);
             $this->CreateQueue(self::NameConfigDAWS .$this->responseDATAMYSQL['operatorid'], false, false, false, $this->responseDATAMYSQL['name'], false);
             $this->MessageOut($response, $this->responseJson);
             $this->logtext($text);
-            $this->update_to_history();
+            $this->update_to_history($this->TextOK);
             $this->bolleanUpdateStreams = true;
         } else {
             $text = '[Job id #' . $this->responseJson->Code->Jobsid . ']' . 'Provider returned no data';
@@ -103,9 +103,9 @@ class RequestProcessor extends WorkerReceiver1
             $this->bolleanUpdateStreams = true;
         }
     }
-    public function update_to_history()
+    public function update_to_history($text)
     {
-        $responseLOG = $this->logDB($this->responseJson->Code->Jobsid, $this->time(), self::statusOK, $this->TextOK);
+        $responseLOG = $this->logDB($this->responseJson->Code->Jobsid, $this->time(), self::statusOK, $text);
         if (!empty($responseLOG)) {
             $results = print_r($responseLOG, true);
             if (!empty($results)) {

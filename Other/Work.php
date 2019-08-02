@@ -1,8 +1,8 @@
 <?php
 
-include_once('CheckDataMYSQL.php');
-include_once('MYSQL.php');
-include_once('Rabbimq.php');
+include_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
+include_once('AbstractClass/MYSQL.php');
+include_once('AbstractClass/Rabbimq.php');
 
 
 class Work extends Threaded
@@ -26,7 +26,7 @@ class Work extends Threaded
         }, $provider);
 
         for($i=0;$i<$this->DataOperators;$i++) {
-            exec('php Inception.php > /dev/null 2>/dev/null &');
+            exec('php Job_Schedule.php > /dev/null 2>/dev/null &');
             sleep(1);
         }
 

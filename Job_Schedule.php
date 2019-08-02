@@ -23,9 +23,10 @@ class Job_Schedule extends Inception
 }
 $jobMYSQL = new Job_Schedule();
 $responseValidate_job_schedule = $jobMYSQL->validate_job_schedule($jobMYSQL->get_jobs());
-
+sleep(5);
 $jobDAWS = new RequestProcessor();
 $responseread_job_from_queue = $jobDAWS->read_job_from_queue($jobMYSQL->idcolumnjob,$jobMYSQL->IDOperators);
+sleep(2);
 if($responseread_job_from_queue == true){
     $jobMYSQL->UpdateOperStreams();
 }
