@@ -35,19 +35,15 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             foreach ($response as $arrayTime) {
                 foreach ($arrayTime as $data) {
                     $this->check++;
-/*                   $this->timestamp = Date('Y-m-d H:i:s', time());*/
-                    /*$date = new DateTime('now');*/
-
                    $this->time();
-                 /*   $this->timestamp = $date->format('Y-m-d H:i:s.u');*/
                     $this->IDOperators = $data['id'];
                     $this->IdOperatorsFull($this->IDOperators);
                     $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'On processing');
                     $response = $this->DataFromVendmax($this->IDJobs);
-                    $responseTimeTableDate = $this->JobScheduleTime($this->IDJobs);
+                    $responseTimeTableDate = $this->JobScheduleTime();
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
-                        return $response;
+                        $this->CheckDataAndSendMessage();
                     } else {
                         $text = '[Job id #' . $this->IDJobs . ']' . 'Schedule is not defined';
                         $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
@@ -79,11 +75,10 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
         $this->timetask = Date('Y-m-d H:i:s', $TimeToUnix + $this->TimeTaskToRepeat);
     }
 
-    protected function JobScheduleTime($id)
+    protected function JobScheduleTime()
     {
-        $responseScheduleTime = $this->TimeJob($id);
+        $responseScheduleTime = $this->TimeJob();
         if (!empty($responseScheduleTime)) {
-            /** insert to time  */
             foreach ($responseScheduleTime as $rob) {
                 $this->TimeTaskToRepeat = $rob;
                 return $rob;
@@ -92,14 +87,15 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             return null;
         }
     }
-    protected function CheckDataAndSendMessage($row)
+    protected function CheckDataAndSendMessage()
     {
         try {
             if ($this->timestamp >= $this->timetask) {
-
+                $responseDataFromVendmax = $this->DataFromVendmax($this->IDJobs);
                 $response = ['time' => $this->timeMYSQLRabbit,
-                    'code' => $row];
-             return $response;
+                    'code' => $responseDataFromVendmax];
+
+                $this->SendAndCheckMessageMYSQL($response);
             } else {
                 $text='[Job id #' . $this->IDJobs . ']' . 'Task tried to be performed out of schedule ';
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);

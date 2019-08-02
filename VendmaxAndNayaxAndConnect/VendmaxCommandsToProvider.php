@@ -5,10 +5,10 @@ use app\generic_command_interface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once "Interface/generic_command_interface.php";
-include_once('VendmaxAndNayaxAndConnect/DbConnectToProvider.php');
+include_once('VendmaxAndNayaxAndConnect/DbConnectProvider.php');
 
 
-class VendmaxCommands extends DbConnectToProvider implements generic_command_interface
+class VendmaxCommands extends DbConnectProvider implements generic_command_interface
 {
     const costumer = "select * from CUS_View";
     const potsofsale = "select top 1000 * from POS_View";
@@ -17,10 +17,11 @@ class VendmaxCommands extends DbConnectToProvider implements generic_command_int
 
     public $command;
     public $softwireprovider;
+    public $operatorname;
 
-     public function __construct($jobid,$operatorid,$command,$software_provider)
+     public function __construct($jobid,$operatorid,$command,$software_provider,$operatorname)
      {
-         /*parent::__construct();*/
+         $this->operatorname = $operatorname;
          $this->IDOperators =$operatorid;
          $this->IDJobs = $jobid;
          $this->command = $command;
@@ -31,8 +32,8 @@ class VendmaxCommands extends DbConnectToProvider implements generic_command_int
     {
         $responseDATAMYSQL = $this->DataFromOperators($this->IDOperators);
         $this->IdOperatorsFull($this->IDJobs);
-        $DAWS = new DbConnectToProvider($SQL, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
-        $response = $DAWS->ResponseOfDbToLogFile();
+        $DAWS = new DbConnectProvider($SQL, $responseDATAMYSQL['connection_url'], $responseDATAMYSQL['user_name'], $responseDATAMYSQL['user_password']);
+        $response = $DAWS->ResponseOfDbToLogFile($this->operatorname,$this->command);
         return $response;
     }
     public function get_products()

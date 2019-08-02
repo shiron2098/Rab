@@ -1,7 +1,6 @@
 <?php
-session_start();
 require_once('CreateOperator/CreateTask.php');
-require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');
+/*require_once('WorkerandsendRabbit/RabbitMqSendMessageConnect.php');*/
 ignore_user_abort(true);
 
 
@@ -34,6 +33,6 @@ class Inception extends CreateTask
     }
 
 }
-$a = new Inception();
-$a->Main();
+/*$a = new Inception();
+$a->Main();*/
 ?>

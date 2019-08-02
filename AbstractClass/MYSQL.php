@@ -66,13 +66,13 @@ abstract class MYSQL
         $this->rows = $result->num_rows;
         FOREACH ($result as $row) {
             if ($row['streams'] === null || $row['streams'] == 0) {
-                $file[] = $row;
+                $arrayOperators[] = $row;
                 $id = $row['id'];
                 $result = mysqli_query(
                     $this->linkConnect,
                     "UPDATE operators SET streams = 1 WHERE id=$id"
                 );
-                return $file;
+                return $arrayOperators;
             }
 
         }
@@ -89,12 +89,12 @@ abstract class MYSQL
                 );
                 if (!empty($result)) {
                     foreach ($result as $date)
-                        $file[$dataOperators['name']][] = $date;
+                        $arrayJobs[$dataOperators['name']][] = $date;
                 } else {
                     return null;
                 }
             }
-            return $file;
+            return $arrayJobs;
         }
     }
     Protected function IdOperatorsFull($idtask)
@@ -150,13 +150,13 @@ abstract class MYSQL
         FOREACH ($result as $row) {
 
             if ($row['streams'] === null || $row['streams'] == 1) {
-                $file[] = $row;
+                $arrayStreams[] = $row;
             }
             if($row['streams'] === null || $row['streams'] == 2){
-                $file[] = $row;
+                $arrayStreams[] = $row;
             }
         }
-        return $file;
+        return $arrayStreams;
     }
     public function time(){
         $this->timestamp =  DateTime::createFromFormat( 'U.u', sprintf('%.f', microtime(true)) )->format('Y-m-d H:i:s.u');

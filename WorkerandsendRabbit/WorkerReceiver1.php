@@ -19,8 +19,6 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class WorkerReceiver1 extends \CheckDataMYSQL
 {
-    private $response;
-    protected $file;
 
     public function Index($id)
     {
@@ -71,7 +69,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
                     $msg = $channel->basic_get($queue_name, true);
                     if (!empty($msg->body) && isset($msg->body)) {
                         if ($msg->body !== null) {
-                            $file[] = $msg->body;
+                            $arrayMessageFromRabbit[] = $msg->body;
                         }
                     }
                         else
@@ -81,8 +79,8 @@ class WorkerReceiver1 extends \CheckDataMYSQL
                 }
             }
         }
-        if(!empty($file)) {
-            return $file;
+        if(!empty($arrayMessageFromRabbit)) {
+            return $arrayMessageFromRabbit;
         }else{
             $text = '$file array WorkerReceiver null';
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);

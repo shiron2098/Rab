@@ -3,16 +3,16 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use app\WorkerReceiver1;
 use app\generic_command_interface;
 require_once "Interface/generic_command_interface.php";
+require_once ('VendmaxAndNayaxAndConnect/DbConnectProvider.php');
 
 
-class NayaxCommands extends DbConnectToProvider implements generic_command_interface
+class NayaxCommands extends DbConnectProvider implements generic_command_interface
 {
     public $command;
     public $softwireprovider;
 
      public function __construct($jobid,$operatorid,$command,$software_provider)
      {
-         /*parent::__construct();*/
          $this->IDOperators =$operatorid;
          $this->IDJobs = $jobid;
          $this->command = $command;

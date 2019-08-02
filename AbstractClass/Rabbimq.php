@@ -1,16 +1,13 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once('LogClass/Log.php');
+require_once('log/Log.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 
-/*require_once __DIR__ . '/vendor/autoload.php';
-require_once('Log.php');*/
+
 abstract class Rabbimq extends Log
 {
-/*    const PASSIVETrue = TRUE;
-    const passivefalse = False;*/
     const Time = 'now';
     const hostrabbit = 'localhost';
     const port = '5672';
@@ -31,7 +28,7 @@ abstract class Rabbimq extends Log
     private $routing_key;
     private $int;
     protected $jsonresponse;
-    public $IDOperators;
+    protected $IDOperators;
     protected $IDJobs;
     protected $IDJob_Scheduler;
     protected $checktrabbitmsg;
@@ -83,13 +80,19 @@ abstract class Rabbimq extends Log
     }
 
     /////////////////////////////
-    public function MessageToDaws($Massiv){
+    public function MessageToDaws($Massiv,$dataOperators){
         try {
-            if (!empty($Massiv['timestamp'])&& isset($Massiv['timestamp'])) {
+            if (!empty($Massiv['timestamp'])&& isset($Massiv['timestamp']) && !empty($dataOperators) && isset($dataOperators)) {
                 $messageBody = json_encode([
                     'Timestamp read from DAWS' => date('d.m.Y H:i:s',$Massiv['timestamp']),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
-                    'Code' => $Massiv['code'],
+                    'Code' => [
+                        'operatorid' => $dataOperators->Code->operatorid,
+                        'jobsid' => $dataOperators->Code->Jobsid,
+                        'command' => $dataOperators->Code->command,
+                        'software_provider' => $dataOperators->Code->software_provider,
+                        'filepath' => $Massiv['code'],
+                        ]
                 ]);
                 return $messageBody;
             } else {
@@ -106,12 +109,12 @@ abstract class Rabbimq extends Log
         if (isset($_SESSION['FileZip']) && !empty($_SESSION['FileZip']) === true || isset($ResponseToDb['timestamp']) && !empty($ResponseToDb['timestamp'])) {
             $ReponseFromMessage = $this->MassivMessageTODAWS($ResponseToDb);
             if(!empty($ReponseFromMessage)) {
-                $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
+                $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage,$data), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                /*    $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);*/
+                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);
                 $this->channel->close();
                 $this->connection->close();
-/*                if(!empty($responseLOG)) {
+                if(!empty($responseLOG)) {
                     $results = print_r($responseLOG, true);
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
@@ -120,7 +123,7 @@ abstract class Rabbimq extends Log
 
                         return $responseTableDate;
                     }
-                }*/
+                }
 
 
             }
@@ -170,16 +173,18 @@ abstract class Rabbimq extends Log
                 } else if ($ResponseToDb['ToMessage'] === 1) {
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
-                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile;
-                            $this->logtext(__DIR__  . '/'. $ResponseToDb['PathToFile']);
-                            $Read = file_get_contents($filaname);
-                            $file = [
+                            $filaname = $ResponseToDb['PathToFile'] . RequestProcessor::NameFile;
+                            $this->logtext(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+                           $perem = Date('Y-m-d H:i:s', time());
+                            $renameFile = rename($filaname,$ResponseToDb['PathToFile'] . RequestProcessor::NameFile . $perem);
+                            $renameFile = $ResponseToDb['PathToFile'] . RequestProcessor::NameFile . $perem;
+                            $arrayResponseFromProvider = [
                                 'timestamp' => $ResponseToDb['timestamp'],
-                                'code' => $Read,
+                                'code' => $renameFile,
                             ];
-                            unlink($filaname);
-                            rmdir(__DIR__  . '/' . $ResponseToDb['PathToFile']);
-                            return $file;
+/*                            unlink($filaname);
+                            rmdir(__DIR__ . '/' . $ResponseToDb['PathToFile']);*/
+                            return $arrayResponseFromProvider;
                         } else {
                             $text = '[Job id #' . $this->IDJobs . ']'. 'Result data unpack failed ';
                             $this->logDB($this->IDJobs, $this->time(), self::statusERROR, $text);
@@ -216,11 +221,11 @@ abstract class Rabbimq extends Log
                                 if (empty($this->jsonresponse)) {
                                     $this->channel->close();
                                     $this->connection->close();
-                                    return $_SESSION['Zapros'] = false;
+                                    return $_SESSION['Check'] = false;
                                 }
-                                $_SESSION['Zapros'] = false;
+                                $_SESSION['Check'] = false;
                             } else {
-                                $_SESSION['Zapros'] = true;
+                                $_SESSION['Check'] = true;
                                 $this->int = 1;
                                 $this->channel->close();
                                 $this->connection->close();
@@ -230,18 +235,18 @@ abstract class Rabbimq extends Log
                             $text= 'MYSQL code and command null or Rabbitmq Body code and command null';
                             $this->logtext($text);
                             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-                            return $_SESSION['ZApros']= true;
+                            return $_SESSION['Check']= true;
                         }
                     }else{
                         $this->channel->close();
                         $this->connection->close();
-                        return $_SESSION['Zapros'] = false;
+                        return $_SESSION['Check'] = false;
                     }
                 }
 
 
-/*                if (isset($_SESSION['Zapros']) === true) {
-                    return $_SESSION['Zapros'];
+/*                if (isset($_SESSION['Check']) === true) {
+                    return $_SESSION['Check'];
                 }*/
             }else{
             $text= 'Operator not found';
