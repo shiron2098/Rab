@@ -31,7 +31,7 @@ class CheckStreams extends CheckDataMYSQL
                               break;
 
                           } else {
-                              $text = 'strems ok';
+                              $text = 'Streams Ok';
                               $this->logtext($text);
                           }
                       }
@@ -55,5 +55,3 @@ class CheckStreams extends CheckDataMYSQL
 
 
 }
-$new = new CheckStreams();
-$new->Check();

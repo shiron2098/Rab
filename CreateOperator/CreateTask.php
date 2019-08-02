@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once ('CheckDataMYSQL.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
 
 
 
@@ -9,20 +9,14 @@ class CreateTask extends CheckDataMYSQL
     protected $commands;
     protected $softwareprovider;
 
-
-
-
-
-
-
-
     public function Tointo()
     {
-        $ret = '28';
+        $ret = '29';
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into operators (name,code,software_provider_id,connection_url,user_name,user_password) values ('vmsasha3','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=vmsasha3','Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
+            "insert into operators (name,code,software_provider_id,connection_url,streams,user_name,user_password) values ('vmsasha3','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=vmsasha3',0,'Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
         );
+        print_R($this->linkConnect);
         $this->RowsNewColumnInsert();
         $result = mysqli_query(
             $this->linkConnect,
@@ -40,11 +34,9 @@ class CreateTask extends CheckDataMYSQL
 
     public function TointoJob()
     {
-
-
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into jobs (operator_id,command_id) values ('" . $this->IDOperators . "','" . $this->IDJobs . "')"
+            "insert into jobs (operator_id,command_id) values ('" . $this->IDOperators . "','" . $this->commands . "')"
         );
         $a = $this->RowsNewColumnInsert();
         if ($a !== null) {
@@ -67,27 +59,16 @@ class CreateTask extends CheckDataMYSQL
         );
     }
 
-
-    public function TointoCommandDetails()
-    {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "insert into command_details (software_provider_id,command_id,execute_statement) values ($this->softwareprovider,$this->commands,'select * from CUS_View')"
-        );
-        return $this->RowsNewColumnInsert();
-
-    }
-
     public function TointoCommands()
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into commands (code,description) values ('Get CUS_View','CUS_View')"
+            "insert into commands (code,description) values ('get_products','receiving_products')"
         );
         if($result == false){
             $result = mysqli_query(
                 $this->linkConnect,
-            "SELECT * FROM commands WHERE code = 'Get CUS_View'"
+            "SELECT * FROM commands WHERE code = 'get_products'"
         );
             foreach ($result as $res){
                 $this->commands = $res['id'];
@@ -102,7 +83,7 @@ class CreateTask extends CheckDataMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into software_providers (code,description) values ('vendmax','vendmax')"
+            "insert into software_providers (code,description) values ('Nayax','Nayax')"
         );
         if ($result == false) {
             $result2 = mysqli_query(

@@ -1,8 +1,9 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-include_once 'Rabbimq.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+include_once 'AbstractClass/Rabbimq.php';
 
-
+/*require_once __DIR__ . '/vendor/autoload.php';
+include_once 'Rabbimq.php';*/
 abstract class MYSQL
 {
     const host = '127.0.0.1';
@@ -11,6 +12,7 @@ abstract class MYSQL
     const database = 'daws2';
 
     protected $DataOperators;
+    protected $timestamp;
     protected $linkConnect;
     protected $rows;
 
@@ -89,8 +91,7 @@ abstract class MYSQL
                     foreach ($result as $date)
                         $file[$dataOperators['name']][] = $date;
                 } else {
-                    $a = 'error empty response';
-                    return $a;
+                    return null;
                 }
             }
             return $file;
@@ -156,6 +157,18 @@ abstract class MYSQL
             }
         }
         return $file;
+    }
+    public function time(){
+        $this->timestamp =  DateTime::createFromFormat( 'U.u', sprintf('%.f', microtime(true)) )->format('Y-m-d H:i:s.u');
+        return $this->timestamp;
+    }
+    public function Insertidrows(){
+        $result2 = mysqli_query(
+            $this->linkConnect,
+            'SELECT LAST_INSERT_ID()'
+        );
+        $row = mysqli_fetch_assoc($result2);
+        return $row['LAST_INSERT_ID()'];
     }
 
 

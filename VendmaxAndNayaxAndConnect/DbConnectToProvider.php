@@ -1,19 +1,19 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once ('Rabbimq.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once('AbstractClass/Rabbimq.php');
 /*
 $ad  = $aa->__getFunctions();*/
 /*'userName' => 'admin',
             'userPassword' => "00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466",
             'sid' => 1,*/
 
-class DbConnectToDAWS extends Rabbimq
+class DbConnectToProvider extends Rabbimq
 {
     const WSDL = "http://web-server:8083/vmodataaccessws.asmx?WSDL";
     const HeadersLocation = "http://web-server:8083/VmoDataAccessWS.asmx?swCode=CLASS2";
     const UrlNamespace = "http://tempuri.org/";
     const NameZip = 'code.zip';
-    const PathToDbConfigurations =__DIR__ . '/File/';
+    const PathToDbConfigurations = __DIR__ . '/File/';
 
     Public $PathOfDataVendmax;
     private   $zip;
@@ -62,7 +62,7 @@ class DbConnectToDAWS extends Rabbimq
             'ProcessResultToXml'=> True,'HasResult' => true,'CompressResult'=> false,
             'accept-encoding' => 'deflate',"Sid"=>1)));
 
-        $connect = new SoapClient(DbConnectToDAWS::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToDAWS::UrlNamespace,
+        $connect = new SoapClient(DbConnectToProvider::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectToProvider::UrlNamespace,
             'trace' => TRUE,
             'exceptions' => false));
 
@@ -70,16 +70,12 @@ class DbConnectToDAWS extends Rabbimq
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
-        /*sleep(5);*/
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
-/*        $results2 = print_r($ToParamResponseDb,
-            true);
-        $this->logtext($results2);*/
+
         if(!empty($ToParamResponseDb)) {
             $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
         }
         if(!empty($this->ResponseDB)){
-            $this->ResponseDB;
             $this->boolean = 1;
         }
         else
@@ -87,7 +83,9 @@ class DbConnectToDAWS extends Rabbimq
             try {
                 if (!empty($ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage)) {
                     $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage;
-                    throw new Exception('Error message of db Daws' . PHP_EOL);
+                    $text = 'DAWS query execution failed';
+                    $this->logtext($text);
+                    throw new Exception($text . PHP_EOL);
                 } else {
                     if(!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response))
                     $this->boolean = 0;
@@ -112,10 +110,9 @@ class DbConnectToDAWS extends Rabbimq
                 $this->zip = 'zip' . rand(100,10000);
                 file_put_contents($this->zip, $ResponseDbDaws);
                 $zip = new ZipArchive();
-                sleep(2);
                 $filename = $this->zip;
                 if ($zip->open($filename) === TRUE) {
-                    $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToDAWS::PathToDbConfigurations;
+                    $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectToProvider::PathToDbConfigurations;
                     $subdir1 = $filename[0];
                    $this->PathOfDataVendmax = $folder = 'File/' . $subdir1 . '/';
                     if (!file_exists($folder)) {
@@ -132,7 +129,7 @@ class DbConnectToDAWS extends Rabbimq
                     return $file;
                 } else {
                     try {
-                        throw new  Exception('Failed to unzip zip' . DbConnectToDAWS::NameZip);
+                        throw new  Exception('Result create zip failed' . DbConnectToProvider::NameZip);
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
@@ -149,7 +146,7 @@ class DbConnectToDAWS extends Rabbimq
             else
             {
                 try {
-                    throw new  Exception('Failed to connect DAWS' . DbConnectToDAWS::UrlNamespace);
+                    throw new  Exception('Cannot Connect to DAWS' . DbConnectToProvider::UrlNamespace);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     $this->logtext($e->getMessage());

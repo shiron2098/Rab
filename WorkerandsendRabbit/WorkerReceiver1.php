@@ -1,6 +1,6 @@
 <?php
 namespace app;
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 /*use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $connection = new AMQPStreamConnection('localhost', 5672, 'Shiro', '1995');
@@ -12,7 +12,7 @@ $a =json_decode($result->body);
 
 $channel->close();
 $connection->close();*/
-include_once('CheckDataMYSQL.php');
+include_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
 
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -41,7 +41,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
                     null
                 );
 
-                echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";
+               /* echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";*/
 
                 /*      $callback = function ($msg) {
                           echo ' [x] ', $msg->body, "\n";
@@ -85,7 +85,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
             return $file;
         }else{
             $text = '$file array WorkerReceiver null';
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
             $this->logtext($text);
         }
     }

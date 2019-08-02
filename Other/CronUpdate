@@ -27,3 +27,7 @@ select top 1000 * from NVE_View
 select * from operators
 order by id desc
 limit 1
+
+
+/** REQUEST **/
+{"Timestamp read from MYSQL":"30.07.2019 12:03:18","timestamp sent to Rabbit":"30.07.2019 12:03:18","Code":{"operatorid":"1","Jobsid":"1","command":"Get Products","software_provider":"vendmax"}}

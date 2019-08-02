@@ -1,15 +1,16 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once ('Log.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once('LogClass/Log.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 
-
+/*require_once __DIR__ . '/vendor/autoload.php';
+require_once('Log.php');*/
 abstract class Rabbimq extends Log
 {
-    const PASSIVETrue = TRUE;
-    const passivefalse = False;
+/*    const PASSIVETrue = TRUE;
+    const passivefalse = False;*/
     const Time = 'now';
     const hostrabbit = 'localhost';
     const port = '5672';
@@ -21,6 +22,8 @@ abstract class Rabbimq extends Log
     const NameConfig = 'JobOperator#';
     const NameConfigDAWS = 'ResponseOperator#';
 
+
+    protected $TextOK;
     private $channel;
     private $connection;
     private $queue;
@@ -28,7 +31,7 @@ abstract class Rabbimq extends Log
     private $routing_key;
     private $int;
     protected $jsonresponse;
-    protected $IDOperators;
+    public $IDOperators;
     protected $IDJobs;
     protected $IDJob_Scheduler;
     protected $checktrabbitmsg;
@@ -105,10 +108,10 @@ abstract class Rabbimq extends Log
             if(!empty($ReponseFromMessage)) {
                 $msg = new AMQPMessage($this->MessageToDaws($ReponseFromMessage), array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
                 $this->channel->basic_publish($msg, $this->Exchange, $this->routing_key);
-                    $responseLOG = $this->logDB($data->Code->Jobsid, $this->timetasklogstart, self::statusOK,'complete');
+                /*    $responseLOG = $this->logDB($data->Code->Jobsid, $this->time(), self::statusOK,$this->TextOK);*/
                 $this->channel->close();
                 $this->connection->close();
-                if(!empty($responseLOG)) {
+/*                if(!empty($responseLOG)) {
                     $results = print_r($responseLOG, true);
                     if (!empty($results)) {
                         $responseTableDate = $this->UpdateJobs();
@@ -117,7 +120,7 @@ abstract class Rabbimq extends Log
 
                         return $responseTableDate;
                     }
-                }
+                }*/
 
 
             }
@@ -130,10 +133,6 @@ abstract class Rabbimq extends Log
         }
 
     }
-    public function time(){
-        $this->timestamp = date('Y-m-d H:i:s' ,strtotime(CheckDataMYSQL::Time));
-        return $this->timestamp;
-    }
     public function UpdateOperStreams(){
         $result = mysqli_query(
             $this->linkConnect,
@@ -143,8 +142,8 @@ abstract class Rabbimq extends Log
             $text = 'Update to complete streams 0';
             $this->logtext($text);
         }else{
-            $text = 'update error streams';
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+            $text = 'Update error streams';
+            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
         }
     }
     public function UpdateOperStreamsUp(){
@@ -157,7 +156,7 @@ abstract class Rabbimq extends Log
             $this->logtext($text);
         }else{
             $text = 'update error streams';
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
         }
     }
 
@@ -169,22 +168,21 @@ abstract class Rabbimq extends Log
                     return $ResponseToDb;
 
                 } else if ($ResponseToDb['ToMessage'] === 1) {
-                    sleep(1);
                     if(!empty($ResponseToDb['PathToFile']) && $ResponseToDb['PathToFile'] !== 1) {
                         if (file_exists($ResponseToDb['PathToFile'])) {
-                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageDAWS::NameFile;
-                            $this->logtext(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+                            $filaname = $ResponseToDb['PathToFile'] . RabbitMqSendMessageConnect::NameFile;
+                            $this->logtext(__DIR__  . '/'. $ResponseToDb['PathToFile']);
                             $Read = file_get_contents($filaname);
                             $file = [
                                 'timestamp' => $ResponseToDb['timestamp'],
                                 'code' => $Read,
                             ];
                             unlink($filaname);
-                            rmdir(__DIR__ . '/' . $ResponseToDb['PathToFile']);
+                            rmdir(__DIR__  . '/' . $ResponseToDb['PathToFile']);
                             return $file;
                         } else {
-                            $text = 'File not create in Vendmax #' . $this->IDJobs;
-                            $this->logDB($this->IDJobs, $this->timetasklogstart, self::statusERROR, $text);
+                            $text = '[Job id #' . $this->IDJobs . ']'. 'Result data unpack failed ';
+                            $this->logDB($this->IDJobs, $this->time(), self::statusERROR, $text);
                             throw new Exception($text);
 
 
@@ -213,7 +211,7 @@ abstract class Rabbimq extends Log
                     $this->checktrabbitmsg = $result = $this->channel->basic_get($this->queue);
                     if (!empty($result->body)) {
                         $this->jsonresponse = json_decode($result->body);
-                        if (!empty($Mysql['code']['command']) && !empty($Mysql['code']['Jobsid']) && $this->jsonresponse->Code->command && $this->jsonresponse->Code->Jobsid) {
+                        if (!empty($Mysql['code']['command']) && !empty($Mysql['code']['Jobsid']) && !empty($this->jsonresponse->Code->command) && !empty($this->jsonresponse->Code->Jobsid)) {
                             if ($this->jsonresponse->Code->command !== $Mysql['code']['command'] && $this->jsonresponse->Code->Jobsid !== $Mysql['code']['Jobsid']) {
                                 if (empty($this->jsonresponse)) {
                                     $this->channel->close();
@@ -229,9 +227,9 @@ abstract class Rabbimq extends Log
 
                             }
                         }else{
-                            $text= 'rabbit body null';
+                            $text= 'MYSQL code and command null or Rabbitmq Body code and command null';
                             $this->logtext($text);
-                            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+                            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
                             return $_SESSION['ZApros']= true;
                         }
                     }else{
@@ -246,9 +244,9 @@ abstract class Rabbimq extends Log
                     return $_SESSION['Zapros'];
                 }*/
             }else{
-            $text= 'DataOperators operatorid null';
+            $text= 'Operator not found';
             $this->logtext($text);
-            $this->logDB($this->IDJobs,$this->timetasklogstart,self::statusERROR,$text);
+            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
         }
     }
     protected function SearchRepeat($row)
