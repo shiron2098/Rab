@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
-require_once('Other/Inception.php');
+require_once('CreateOperator/CreateTask.php');
 require_once('RequestProcessor.php');
 ignore_user_abort(true);
 
-class Job_Schedule extends Inception
+class Job_Schedule extends CreateTask
 {
 
     public $idcolumnjob;
@@ -23,10 +23,3 @@ class Job_Schedule extends Inception
 }
 $jobMYSQL = new Job_Schedule();
 $responseValidate_job_schedule = $jobMYSQL->validate_job_schedule($jobMYSQL->get_jobs());
-sleep(5);
-$jobDAWS = new RequestProcessor();
-$responseread_job_from_queue = $jobDAWS->read_job_from_queue($jobMYSQL->idcolumnjob,$jobMYSQL->IDOperators);
-sleep(2);
-if($responseread_job_from_queue == true){
-    $jobMYSQL->UpdateOperStreams();
-}

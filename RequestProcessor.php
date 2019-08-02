@@ -3,7 +3,7 @@
 use app\WorkerReceiver1;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once('Other/Inception.php');
+require_once ('VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php');
 require_once('Worker/WorkerReceiver1.php');
 require_once ('VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php');
 require_once('VendmaxAndNayaxAndConnect/NayaxCommandsToProvider.php');
@@ -18,25 +18,26 @@ class RequestProcessor extends WorkerReceiver1
 
     public $responseDATAMYSQL;
     public $responseJson;
+    public $idcolumnjob;
     public $bolleanUpdateStreams = false;
-    public function read_job_from_queue($idcolumnjob_history,$id)
+    public function read_job_from_queue($id)
     {
-        if (!empty($idcolumnjob_history) && isset($idcolumnjob_history)) {
-            $WorkerOfDb = new WorkerReceiver1();
-            $this->idcolumnjob = $idcolumnjob_history;
-            $responseOfRabbit = $WorkerOfDb->Index($id);
-            if (!empty($responseOfRabbit)) {
-                foreach ($responseOfRabbit as $array) {
-                    $response = null;
-                    $this->responseJson = json_decode($array);
-                   $this->execute_job($this->responseJson);
-                }
-            }else{
-                return $this->bolleanUpdateStreams;
+        $WorkerOfDb = new WorkerReceiver1();
+        $responseOfRabbit = $WorkerOfDb->Index($id);
+        if (!empty($responseOfRabbit)) {
+            foreach ($responseOfRabbit as $array) {
+                $response = null;
+                $this->responseJson = json_decode($array);
+                $this->idcolumnjob = $this->responseJson->IdColumnJobHistory;
+                $this->execute_job($this->responseJson);
             }
-
+        } else {
+            return  $this->UpdateOperStreams();
         }
-        return $this->bolleanUpdateStreams;
+
+        if($this->bolleanUpdateStreams === true) {
+            $this->UpdateOperStreams();
+        }
     }
     public function execute_job($json)
     {
@@ -73,7 +74,7 @@ class RequestProcessor extends WorkerReceiver1
                 $this->save_result_to_queue($response);
 
             }else{
-                $text = 'MYSQL is not responding';
+                $text = 'Connector is not responding';
                 throw new Exception($text);
             }
         } catch (Exception $e) {
@@ -81,7 +82,6 @@ class RequestProcessor extends WorkerReceiver1
             $this->logDB($this->responseJson->Code->Jobsid, $this->time(), self::statusERROR,$e->getMessage());
             $this->logtext($e->getMessage());
             }
-
     }
 
     public function save_result_to_queue($response)
@@ -119,3 +119,5 @@ class RequestProcessor extends WorkerReceiver1
         return $text;
     }
 }
+/*$start = new RequestProcessor();
+$start->read_job_from_queue();*/

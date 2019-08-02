@@ -43,20 +43,22 @@ abstract class MYSQL
         }
     }
 
-    protected function SelectToDbOperatorsDAWS($id)
+    protected function SelectToDbOperatorsDAWS()
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT id,code FROM operators where id=$id"
+            "SELECT id,code,streams FROM operators"
 
         );
         FOREACH ($result as $row) {
-                $oper[] = $row;
-                return $oper;
+            if($row['streams'] == 0 ) {
+                $arrayoper[] = $row;
+                return $arrayoper;
+            }
         }
     }
 
-    protected function SelectToDbOperators()
+    public function SelectToDbOperators()
     {
         $result = mysqli_query(
             $this->linkConnect,
@@ -67,15 +69,10 @@ abstract class MYSQL
         FOREACH ($result as $row) {
             if ($row['streams'] === null || $row['streams'] == 0) {
                 $arrayOperators[] = $row;
-                $id = $row['id'];
-                $result = mysqli_query(
-                    $this->linkConnect,
-                    "UPDATE operators SET streams = 1 WHERE id=$id"
-                );
-                return $arrayOperators;
             }
 
         }
+        return $arrayOperators;
     }
 
     protected function JobsOperators($data)

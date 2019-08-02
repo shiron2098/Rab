@@ -31,7 +31,7 @@ class Log extends MYSQL
                                values ('" . $id . "','" . $this->commandname . "','" . $this->IDOperators . "','" . $this->operratorname . "','" . $this->software_provider . "','" . $timelog . "','" . $status . "','" . $text . "')"
                 );
               $id= $this->Insertidrows();
-              $this->idcolumnjob[$this->IDJobs] = $id;
+              $this->idcolumnjob = $id;
                 if ($status === self::statusRUN) {
                     $text = 'log downloads complete in DATABASE MYSQL ';
                     $this->logtext($text);
@@ -42,14 +42,11 @@ class Log extends MYSQL
             }
             if ($status === self::statusOK || $status === self::statusERROR) {
                 $this->time();
-                if(!empty($this->idcolumnjob)) {
-                    foreach ($this->idcolumnjob as $key => $value) {
-                        if ($key == $id)
-                            $result = mysqli_query(
-                                $this->linkConnect,
-                                "UPDATE job_history SET execute_end_time_dt = '" . $this->timestamp . "',status = '" . $status . "',description = '" . $text . "' WHERE id=$value"
-                            );
-                    }
+                if (!empty($this->idcolumnjob)) {
+                    $result = mysqli_query(
+                        $this->linkConnect,
+                        "UPDATE job_history SET execute_end_time_dt = '" . $this->timestamp . "',status = '" . $status . "',description = '" . $text . "' WHERE id=$this->idcolumnjob"
+                    );
                 }
             }
             if ($status === static::statusOK) {

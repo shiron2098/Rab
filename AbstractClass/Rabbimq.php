@@ -27,6 +27,7 @@ abstract class Rabbimq extends Log
     private $Exchange;
     private $routing_key;
     private $int;
+    private $idJobHistory;
     protected $jsonresponse;
     protected $IDOperators;
     protected $IDJobs;
@@ -61,13 +62,13 @@ abstract class Rabbimq extends Log
     }
     public function MessageToArray($massivData)
     {
-
         try {
             if (!empty($massivData)&& !empty($massivData['time'])&& isset($massivData['time'])) {
                 $messageBody = json_encode([
                     'Timestamp read from MYSQL' => date('d.m.Y H:i:s' , $massivData['time'] ),
                     'timestamp sent to Rabbit' => date('d.m.Y H:i:s', strtotime('now')),
                     'Code' => $massivData['code'],
+                    'IdColumnJobHistory' => $massivData['idcolumnjob'],
                 ]);
                 return $messageBody;
             } else {
@@ -149,10 +150,10 @@ abstract class Rabbimq extends Log
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
         }
     }
-    public function UpdateOperStreamsUp(){
+    public function UpdateOperStreamsUp($idstreams,$idoper){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE operators SET streams = 2 WHERE id=$this->IDOperators"
+            "UPDATE operators SET streams = $idstreams WHERE id=$idoper"
         );
         if($result !== false){
             $text = 'Update to complete streams 0';

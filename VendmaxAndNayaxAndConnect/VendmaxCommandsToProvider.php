@@ -10,7 +10,7 @@ include_once('VendmaxAndNayaxAndConnect/DbConnectProvider.php');
 
 class VendmaxCommands extends DbConnectProvider implements generic_command_interface
 {
-    const costumer = "select * from CUS_View";
+    const customer = "select * from CUS_View";
     const potsofsale = "select top 1000 * from POS_View";
     const product = "select * from PRO_View";
     const locations = "select top 1000 * from LOC_View";
@@ -42,7 +42,7 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
     }
     public function get_customers()
     {
-       return $this->ExecuteStatment(VendmaxCommands::costumer);
+       return $this->ExecuteStatment(VendmaxCommands::customer);
     }
     public function get_pointsofsale()
     {

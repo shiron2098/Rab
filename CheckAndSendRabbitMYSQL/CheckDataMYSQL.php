@@ -38,7 +38,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
                    $this->time();
                     $this->IDOperators = $data['id'];
                     $this->IdOperatorsFull($this->IDOperators);
-                    $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'On processing');
+                    $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'is processing');
                     $responseTimeTableDate = $this->JobScheduleTime();
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
@@ -53,12 +53,11 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             $text = '[Job id #'. $this->IDOperators . ']' . 'Operator cannot be found';
             $this->logtext($text);
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-            return $this->idcolumnjob;
         }
         if($this->check === $this->checkrowstime){
+            /** No jobs need to be run.Just logging into database */
             $this->UpdateOperStreamsUp();
         }
-        return $this->idcolumnjob;
     }
 
 
@@ -90,9 +89,10 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     {
         try {
             if ($this->timestamp >= $this->timetask) {
-                $responseDataFromVendmax = $this->DataFromVendmax($this->IDJobs);
+                $responseDataFromOperator = $this->DataFromRabbit($this->IDJobs);
                 $response = ['time' => $this->timeMYSQLRabbit,
-                    'code' => $responseDataFromVendmax];
+                    'code' => $responseDataFromOperator,
+                     'idcolumnjob' => $this->idcolumnjob];
 
                 $this->SendAndCheckMessageMYSQL($response);
             } else {
@@ -109,7 +109,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
         }
     }
 
-    protected function DataFromVendmax($idtask)
+    protected function DataFromRabbit($idtask)
     {
         $result = mysqli_query(
             $this->linkConnect,

@@ -19,14 +19,18 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class WorkerReceiver1 extends \CheckDataMYSQL
 {
+     protected $IDOperators;
+     protected $IDJobs;
+     Protected $IDJob_Scheduler;
 
-    public function Index($id)
+    public function Index($idstreams)
     {
         $connection = new AMQPStreamConnection(self::hostrabbit, self::port, self::username, self::passwordrabbit,self::vhost);
         $channel = $connection->channel();
-        $responseOper = $this->SelectToDbOperatorsDAWS($id);
+        $responseOper = $this->SelectToDbOperatorsDAWS();
         if (!empty($responseOper) && isset($responseOper)) {
             foreach ($responseOper as $rabbitmq) {
+                $this->IdOperatorsFull($rabbitmq['id']);
                 $channel->exchange_declare(self::exchange, self::type, false, false, false);
 
                 list($queue_name, ,) = $channel->queue_declare(self::NameConfig . $rabbitmq['id'], false, false, false, false);
@@ -38,6 +42,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
                     1,
                     null
                 );
+
 
                /* echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";*/
 

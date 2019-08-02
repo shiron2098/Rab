@@ -1,47 +1,25 @@
 <?php
+
 require_once __DIR__ . '/vendor/autoload.php';
-include_once ('MysqlDbConnect.php');
-include_once ('RabbiSendSqlTakeInDbMYSQL.php');
-use GO\Scheduler;
+require_once('RequestProcessor.php');
+require_once('CreateOperator/CreateTask.php');
 
-class Job extends MysqlDbConnect
-{
 
-    const NameTable = 'JobScheduler';
-    const Schedule = "*/5 * * * 4,5 /usr/bin/php7.3 /var/www/html/rab/index.php >/dev/null 2>&1";
-    const SQL = 'SELECT * FROM Product';
-    const columnname = 'Taskid';
 
-    protected $Userid;
-    protected $TimeForScheduler;
-    protected $DateForMYSQL;
+class Job extends Threaded {
 
-    protected function SelectToDbOperators()
-    {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM operators"
+    private $idstreams;
+    public static $rows;
+    public function run() {
 
-        );
-        $row = mysqli_fetch_assoc($result);
-        $this->Userid = $row['id'];
-        return $row;
+    $this->idstreams = Thread::getCurrentThreadId();
+       $a = new RequestProcessor();
+        $a->UpdateOperStreamsUp();
+       $a->read_job_from_queue($this->idstreams);
+        printf("%s is Thread #%lu\n", __CLASS__, Thread::getCurrentThreadId());
     }
-    protected function SchedulerSingle()
-    {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM jobs WHERE operator_id = $this->Userid"
-        );
-        if (!empty($result)) {
-            foreach ($result as $date)
-                $file[] = $date;
-            return $file;
-        } else {
-            $a = 'error empty response';
-            return $a;
-        }
-    }
-
 }
 
+    $my = new Job();
+        $my->run();
+/*    $my->start();*/
