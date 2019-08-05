@@ -14,6 +14,7 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
     const potsofsale = "select top 1000 * from POS_View";
     const product = "select * from PRO_View";
     const locations = "select top 1000 * from LOC_View";
+    const non_vending_equipment = "select top 1000 * from VEQ_View";
 
     public $command;
     public $softwireprovider;
@@ -52,5 +53,7 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
     {
         return  $this->ExecuteStatment(VendmaxCommands::locations);
     }
-
+   public function get_non_vending_equipment(){
+       return  $this->ExecuteStatment(VendmaxCommands::non_vending_equipment);
+   }
 }

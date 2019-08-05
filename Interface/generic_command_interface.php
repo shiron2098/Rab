@@ -10,4 +10,5 @@ interface generic_command_interface{
     public function get_customers();
     public function get_pointsofsale();
     public function get_locations();
+    public function get_non_vending_equipment();
 }

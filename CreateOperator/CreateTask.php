@@ -129,4 +129,19 @@ class CreateTask extends CheckDataMYSQL
         }
 
     }
+
+    public function Select()
+    {
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
+
+        );
+        $this->rows = $result->num_rows;
+        FOREACH ($result as $row) {
+            $arrayOperators[] = $row;
+
+        }
+        return $arrayOperators;
+    }
 }

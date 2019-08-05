@@ -49,5 +49,10 @@ class NayaxCommands extends DbConnectProvider implements generic_command_interfa
         $this->logtext($text);
         return false;
     }
+    public function get_non_vending_equipment(){
+        $text = 'get_non_vending_equipment true';
+        $this->logtext($text);
+        return false;
+    }
 
 }

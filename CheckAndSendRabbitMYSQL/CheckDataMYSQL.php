@@ -54,10 +54,10 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             $this->logtext($text);
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
         }
-        if($this->check === $this->checkrowstime){
+     //   if($this->check === $this->checkrowstime){
             /** No jobs need to be run.Just logging into database */
-            $this->UpdateOperStreamsUp();
-        }
+       //     $this->UpdateOperStreamsUp();
+       // }
     }
 
 
@@ -98,7 +98,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             } else {
                 $text='[Job id #' . $this->IDJobs . ']' . 'Task tried to be performed out of schedule ';
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-                $this->UpdateOperStreams();
+                $this->UpdateOperStreams($this->IDOperators);
                 $this->checkrowstime++;
                 throw new Exception($text);
             }

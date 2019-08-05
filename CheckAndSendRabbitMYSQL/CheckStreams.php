@@ -9,7 +9,7 @@ class CheckStreams extends CheckDataMYSQL
 
 
        public function CheckDouble (){
-           $this->UpdateOperStreams();
+           $this->UpdateOperStreams($this->IDOperators);
        }
       public function Check(){
           $data = $this->CheckStreamsSelect();
@@ -27,7 +27,7 @@ class CheckStreams extends CheckDataMYSQL
                           $this->IDOperators= $data['operator_id'];
                           $this->Checktime();
                           if ($this->timestamp > $this->timetaskcheck) {
-                              $this->UpdateOperStreams();
+                              $this->UpdateOperStreams($this->IDOperators);
                               break;
 
                           } else {

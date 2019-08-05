@@ -137,10 +137,10 @@ abstract class Rabbimq extends Log
         }
 
     }
-    public function UpdateOperStreams(){
+    public function UpdateOperStreams($id){
         $result = mysqli_query(
             $this->linkConnect,
-            "UPDATE operators SET streams = 0 WHERE id=$this->IDOperators"
+            "UPDATE operators SET streams = 0 WHERE id=$id"
         );
         if($result !== false){
             $text = 'Update to complete streams 0';
@@ -151,16 +151,18 @@ abstract class Rabbimq extends Log
         }
     }
     public function UpdateOperStreamsUp($idstreams,$idoper){
-        $result = mysqli_query(
-            $this->linkConnect,
-            "UPDATE operators SET streams = $idstreams WHERE id=$idoper"
-        );
-        if($result !== false){
-            $text = 'Update to complete streams 0';
-            $this->logtext($text);
-        }else{
-            $text = 'update error streams';
-            $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
+        if(!empty($idstreams) && isset($idstreams)&& !empty($idstreams)&& isset($idoper)) {
+            $result = mysqli_query(
+                $this->linkConnect,
+                "UPDATE operators SET streams = $idstreams WHERE id=$idoper"
+            );
+            if ($result !== false) {
+                $text = 'Update to complete streams #' . $idstreams . 'in #' . $idoper;
+                $this->logtext($text);
+            } else {
+                $text = 'update error streams' . $idoper;
+                $this->logDB($this->IDJobs, $this->time(), self::statusERROR, $text);
+            }
         }
     }
 

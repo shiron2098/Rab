@@ -43,15 +43,15 @@ abstract class MYSQL
         }
     }
 
-    protected function SelectToDbOperatorsDAWS()
+    protected function SelectToDbOperatorsDAWS($operid)
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT id,code,streams FROM operators"
+            "SELECT id,code,streams FROM operators where id = $operid"
 
         );
         FOREACH ($result as $row) {
-            if($row['streams'] == 0 ) {
+            if($row['streams'] !== 0 ) {
                 $arrayoper[] = $row;
                 return $arrayoper;
             }
@@ -166,6 +166,22 @@ abstract class MYSQL
         );
         $row = mysqli_fetch_assoc($result2);
         return $row['LAST_INSERT_ID()'];
+    }
+    public function SelectToDbOperatorsStreams()
+    {
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
+
+        );
+        $this->rows = $result->num_rows;
+        FOREACH ($result as $row) {
+            if ($row['streams'] === null || $row['streams'] == 0) {
+                $arrayOperators[] = $row;
+                return $arrayOperators;
+            }
+
+        }
     }
 
 

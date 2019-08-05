@@ -20,23 +20,26 @@ class RequestProcessor extends WorkerReceiver1
     public $responseJson;
     public $idcolumnjob;
     public $bolleanUpdateStreams = false;
-    public function read_job_from_queue($id)
+    public function read_job_from_queue($Operator)
     {
-        $WorkerOfDb = new WorkerReceiver1();
-        $responseOfRabbit = $WorkerOfDb->Index($id);
-        if (!empty($responseOfRabbit)) {
-            foreach ($responseOfRabbit as $array) {
-                $response = null;
-                $this->responseJson = json_decode($array);
-                $this->idcolumnjob = $this->responseJson->IdColumnJobHistory;
-                $this->execute_job($this->responseJson);
+        if(!empty($Operator) && isset($Operator)) {
+            $WorkerOfDb = new WorkerReceiver1();
+            $responseOfRabbit = $WorkerOfDb->Index($Operator['id']);
+
+            if (!empty($responseOfRabbit)) {
+                foreach ($responseOfRabbit as $array) {
+                    $response = null;
+                    $this->responseJson = json_decode($array);
+                    $this->idcolumnjob = $this->responseJson->IdColumnJobHistory;
+                    $this->execute_job($this->responseJson);
+                }
+            } else {
+                return $this->UpdateOperStreams($Operator['id']);
             }
-        } else {
-            return  $this->UpdateOperStreams();
         }
 
         if($this->bolleanUpdateStreams === true) {
-            $this->UpdateOperStreams();
+            $this->UpdateOperStreams($Operator['id']);
         }
     }
     public function execute_job($json)
@@ -70,6 +73,9 @@ class RequestProcessor extends WorkerReceiver1
                         break;
                     case 'get_locations':
                         $response = $commands->get_locations();
+                        break;
+                    case 'get_non_vending_equipment':
+                        $response = $commands->get_non_vending_equipment();
                 }
                 $this->save_result_to_queue($response);
 

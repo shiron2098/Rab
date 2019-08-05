@@ -23,11 +23,11 @@ class WorkerReceiver1 extends \CheckDataMYSQL
      protected $IDJobs;
      Protected $IDJob_Scheduler;
 
-    public function Index($idstreams)
+    public function Index($idoper)
     {
         $connection = new AMQPStreamConnection(self::hostrabbit, self::port, self::username, self::passwordrabbit,self::vhost);
         $channel = $connection->channel();
-        $responseOper = $this->SelectToDbOperatorsDAWS();
+        $responseOper = $this->SelectToDbOperatorsDAWS($idoper);
         if (!empty($responseOper) && isset($responseOper)) {
             foreach ($responseOper as $rabbitmq) {
                 $this->IdOperatorsFull($rabbitmq['id']);
@@ -89,6 +89,7 @@ class WorkerReceiver1 extends \CheckDataMYSQL
         }else{
             $text = '$file array WorkerReceiver null';
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
+            $this->UpdateOperStreams($rabbitmq['id']);
             $this->logtext($text);
         }
     }
