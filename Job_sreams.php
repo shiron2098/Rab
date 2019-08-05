@@ -1,6 +1,6 @@
 <?php
 
-class AsyncOperation extends Thread
+class Job_sreams extends Thread
 {
 
     private $idstreams;
@@ -15,6 +15,7 @@ class AsyncOperation extends Thread
     {
         if ($this->arg) {
             $this->idstreams = Thread::getCurrentThreadId();
+
             printf("%s is JobStreams #%lu\n", __CLASS__, Thread::getCurrentThreadId());
         }
     }
@@ -25,7 +26,7 @@ $stack = array();
 
 //Initiate Multiple Thread
 foreach (range("A", "D") as $i) {
-    $stack[] = new AsyncOperation($i);
+    $stack[] = new Job_sreams($i);
 }
 
 // Start The Threads

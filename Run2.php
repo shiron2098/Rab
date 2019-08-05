@@ -2,8 +2,6 @@
 session_start();
 require_once('CreateOperator/CreateTask.php');
 require_once('RequestProcessor.php');
-
-
 class Run2 extends CreateTask
 {
     public function Injection()
@@ -18,9 +16,9 @@ class Run2 extends CreateTask
         for ($i = 0; $i < $rows; $i++) {
             exec('php Job.php > /dev/null 2>/dev/null &');
             sleep(1);
-
         }
     }
 }
 $a = new Run2();
 $a->Injection();
+?>

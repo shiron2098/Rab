@@ -2,7 +2,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 require_once('CreateOperator/CreateTask.php');
-ignore_user_abort(true);
 
 class Job_Schedule extends CreateTask
 {
