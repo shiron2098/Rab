@@ -137,11 +137,18 @@ abstract class Rabbimq extends Log
         }
 
     }
-    public function UpdateOperStreams($id){
-        $result = mysqli_query(
-            $this->linkConnect,
-            "UPDATE operators SET streams = 0 WHERE id=$id"
-        );
+    public function UpdateOperStreams($id,$bool){
+        if(isset($bool) && !empty($bool) == 0) {
+            $result = mysqli_query(
+                $this->linkConnect,
+                "UPDATE operators SET streams = 0 WHERE id=$id"
+            );
+        }else{
+            $result = mysqli_query(
+                $this->linkConnect,
+                "UPDATE operators SET streams_response = 0 WHERE id=$id"
+            );
+        }
         if($result !== false){
             $text = 'Update to complete streams 0';
             $this->logtext($text);
@@ -150,19 +157,26 @@ abstract class Rabbimq extends Log
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
         }
     }
-    public function UpdateOperStreamsUp($idstreams,$idoper){
+    public function UpdateOperStreamsUp($idstreams,$idoper,$configid){
         if(!empty($idstreams) && isset($idstreams)&& !empty($idstreams)&& isset($idoper)) {
-            $result = mysqli_query(
-                $this->linkConnect,
-                "UPDATE operators SET streams = $idstreams WHERE id=$idoper"
-            );
-            if ($result !== false) {
-                $text = 'Update to complete streams #' . $idstreams . 'in #' . $idoper;
-                $this->logtext($text);
-            } else {
-                $text = 'update error streams' . $idoper;
-                $this->logDB($this->IDJobs, $this->time(), self::statusERROR, $text);
+            if(isset($configid)&& !empty($configid) == 0) {
+                $result = mysqli_query(
+                    $this->linkConnect,
+                    "UPDATE operators SET streams = $idstreams WHERE id=$idoper"
+                );
+            }else{
+                $result = mysqli_query(
+                    $this->linkConnect,
+                    "UPDATE operators SET streams_response = $idstreams WHERE id=$idoper"
+                );
             }
+                if ($result !== false) {
+                    $text = 'Update to complete streams #' . $idstreams . 'in #' . $idoper;
+                    $this->logtext($text);
+                } else {
+                    $text = 'update error streams' . $idoper;
+                    $this->logDB($this->IDJobs, $this->time(), self::statusERROR, $text);
+                }
         }
     }
 

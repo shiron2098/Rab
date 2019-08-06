@@ -114,7 +114,6 @@ class DbConnectProvider extends Rabbimq
                 $this->zip = 'zip' . rand(100,10000);
                 file_put_contents($this->zip, $ResponseDbDaws);
                 $zip = new ZipArchive();
-                sleep(2);
                 $filename = $this->zip;
                 if ($zip->open($filename) === TRUE) {
 /*                    $filename = md5(time() . rand(1, 999999)) . '.' . DbConnectProvider::PathToDbConfigurations;

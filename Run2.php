@@ -4,18 +4,27 @@ require_once('CreateOperator/CreateTask.php');
 require_once('RequestProcessor.php');
 class Run2 extends CreateTask
 {
+    const rows = 2;
     public function Injection()
     {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM operators"
 
-        );
 
-        $rows = $result->num_rows;
-        for ($i = 0; $i < $rows; $i++) {
-            exec('php Job.php > /dev/null 2>/dev/null &');
-            sleep(1);
+
+        for ($i = 0; $i < self::rows; $i++) {
+            $row=null;
+            $result = mysqli_query(
+                $this->linkConnect,
+                "SELECT * FROM operators"
+
+            );
+            foreach($result as $operator){
+                $row[] =$operator;
+            }
+                foreach($row as $oper) {
+                    if ($oper['streams'] == 0) {
+                        exec('php Job.php > /dev/null 2>/dev/null &');
+                    }
+                }
         }
     }
 }

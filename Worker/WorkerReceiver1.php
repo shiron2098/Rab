@@ -16,6 +16,8 @@ include_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
 
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 class WorkerReceiver1 extends \CheckDataMYSQL
 {
@@ -23,19 +25,22 @@ class WorkerReceiver1 extends \CheckDataMYSQL
      protected $IDJobs;
      Protected $IDJob_Scheduler;
 
-    public function Index($idoper)
+    public function Index($idoper,$idconfig)
     {
         $connection = new AMQPStreamConnection(self::hostrabbit, self::port, self::username, self::passwordrabbit,self::vhost);
         $channel = $connection->channel();
-        $responseOper = $this->SelectToDbOperatorsDAWS($idoper);
+            $responseOper = $this->SelectToDbOperatorsDAWS($idoper['id']);
         if (!empty($responseOper) && isset($responseOper)) {
             foreach ($responseOper as $rabbitmq) {
                 $this->IdOperatorsFull($rabbitmq['id']);
                 $channel->exchange_declare(self::exchange, self::type, false, false, false);
-
-                list($queue_name, ,) = $channel->queue_declare(self::NameConfig . $rabbitmq['id'], false, false, false, false);
-
-                $channel->queue_bind($queue_name, self::exchange, $rabbitmq['code']);
+                if(isset($idconfig)&&!empty($idconfig) == 0) {
+                    list($queue_name, ,) = $channel->queue_declare(self::NameConfig . $rabbitmq['id'], false, false, false, false);
+                    $channel->queue_bind($queue_name, self::exchange, $rabbitmq['code']);
+                }else {
+                    list($queue_name, ,) = $channel->queue_declare(self::NameConfigDAWS . $rabbitmq['id'], false, false, false, false);
+                    $channel->queue_bind($queue_name, self::exchange, $rabbitmq['name']);
+                }
 
                 $channel->basic_qos(
                     null,
@@ -89,8 +94,9 @@ class WorkerReceiver1 extends \CheckDataMYSQL
         }else{
             $text = '$file array WorkerReceiver null';
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-            $this->UpdateOperStreams($rabbitmq['id']);
+            $this->UpdateOperStreams($rabbitmq['id'],$this->bool);
             $this->logtext($text);
         }
     }
+
 }

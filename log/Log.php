@@ -63,7 +63,7 @@ class Log extends MYSQL
             return null;
         }
     }
-    protected function logtext($text)
+    public function logtext($text)
     {
         file_put_contents(__DIR__ . Rabbimq::logfile, date('Y-m-d H:i:s', strtotime('now')) . " " . $text . PHP_EOL, FILE_APPEND);
     }

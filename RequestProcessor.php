@@ -20,11 +20,12 @@ class RequestProcessor extends WorkerReceiver1
     public $responseJson;
     public $idcolumnjob;
     public $bolleanUpdateStreams = false;
+    public $bool = 0;
     public function read_job_from_queue($Operator)
     {
         if(!empty($Operator) && isset($Operator)) {
             $WorkerOfDb = new WorkerReceiver1();
-            $responseOfRabbit = $WorkerOfDb->Index($Operator['id']);
+            $responseOfRabbit = $WorkerOfDb->Index($Operator,$this->bool);
 
             if (!empty($responseOfRabbit)) {
                 foreach ($responseOfRabbit as $array) {
@@ -34,12 +35,12 @@ class RequestProcessor extends WorkerReceiver1
                     $this->execute_job($this->responseJson);
                 }
             } else {
-                return $this->UpdateOperStreams($Operator['id']);
+                return $this->UpdateOperStreams($Operator['id'],$this->bool);
             }
         }
 
         if($this->bolleanUpdateStreams === true) {
-            $this->UpdateOperStreams($Operator['id']);
+            $this->UpdateOperStreams($Operator['id'],$this->bool);
         }
     }
     public function execute_job($json)

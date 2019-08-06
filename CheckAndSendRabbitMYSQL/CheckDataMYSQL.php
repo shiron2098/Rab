@@ -12,6 +12,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
     protected $TimeTaskUpdate;
     protected $timetask;
     protected   $timestamp;
+    protected $bool = 0;
     private  $check;
     protected $timetasklogstart;
     protected $TimeTaskToRepeat;
@@ -98,7 +99,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             } else {
                 $text='[Job id #' . $this->IDJobs . ']' . 'Task tried to be performed out of schedule ';
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-                $this->UpdateOperStreams($this->IDOperators);
+                $this->UpdateOperStreams($this->IDOperators,$this->bool);
                 $this->checkrowstime++;
                 throw new Exception($text);
             }

@@ -136,25 +136,6 @@ abstract class MYSQL
             $this->logtext($e->getMessage());
         }
     }
-
-    protected function CheckStreamsSelect(){
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM operators"
-
-        );
-        $this->rows = $result->num_rows;
-        FOREACH ($result as $row) {
-
-            if ($row['streams'] === null || $row['streams'] == 1) {
-                $arrayStreams[] = $row;
-            }
-            if($row['streams'] === null || $row['streams'] == 2){
-                $arrayStreams[] = $row;
-            }
-        }
-        return $arrayStreams;
-    }
     public function time(){
         $this->timestamp =  DateTime::createFromFormat( 'U.u', sprintf('%.f', microtime(true)) )->format('Y-m-d H:i:s.u');
         return $this->timestamp;
@@ -184,5 +165,20 @@ abstract class MYSQL
         }
     }
 
+    public function SelectToDbOperatorsStreamsOut(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
+
+        );
+        $this->rows = $result->num_rows;
+        FOREACH ($result as $row) {
+            if ($row['streams_response'] === null || $row['streams_response'] == 0) {
+                $arrayOperators[] = $row;
+            }
+
+        }
+        return $arrayOperators;
+    }
 
 }
