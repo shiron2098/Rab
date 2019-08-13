@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-include_once 'AbstractClass/Rabbimq.php';
+include_once __DIR__ . '/../AbstractClass/Rabbimq.php';
 
 /*require_once __DIR__ . '/vendor/autoload.php';
 include_once 'Rabbimq.php';*/
@@ -10,6 +10,7 @@ abstract class MYSQL
     const user = 'ret';
     const password = '123';
     const database = 'daws2';
+    const Changednew = "not changed";
 
     protected $DataOperators;
     protected $timestamp;
@@ -47,7 +48,7 @@ abstract class MYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT id,code,streams FROM operators where id = $operid"
+            "SELECT id,code,streams,name FROM operators where id = $operid"
 
         );
         FOREACH ($result as $row) {
@@ -161,7 +162,6 @@ abstract class MYSQL
                 $arrayOperators[] = $row;
                 return $arrayOperators;
             }
-
         }
     }
 
@@ -180,5 +180,28 @@ abstract class MYSQL
         }
         return $arrayOperators;
     }
+    public function InsertDataResponseForProducts($response){
+        if($response->changed_or_new == mysql::Changednew) {
+            $result = mysqli_query(
+                $this->linkConnect,
+                "insert into products (operator_id,pro_code,pro_description,pdf_code,pdf_description,pro_id,pdf_id,created_dt,batch_id) 
+                               values ('" . $response->operator_id . "','" . $response->pro_code . "','" . $response->pro_description . "','" . $response->pdf_code . "',
+                               '" . $response->pdf_description . "','" . $response->pro_id . "','" . $response->pdf_id . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+            );
+            print_r($this->linkConnect);
+            exit();
+        }
+    }
+    public function GetSoftwareProvider($id)
+    {
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT id,code,description FROM software_providers
+                  WHERE id = $id"
+        );
+        $row = mysqli_fetch_assoc($result);
+        return $row;
+    }
+
 
 }

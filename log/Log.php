@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once 'AbstractClass/MYSQL.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL.php';
 
 
 class Log extends MYSQL
@@ -63,7 +63,7 @@ class Log extends MYSQL
             return null;
         }
     }
-    public function logtext($text)
+    public static function logtext($text)
     {
         file_put_contents(__DIR__ . Rabbimq::logfile, date('Y-m-d H:i:s', strtotime('now')) . " " . $text . PHP_EOL, FILE_APPEND);
     }
@@ -91,8 +91,5 @@ class Log extends MYSQL
             echo $e->getMessage();
             $this->logtext($e->getMessage());
         }
-    }
-    public function UpdateLogDb(){
-
     }
 }

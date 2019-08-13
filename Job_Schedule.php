@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 session_start();
-require_once('CreateOperator/CreateTask.php');
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/CreateOperator/CreateTask.php';
 
 class Job_Schedule extends CreateTask
 {

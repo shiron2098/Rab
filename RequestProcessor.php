@@ -3,11 +3,11 @@
 use app\WorkerReceiver1;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once ('VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php');
-require_once('Worker/WorkerReceiver1.php');
-require_once ('VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php');
-require_once('VendmaxAndNayaxAndConnect/NayaxCommandsToProvider.php');
-require_once('VendmaxAndNayaxAndConnect/DbConnectProvider.php');
+require_once __DIR__ . '/VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php';
+require_once __DIR__ . '/Worker/WorkerReceiver1.php';
+require_once __DIR__ . '/VendmaxAndNayaxAndConnect/VendmaxCommandsToProvider.php';
+require_once __DIR__ . '/VendmaxAndNayaxAndConnect/NayaxCommandsToProvider.php';
+require_once __DIR__ . '/VendmaxAndNayaxAndConnect/DbConnectProvider.php';
 /*require_once('Worker/RabbitMqSendMessageConnect.php');*/
 
 class RequestProcessor extends WorkerReceiver1
@@ -77,6 +77,23 @@ class RequestProcessor extends WorkerReceiver1
                         break;
                     case 'get_non_vending_equipment':
                         $response = $commands->get_non_vending_equipment();
+                        break;
+                    case 'get_equipment':
+                        $response = $commands->get_equipment();
+                        break;
+                    case 'get_items':
+                        $response = $commands->get_items();
+                        break;
+
+                    case 'exec t2s_exportPos No':
+                        $response = $commands->get_t2s_exportPos();
+                        break;
+                    case 'exec t2s_exportPRO No':
+                        $response = $commands->get_t2s_exportPRO();
+                        break;
+                    case 'exec t2s_exportVisits':
+                        $response = $commands->get_t2s_exportVisits();
+                        break;
                 }
                 $this->save_result_to_queue($response);
 

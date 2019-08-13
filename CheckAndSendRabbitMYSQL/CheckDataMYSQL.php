@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-include_once 'RabbitSendSqlTakeInDbMYSQL.php';
+require_once __DIR__ . '/RabbitSendSqlTakeInDbMYSQL.php';
 
 
 class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL

@@ -1,8 +1,8 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once('RequestProcessor.php');
-require_once('CreateOperator/CreateTask.php');
+require_once __DIR__ . '/RequestProcessor.php';
+require_once __DIR__ . '/CreateOperator/CreateTask.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -21,7 +21,6 @@ class Job extends Threaded
                  $this->idstreams = Thread::getCurrentThreadId();
                  $request = new RequestProcessor();
                    $request->UpdateOperStreamsUp($this->idstreams, $operator['id'],$this->bool);
-                   sleep(1);
                  $request->read_job_from_queue($operator);
                 printf("%s is JobStreams #%lu\n", __CLASS__, Thread::getCurrentThreadId());
                 echo Thread::getCurrentThreadId();
@@ -33,9 +32,9 @@ class Job extends Threaded
      $classCreatetask = new CreateTask();
     $dataresponseOperator = $classCreatetask->SelectToDbOperatorsStreams();
         foreach($dataresponseOperator as $operator) {
-            if($dataresponseOperator['streams'] == 0) {
+            if($operator['streams'] == 0) {
                 $my = new Job();
-                $my->Run($operator);
+                $my->Run($operator, ENT_XML1);
             }
         }
 /*    $my->start();*/

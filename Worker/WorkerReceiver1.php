@@ -12,7 +12,7 @@ $a =json_decode($result->body);
 
 $channel->close();
 $connection->close();*/
-include_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
+require_once __DIR__ . '/../CheckAndSendRabbitMYSQL/CheckDataMYSQL.php';
 
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;

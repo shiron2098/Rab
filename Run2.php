@@ -1,33 +1,38 @@
 <?php
 session_start();
-require_once('CreateOperator/CreateTask.php');
-require_once('RequestProcessor.php');
+require_once __DIR__ . '/CreateOperator/CreateTask.php';
+require_once __DIR__ . '/RequestProcessor.php';
 class Run2 extends CreateTask
 {
-    const rows = 2;
-    public function Injection()
+    const rows = 3;
+
+    private $idoper;
+    private $idjob;
+    public function Start()
     {
 
-
-
         for ($i = 0; $i < self::rows; $i++) {
-            $row=null;
-            $result = mysqli_query(
-                $this->linkConnect,
-                "SELECT * FROM operators"
-
-            );
-            foreach($result as $operator){
-                $row[] =$operator;
-            }
+             $row = $this->SingleJobArray();
                 foreach($row as $oper) {
                     if ($oper['streams'] == 0) {
-                        exec('php Job.php > /dev/null 2>/dev/null &');
+                        exec('/usr/bin/php /home/shiro/Downloads/Rab/Job.php > /dev/null 2>/dev/null &');
                     }
                 }
         }
     }
+    public function SingleJobArray(){
+        $row=null;
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
+
+        );
+        foreach($result as $operator){
+            $row[] =$operator;
+        }
+        return $row;
+    }
 }
 $a = new Run2();
-$a->Injection();
+$a->Start();
 ?>

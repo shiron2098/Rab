@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once('AbstractClass/Rabbimq.php');
+require_once __DIR__ . '/../AbstractClass/Rabbimq.php';
 /*
 $ad  = $aa->__getFunctions();*/
 /*'userName' => 'admin',
@@ -62,15 +62,19 @@ class DbConnectProvider extends Rabbimq
             'ProcessResultToXml'=> True,'HasResult' => true,'CompressResult'=> false,
             'accept-encoding' => 'deflate',"Sid"=>1)));
 
-        $connect = new SoapClient(DbConnectProvider::WSDL,array('location' => $this->HeaderLocal, 'url' => DbConnectProvider::UrlNamespace,
-            'trace' => TRUE,
-            'exceptions' => false));
+        try {
+            $connect = new SoapClient(DbConnectProvider::WSDL, array('location' => $this->HeaderLocal, 'url' => DbConnectProvider::UrlNamespace,
+                'trace' => TRUE,
+                'exceptions' => false));
+        } catch (SoapFault $e) {
+            $e->getMessage();
+        }
 
-         /**AuthenticateUser @Param array  @response Object(Status,LoginType) */
+        /**AuthenticateUser @Param array  @response Object(Status,LoginType) */
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
-        /*sleep(5);*/
+        sleep(1);
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
 /*        $results2 = print_r($ToParamResponseDb,
             true);
@@ -99,7 +103,13 @@ class DbConnectProvider extends Rabbimq
 
             }
         }
-        do
+
+/*            if($this->ResponseDB !== null){
+                return $this->ResponseDB;
+            }else{
+                $this->Db_Connect();
+            }*/
+      do
             if($this->ResponseDB !== null){
                 return $this->ResponseDB;
             }while($this->Db_Connect());
@@ -159,4 +169,6 @@ class DbConnectProvider extends Rabbimq
         }
     }
 }
+/*$a = new DbConnectProvider('exec t2s_exportPos No',DbConnectProvider::HeadersLocation,'admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466');
+$a->ResponseOfDbToLogFile('1','exec t2s_exportPos No')*/
 ?>

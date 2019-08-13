@@ -1,7 +1,13 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once('RequestProcessor.php');
-require_once('CreateOperator/CreateTask.php');
+require_once __DIR__ . '/RequestProcessor.php';
+require_once __DIR__ .  '/CreateOperator/CreateTask.php';
+require_once __DIR__ . '/VendmaxAndNayaxAndConnect/DbConnectProvider.php';
+require_once __DIR__ . '/Worker/WorkerReceiver1.php';
+require_once __DIR__ . '/vendor/php-amqplib/php-amqplib/PhpAmqpLib/Connection/AMQPStreamConnection.php';
+
+
+use app\WorkerReceiver1;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
@@ -12,13 +18,20 @@ class Task extends Threaded
     public $response;
     public $idstream;
     public $idoper;
+    public $responsework;
+    public $responseoperator;
+
 
     public function someWork()
     {
         $bool = 0;
-        require_once __DIR__ . '/vendor/autoload.php';
         $this->idstream = Thread::getCurrentThreadId();
-        $connection = new AMQPStreamConnection();
+        $WorkerOfDb = new WorkerReceiver1();
+        $request = new RequestProcessor();
+        $operator = $request->UpdateOperStreamsUp($this->idstream, $this->idoper['id'],$bool);
+        $responseOfRabbit = $WorkerOfDb->Index($this->idoper,$bool);
+
+
 /*        $request = new RequestProcessor();
         $operator = $request->UpdateOperStreamsUp($this->idstream, $this->idoper['id'],$bool);
         sleep(5);
@@ -26,16 +39,28 @@ class Task extends Threaded
         $request->read_job_from_queue($this->idoper);
         echo Thread::getCurrentThreadId();*/
     }
-
+      public function rep(){
+         return $this->responsework;
+      }
     public function single()
     {
         $classCreatetask = new CreateTask();
         $dataresponseOperator = $classCreatetask->SelectToDbOperatorsStreams();
         foreach ($dataresponseOperator as $operator) {
-            if ($dataresponseOperator['streams'] == 0) {
+            if ($operator['streams'] == 0) {
                 return $this->idoper = $operator;
             }
         }
+    }
+    public function Work(){
+        $time = time();
+        $bool = 0;
+        $WorkerOfDb = new WorkerReceiver1();
+        $responseOfRabbit = $WorkerOfDb->Index($this->idoper,$bool);
+        foreach ($responseOfRabbit as $job) {
+            $response = json_decode($job);
+        }
+        return $response;
     }
     public function rows(){
         $link = mysqli_connect(
@@ -54,25 +79,21 @@ class Task extends Threaded
         return $rows;
     }
 }
+/*$task = new Task();
+$task->responseoperator = $task->Single();
+$task->responsework = $task->Work();*/
 
-$task = new Task;
 
-$thread = new class($task) extends Thread {
-    private $task;
 
-    public function __construct(Threaded $task)
-    {
-        $this->task = $task;
-    }
-
-    public function run()
-    {
-        $this->task->single();
-        $this->task->someWork();
-    }
-};
+class readWorker extends Thread {
+    public function run(){
+        $a = new task();
+        $a->someWork();
+        }
+}
 $a = new Task();
 $res = $a->rows();
 for($i = 0;$i<$res;$i++) {
-    $thread->start() && $thread->join();
+    $Thres = new readWorker();
+    $Thres->start();
 }

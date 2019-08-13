@@ -1,13 +1,13 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once('CheckAndSendRabbitMYSQL/CheckDataMYSQL.php');
+require_once __DIR__ . '/../CheckAndSendRabbitMYSQL/CheckDataMYSQL.php';
 
 
 
 class CreateTask extends CheckDataMYSQL
 {
-    protected $commands;
-    protected $softwareprovider;
+    Public $commands;
+    Public $softwareprovider;
 
     public function Tointo()
     {
@@ -16,7 +16,6 @@ class CreateTask extends CheckDataMYSQL
             $this->linkConnect,
             "insert into operators (name,code,software_provider_id,connection_url,streams,user_name,user_password) values ('vmsasha3','" . $ret . "','" . $this->softwareprovider . "','http://web-server:8083/VmoDataAccessWS.asmx?swCode=vmsasha3',0,'Admin','00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466')"
         );
-        print_R($this->linkConnect);
         $this->RowsNewColumnInsert();
         $result = mysqli_query(
             $this->linkConnect,
@@ -63,12 +62,12 @@ class CreateTask extends CheckDataMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into commands (code,description) values ('get_products','receiving_products')"
+            "insert into commands (code,description) values ('exec t2s_exportVisits','t2s_exportVisits')"
         );
         if($result == false){
             $result = mysqli_query(
                 $this->linkConnect,
-            "SELECT * FROM commands WHERE code = 'get_products'"
+            "SELECT * FROM commands WHERE code = 'exec t2s_exportVisits'"
         );
             foreach ($result as $res){
                 $this->commands = $res['id'];
@@ -83,7 +82,7 @@ class CreateTask extends CheckDataMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into software_providers (code,description) values ('Nayax','Nayax')"
+            "insert into software_providers (code,description) values ('Vendmax','Vendmax')"
         );
         if ($result == false) {
             $result2 = mysqli_query(
@@ -145,3 +144,11 @@ class CreateTask extends CheckDataMYSQL
         return $arrayOperators;
     }
 }
+/*$CREATE = NEW CreateTask();
+$CREATE->TointoSoftware_providers();
+$CREATE->Tointo();
+$CREATE->TointoCommands();
+        if ($CREATE->commands !== '0' && $CREATE->commands !== null) {
+            $CREATE->TointoJob();
+            $CREATE->TointoJob_Schedule();
+        }*/

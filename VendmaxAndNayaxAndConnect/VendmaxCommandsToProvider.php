@@ -4,8 +4,8 @@ use app\WorkerReceiver1;
 use app\generic_command_interface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once "Interface/generic_command_interface.php";
-include_once('VendmaxAndNayaxAndConnect/DbConnectProvider.php');
+require_once __DIR__ . "/../Interface/generic_command_interface.php";
+include_once __DIR__ . '/../VendmaxAndNayaxAndConnect/DbConnectProvider.php';
 
 
 class VendmaxCommands extends DbConnectProvider implements generic_command_interface
@@ -15,6 +15,11 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
     const product = "select * from PRO_View";
     const locations = "select top 1000 * from LOC_View";
     const non_vending_equipment = "select top 1000 * from VEQ_View";
+    const equipment =  'select * from VVI_View';
+    const items  = 'select top 1000 * from VEQ_View';
+    const exportPOS = 'exec t2s_exportPos No';
+    const exportPRO = 'exec t2s_exportPRO No';
+    const exportVISITS = 'exec t2s_exportVisits';
 
     public $command;
     public $softwireprovider;
@@ -56,4 +61,29 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
    public function get_non_vending_equipment(){
        return  $this->ExecuteStatment(VendmaxCommands::non_vending_equipment);
    }
+
+    public function get_equipment()
+    {
+        return  $this->ExecuteStatment(VendmaxCommands::equipment);
+    }
+
+    public function get_items()
+    {
+        return  $this->ExecuteStatment(VendmaxCommands::items);
+    }
+
+    public function get_t2s_exportPos()
+    {
+        return  $this->ExecuteStatment(VendmaxCommands::exportPOS);
+    }
+
+    public function get_t2s_exportPRO()
+    {
+        return  $this->ExecuteStatment(VendmaxCommands::exportPRO);
+    }
+
+    public function get_t2s_exportVisits()
+    {
+        return  $this->ExecuteStatment(VendmaxCommands::exportVISITS);
+    }
 }
