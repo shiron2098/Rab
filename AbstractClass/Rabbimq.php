@@ -150,7 +150,7 @@ abstract class Rabbimq extends Log
             );
         }
         if($result !== false){
-            $text = 'Update to complete streams 0';
+            $text = 'Update to complete streams 0 #' . $id;
             $this->logtext($text);
         }else{
             $text = 'Update error streams';
@@ -164,14 +164,15 @@ abstract class Rabbimq extends Log
                     $this->linkConnect,
                     "UPDATE operators SET streams = $idstreams WHERE id=$idoper"
                 );
+                $text = 'Update to complete streams #' . $idstreams . 'in #' . $idoper;
             }else{
                 $result = mysqli_query(
                     $this->linkConnect,
                     "UPDATE operators SET streams_response = $idstreams WHERE id=$idoper"
                 );
+                $text = 'Update to complete streams_response #' . $idstreams . 'in #' . $idoper;
             }
                 if ($result !== false) {
-                    $text = 'Update to complete streams #' . $idstreams . 'in #' . $idoper;
                     $this->logtext($text);
                 } else {
                     $text = 'update error streams' . $idoper;

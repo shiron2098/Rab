@@ -8,7 +8,7 @@ CREATE INDEX CodeSoftware_Providers on software_providers(code);
 CREATE TABLE IF NOT EXISTS operators (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(30) NOT NULL UNIQUE,
-    code VARCHAR(100) NOT NULL,
+    code VARCHAR(100) NOT NULL UNIQUE ,
     software_provider_id INTEGER NOT NULL,
     connection_url VARCHAR(100) NOT NULL,
     streams TINYINT,

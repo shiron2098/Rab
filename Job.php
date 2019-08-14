@@ -13,17 +13,18 @@ class Job extends Threaded
 {
 
     private $idstreams;
+    public static  $operator;
     private $bool = 0;
 
-    public function Run($operator)
+    public function Run()
     {
 
                  $this->idstreams = Thread::getCurrentThreadId();
                  $request = new RequestProcessor();
-                   $request->UpdateOperStreamsUp($this->idstreams, $operator['id'],$this->bool);
-                 $request->read_job_from_queue($operator);
-                printf("%s is JobStreams #%lu\n", __CLASS__, Thread::getCurrentThreadId());
-                echo Thread::getCurrentThreadId();
+                   $request->UpdateOperStreamsUp($this->idstreams, Job::$operator['id'],$this->bool);
+                 $request->read_job_from_queue(Job::$operator);
+/*                printf("%s is JobStreams #%lu\n", __CLASS__, Thread::getCurrentThreadId());
+                echo Thread::getCurrentThreadId();*/
     }
 }
 
@@ -34,7 +35,8 @@ class Job extends Threaded
         foreach($dataresponseOperator as $operator) {
             if($operator['streams'] == 0) {
                 $my = new Job();
-                $my->Run($operator, ENT_XML1);
+                Job::$operator = $operator;
+                $my->Run();
             }
         }
 /*    $my->start();*/

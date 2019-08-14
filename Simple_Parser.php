@@ -1,21 +1,5 @@
 <?php
-/*$a = __DIR__ . '/VendmaxAndNayaxAndConnect/File/vmsasha3/exec t2s_exportPos No/data2019-08-12 10:07:05';
-$ser = __DIR__ . '/sere';
-$response = file_get_contents($ser);*/
-/*$xml = simplexml_load_string($response);
-$json_string = json_encode($xml);
-$object = json_decode($json_string);
-$ver = $object;
-foreach ($object as $photo ){
-     $re = $photo;
-     foreach($re as $string){
-         $aaaa = $string;
-         print_R($aaaa);
-         foreach ( $aaaa as $reps){
-             $rtr = $reps;
-         }
-     }
-}*/
+
 
 class Simple_Parser
 {
@@ -68,16 +52,3 @@ class Simple_Parser
         array_pop($this->datas);
     }
 }
-/*$a = 0;
-$xml_parser = new Simple_Parser;
-$xml_parser->parse($response);
-$xmlstring = $xml_parser->data['NEWDATASET']['0']['child']['TABLE'];
-foreach ($xmlstring as $atribut){
-    foreach($atribut['attribs'] as $fullstring){
-        $parser=xml_parser_create();
-        $file[$a] = $fullstring;
-        $a++;
-        print_r($a);
-        file_put_contents(__DIR__ . '/sere',$file);
-    }
-}*/

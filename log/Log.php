@@ -33,7 +33,7 @@ class Log extends MYSQL
               $id= $this->Insertidrows();
               $this->idcolumnjob = $id;
                 if ($status === self::statusRUN) {
-                    $text = 'log downloads complete in DATABASE MYSQL ';
+                    $text = 'log downloads complete in DATABASE MYSQL #' . $this->idcolumnjob;
                     $this->logtext($text);
                     return $text;
                 } else {
@@ -50,12 +50,12 @@ class Log extends MYSQL
                 }
             }
             if ($status === static::statusOK) {
-                $text = 'log update complete in DATABASE MYSQL';
+                $text = 'log update complete in DATABASE MYSQL #' . $this->idcolumnjob;
                 $this->logtext($text);
                 return $text;
             }
             if ($result === false || $status === self::statusERROR) {
-                $text = 'Log error downloads to DATABASE MYSQL';
+                $text = 'Log error downloads to DATABASE MYSQL #' . $this->idcolumnjob;
                 $this->logtext($text);
 
             }
@@ -66,6 +66,12 @@ class Log extends MYSQL
     public static function logtext($text)
     {
         file_put_contents(__DIR__ . Rabbimq::logfile, date('Y-m-d H:i:s', strtotime('now')) . " " . $text . PHP_EOL, FILE_APPEND);
+    }
+
+
+    public static function logtextL2D($text,$name)
+    {
+        file_put_contents(__DIR__ . '/' . $name . '.log', date('Y-m-d H:i:s', strtotime('now')) . " " . $text . PHP_EOL, FILE_APPEND);
     }
     private function LogData($id){
         $result = mysqli_query(

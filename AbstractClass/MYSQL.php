@@ -180,28 +180,5 @@ abstract class MYSQL
         }
         return $arrayOperators;
     }
-    public function InsertDataResponseForProducts($response){
-        if($response->changed_or_new == mysql::Changednew) {
-            $result = mysqli_query(
-                $this->linkConnect,
-                "insert into products (operator_id,pro_code,pro_description,pdf_code,pdf_description,pro_id,pdf_id,created_dt,batch_id) 
-                               values ('" . $response->operator_id . "','" . $response->pro_code . "','" . $response->pro_description . "','" . $response->pdf_code . "',
-                               '" . $response->pdf_description . "','" . $response->pro_id . "','" . $response->pdf_id . "','" . $response->created_dt . "','" . $response->batch_id . "')"
-            );
-            print_r($this->linkConnect);
-            exit();
-        }
-    }
-    public function GetSoftwareProvider($id)
-    {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT id,code,description FROM software_providers
-                  WHERE id = $id"
-        );
-        $row = mysqli_fetch_assoc($result);
-        return $row;
-    }
-
 
 }

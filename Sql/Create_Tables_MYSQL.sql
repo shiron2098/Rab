@@ -3,6 +3,8 @@
 
 --need to fill in table Operators with correct data from Vendmax from cp_extension table.
 
+
+
 CREATE TABLE IF NOT EXISTS operators (
   ops_record_id         integer AUTO_INCREMENT
  ,operator_name     varchar(64)   UNIQUE -- Unique

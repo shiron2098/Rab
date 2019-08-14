@@ -20,7 +20,6 @@ class Job extends Threaded
 {
 
     private $idstreams;
-    private $index = 0;
     protected $id_operator;
     protected $id_jobs;
     Protected $command;
@@ -29,7 +28,7 @@ class Job extends Threaded
     private $batch_id;
     private $time;
     private $NameDataForProccesing;
-    public static $operator;
+    private static $operator;
 
     public function Run()
     {
@@ -45,18 +44,17 @@ class Job extends Threaded
                 $this->variable($json);
                 MYSQLDataOperator::OperatorL2D(Job::$operator, $this->provider);
                 $this->StartXML = file_get_contents($json->Code->filepath);
-                $xml_parser = new Simple_Parser;
+               $xml_parser = new Simple_Parser;
                 $xml_parser->parse($this->StartXML);
                 $xmlstring = $xml_parser->data['NEWDATASET']['0']['child']['TABLE'];
-                $this->index = null;
                 $file[] = null;
                 foreach ($file as $i => $key) {
                     unset($file[$i]);
                 }
                 foreach ($xmlstring as $atribut) {
                     foreach ($atribut['attribs'] as $fullstring) {
-                        $file[] = $fullstring;
-                        $this->index++;
+                        $string = str_replace("'", "", "$fullstring");
+                        $file[] = $string;
                         file_put_contents(__DIR__ . '/' . $this->time, $file);
                     }
                 }
@@ -84,15 +82,15 @@ class Job extends Threaded
                         $response = MYSQLDataOperator::ProductOut($dataxmlcompleteobject);
                         break;
                     case 'Visit':
-                        $reponse = MYSQLDataOperator::VisitsOut($dataxmlcompleteobject);
+                        $response = MYSQLDataOperator::VisitsOut($dataxmlcompleteobject);
                         break;
                     case 'POS':
-                        $reponse = MYSQLDataOperator::Points_of_saleOut($dataxmlcompleteobject);
+                        $response = MYSQLDataOperator::Points_of_saleOut($dataxmlcompleteobject);
                         break;
                 }
             }
         }
-        unlink(__DIR__ . '/' . $Path);
+     unlink(__DIR__ . '/' . $Path);
        MYSQLDataOperator::LogL2D($this->id_operator, $this->command, $this->StartXML, $this->batch_id);
     }
 

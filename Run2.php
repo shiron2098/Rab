@@ -6,8 +6,6 @@ class Run2 extends CreateTask
 {
     const rows = 3;
 
-    private $idoper;
-    private $idjob;
     public function Start()
     {
 

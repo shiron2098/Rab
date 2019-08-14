@@ -16,8 +16,10 @@ class RequestProcessor extends WorkerReceiver1
     const NameFile = "data";
 
 
-    public $responseDATAMYSQL;
-    public $responseJson;
+    protected $responseDATAMYSQL;
+    protected $responseJson;
+    private $responseData;
+    private $command;
     public $idcolumnjob;
     public $bolleanUpdateStreams = false;
     public $bool = 0;
@@ -51,51 +53,51 @@ class RequestProcessor extends WorkerReceiver1
                 $this->responseDATAMYSQL = $this->DataFromOperators($this->responseJson->Code->operatorid);
                 switch ($this->responseJson->Code->software_provider) {
                     case 'Vendmax':
-                        $commands = new VendmaxCommands($this->responseJson->Code->Jobsid, $this->responseJson->Code->operatorid, $this->responseJson->Code->command, $this->responseJson->Code->software_provider, $this->responseDATAMYSQL['name']);
+                        $this->command = new VendmaxCommands($this->responseJson->Code->Jobsid, $this->responseJson->Code->operatorid, $this->responseJson->Code->command, $this->responseJson->Code->software_provider, $this->responseDATAMYSQL['name']);
                         break;
 
                     case 'Nayax':
-                        $commands = new NayaxCommands($this->responseJson->Code->Jobsid, $this->responseJson->Code->operatorid, $this->responseJson->Code->command, $this->responseJson->Code->software_provider);
+                        $this->command = new NayaxCommands($this->responseJson->Code->Jobsid, $this->responseJson->Code->operatorid, $this->responseJson->Code->command, $this->responseJson->Code->software_provider);
                         break;
                 }
 
 
                 switch ($this->responseJson->Code->command) {
                     case 'get_products':
-                        $response = $commands->get_products();
+                        $this->responseData =  $this->command->get_products();
                         break;
 
                     case 'get_customers':
-                        $response = $commands->get_customers();
+                        $this->responseData =  $this->command->get_customers();
                         break;
 
                     case 'get_points_of_sale':
-                        $response = $commands->get_pointsofsale();
+                        $this->responseData =  $this->command->get_pointsofsale();
                         break;
                     case 'get_locations':
-                        $response = $commands->get_locations();
+                        $this->responseData =  $this->command->get_locations();
                         break;
                     case 'get_non_vending_equipment':
-                        $response = $commands->get_non_vending_equipment();
+                        $this->responseData =  $this->command->get_non_vending_equipment();
                         break;
                     case 'get_equipment':
-                        $response = $commands->get_equipment();
+                        $this->responseData =  $this->command->get_equipment();
                         break;
                     case 'get_items':
-                        $response = $commands->get_items();
+                        $this->responseData =  $this->command->get_items();
                         break;
 
                     case 'exec t2s_exportPos No':
-                        $response = $commands->get_t2s_exportPos();
+                        $this->responseData =  $this->command->get_t2s_exportPos();
                         break;
                     case 'exec t2s_exportPRO No':
-                        $response = $commands->get_t2s_exportPRO();
+                        $this->responseData =  $this->command->get_t2s_exportPRO();
                         break;
                     case 'exec t2s_exportVisits':
-                        $response = $commands->get_t2s_exportVisits();
+                        $this->responseData =  $this->command->get_t2s_exportVisits();
                         break;
                 }
-                $this->save_result_to_queue($response);
+                $this->save_result_to_queue($this->responseData);
 
             }else{
                 $text = 'Connector is not responding';
