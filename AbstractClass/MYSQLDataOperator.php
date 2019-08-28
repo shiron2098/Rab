@@ -10,6 +10,7 @@ use \app\mysql_insert_interface;
 abstract class MYSQLDataOperator implements mysql_insert_interface
 {
     const host = '127.0.0.1';
+    const filepathCsv = __DIR__ . '/../VendmaxAndNayaxAndConnect/File/Csv/';
     const user = 'ret';
     const password = '123';
     const database = 't2s_bi_dashboard';
@@ -17,10 +18,23 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
     const Product = 'Product';
     const Points = 'Points_of_sale';
     const Visits = 'Visits';
-
+    const Operator = 'Operator';
+    const Xml_log = 'Xml_log';
 
     private static $linkConnectT2S;
+    private static  $boollog;
+    private static $Filetime;
+    private static $ArrayCSvPOS;
 
+    /**
+     * Dbconnect to MYSQL DB=(t2s_bi_dashboard)
+     * @const host
+     * @const user
+     * @const password
+     * @const database
+     * @const NoConnect
+     * @var $linkConnect
+     */
     private static function DbconnectT2S()
     {
         $link = mysqli_connect(
@@ -32,7 +46,11 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
         MYSQLDataOperator::$linkConnectT2S = $link;
     }
 
-
+    /**
+     * insert in MYSQL product
+     * @param $response
+     * @return bool|mysqli_result
+     */
     public static function ProductOut($response)
     {
         MYSQLDataOperator::DbconnectT2S();
@@ -44,18 +62,24 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                '" . $response->pdf_description . "','" . $response->pro_id . "','" . $response->pdf_id . "','" . $response->created_dt . "','" . $response->batch_id . "')"
         );
         if($result === true){
-            $text = 'String Product inserted successfully' . MYSQLDataOperator::InsertidrowsT2S();
+            $text = 'String Product insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
             Log::logtextL2D($text,MYSQLDataOperator::Product);
-            return $result;
+            MYSQLDataOperator::$boollog = true;
+            return   MYSQLDataOperator::$boollog;
         }else{
             $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
                 true);
-            $text = 'String Product inserted error' . $results2;
+            $text = 'String Product insert error' . $results2;
             Log::logtextL2D($text,MYSQLDataOperator::Product);
             return $result;
         }
     }
 
+    /**
+     * insert in MYSQL points_of_sale
+     * @param $response
+     * @return bool|mysqli_result
+     */
     public static function Points_of_saleOut($response)
     {
         MYSQLDataOperator::DbconnectT2S();
@@ -67,18 +91,24 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                '" . $response->veq_id . "','" . $response->loc_id . "','" . $response->cus_id . "','" . $response->created_dt . "','" . $response->batch_id . "')"
         );
         if($result === true){
-            $text = 'String POS inserted successfully' . MYSQLDataOperator::InsertidrowsT2S();
+            $text = 'String POS insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
             Log::logtextL2D($text,MYSQLDataOperator::Points);
-            return $result;
+            MYSQLDataOperator::$boollog = true;
+            return   MYSQLDataOperator::$boollog;
         }else{
             $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
                 true);
-            $text = 'String POS inserted error' . $results2;
+            $text = 'String POS insert error' . $results2;
             Log::logtextL2D($text,MYSQLDataOperator::Points);
             return $result;
         }
     }
 
+    /**
+     * insert in MYSQL Visits
+     * @param $response
+     * @return bool|mysqli_result
+     */
     public static function VisitsOut($response)
     {
         MYSQLDataOperator::DbconnectT2S();
@@ -91,13 +121,14 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                '" . $response->pro_empty_after . "','" . $response->not_packed . "','" . $response->created_dt . "','" . $response->batch_id . "')"
             );
             if($result === true){
-                $text = 'String Visits inserted successfully' . MYSQLDataOperator::InsertidrowsT2S();
+                $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
                 Log::logtextL2D($text,MYSQLDataOperator::Visits);
-                return $result;
+                MYSQLDataOperator::$boollog = true;
+                return   MYSQLDataOperator::$boollog;
             }else{
                 $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
                     true);
-                $text = 'String Visits inserted error' . $results2;
+                $text = 'String Visits insert error' . $results2;
                 Log::logtextL2D($text,MYSQLDataOperator::Visits);
                 return $result;
             }
@@ -110,19 +141,27 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                '" . $response->pro_empty_after . "','" . $response->created_dt . "','" . $response->batch_id . "')"
             );
             if($result === true){
-                $text = 'String Visits inserted successfully' . MYSQLDataOperator::InsertidrowsT2S();
+                $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
                 Log::logtextL2D($text,MYSQLDataOperator::Visits);
-                return $result;
+                MYSQLDataOperator::$boollog = true;
+                return   MYSQLDataOperator::$boollog;
             }else{
                 $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
                     true);
-                $text = 'String Visits inserted error' . $results2;
+                $text = 'String Visits insert error' . $results2;
                 Log::logtextL2D($text,MYSQLDataOperator::Visits);
                 return $result;
             }
         }
 
     }
+
+    /**
+     * insert in MYSQL operator
+     * @param $response
+     * @param $provider
+     * @return bool|mysqli_result
+     */
     public static function OperatorL2D($response,$provider){
         MYSQLDataOperator::DbconnectT2S();
         $result = mysqli_query(
@@ -130,18 +169,50 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
             "insert into operators (operator_name,operator_id,operator_software) 
                                values ('" . $response['name'] . "','" . $response['id'] . "','" . $provider . "')"
         );
-        return $result;
+        if($result === true){
+            $text = 'String Operator insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+            Log::logtextL2D($text,MYSQLDataOperator::Operator);
+            return $result;
+        }else{
+            $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                true);
+            $text = 'String Operator insert error' . $results2;
+            Log::logtextL2D($text,MYSQLDataOperator::Operator);
+            return $result;
+        }
     }
 
+    /**
+     * insert in MYSQL xml_log
+     * @param $id
+     * @param $command
+     * @param $xml
+     * @param $batchid
+     * @return bool|mysqli_result
+     */
     public static function LogL2D($id,$command,$xml,$batchid){
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
             "insert into xml_log (operator_id,command_type,xml_value,batch_id) 
                                values ('" . $id . "','" . $command . "','" . $xml . "','" . $batchid. "')"
         );
-        return $result;
+        if($result === true){
+            $text = 'String Xml_log insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+            Log::logtextL2D($text,MYSQLDataOperator::Xml_log);
+            return $result;
+        }else{
+            $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                true);
+            $text = 'String Xml_log insert error' . $results2;
+            Log::logtextL2D($text,MYSQLDataOperator::Xml_log);
+            return $result;
+        }
     }
 
+    /**
+     * take insert row in MYSQL
+     * @return mixed
+     */
     public static function InsertidrowsT2S(){
         $result2 = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,

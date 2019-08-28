@@ -31,18 +31,25 @@ class RequestProcessor extends WorkerReceiver1
 
             if (!empty($responseOfRabbit)) {
                 foreach ($responseOfRabbit as $array) {
+
                     $response = null;
+                    $this->responseData = null;
                     $this->responseJson = json_decode($array);
                     $this->idcolumnjob = $this->responseJson->IdColumnJobHistory;
                     $this->execute_job($this->responseJson);
                 }
             } else {
+                $text = '$Operator variable data null #' . $Operator['id'];
+                Log::logtext($text);
                 return $this->UpdateOperStreams($Operator['id'],$this->bool);
             }
         }
 
         if($this->bolleanUpdateStreams === true) {
             $this->UpdateOperStreams($Operator['id'],$this->bool);
+        } else {
+            $text = 'successfully finish processing' . $Operator['id'];
+            Log::logtext($text);
         }
     }
     public function execute_job($json)
@@ -86,16 +93,22 @@ class RequestProcessor extends WorkerReceiver1
                     case 'get_items':
                         $this->responseData =  $this->command->get_items();
                         break;
-
-                    case 'exec t2s_exportPos No':
+                    case 'get_pos_bi':
                         $this->responseData =  $this->command->get_t2s_exportPos();
                         break;
-                    case 'exec t2s_exportPRO No':
+                    case 'get_pr_bi':
                         $this->responseData =  $this->command->get_t2s_exportPRO();
                         break;
-                    case 'exec t2s_exportVisits':
+                    case 'get_vvs_bi':
                         $this->responseData =  $this->command->get_t2s_exportVisits();
                         break;
+                    case 'export_pro_wbstore':
+                        $this->responseData =  $this->command->get_t2s_export_pro_wbstore();
+                        break;
+                    case 'export_pos_wbstore':
+                        $this->responseData =  $this->command->get_t2s_export_pos_wbstore();
+                        break;
+
                 }
                 $this->save_result_to_queue($this->responseData);
 

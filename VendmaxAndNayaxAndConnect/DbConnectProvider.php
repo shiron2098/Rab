@@ -65,7 +65,8 @@ class DbConnectProvider extends Rabbimq
         try {
             $connect = new SoapClient(DbConnectProvider::WSDL, array('location' => $this->HeaderLocal, 'url' => DbConnectProvider::UrlNamespace,
                 'trace' => TRUE,
-                'exceptions' => false));
+                'exceptions' => false,
+                'connection_timeout' => 120));
         } catch (SoapFault $e) {
             $e->getMessage();
         }
@@ -74,11 +75,8 @@ class DbConnectProvider extends Rabbimq
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
 
         /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
-        sleep(1);
+        sleep(2);
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
-/*        $results2 = print_r($ToParamResponseDb,
-            true);
-        $this->logtext($results2);*/
         if(!empty($ToParamResponseDb)) {
             $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ResponseDataCompressed;
         }
@@ -92,15 +90,16 @@ class DbConnectProvider extends Rabbimq
                 if (!empty($ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage)) {
                     $this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->ErrorMessage;
                     $text = 'DAWS query execution failed';
-                    $this->logtext($text);
+                    $results2 = print_r($this->ResponseDB,
+                        true);
+                    $this->logtext($results2);
                     throw new Exception($text . PHP_EOL);
                 } else {
                     if(!empty($this->ResponseDB = $ToParamResponseDb->ExecuteDbStatementResult->ServiceCallResult->Response))
                     $this->boolean = 0;
                 }
             }catch(Exception $e){
-                echo $e->getMessage();;
-
+                echo $e->getMessage();
             }
         }
 
@@ -109,7 +108,7 @@ class DbConnectProvider extends Rabbimq
             }else{
                 $this->Db_Connect();
             }*/
-      do
+     do
             if($this->ResponseDB !== null){
                 return $this->ResponseDB;
             }while($this->Db_Connect());
