@@ -5,6 +5,7 @@ require_once __DIR__ . '/../AbstractClass/MYSQL.php';
 
 class Log extends MYSQL
 {
+
     const statusOK = 'OK';
     const statusERROR = 'ERROR';
     const statusRUN = 'RUN';
