@@ -1,11 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../AbstractClass/Rabbimq.php';
-/*
-$ad  = $aa->__getFunctions();*/
-/*'userName' => 'admin',
-            'userPassword' => "00734070407B3472366F4B7A3F082408417A2278246551674B1553603A7D3D0D4105340B403F1466",
-            'sid' => 1,*/
 
 class DbConnectProvider extends Rabbimq
 {

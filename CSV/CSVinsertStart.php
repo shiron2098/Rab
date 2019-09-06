@@ -20,7 +20,7 @@ class CSVinsertStart extends Date
     {
         $bool = true;
         Date::index();
-        self::$Filetime = Date('Y-m-d H:i:s', time());
+        self::$Filetime = Date('YmdHis', time());
         if (file_exists(__DIR__ . '/../' . $path)) {
             $xml = simplexml_load_file(__DIR__ . '/../'. $path);
             if (!file_exists(MYSQLDataOperator::filepathCsv)) {
@@ -28,7 +28,7 @@ class CSVinsertStart extends Date
             }
             foreach ($xml as $data) {
                 switch ($name) {
-                    case 'product':
+                      case 'product':
                         if ($bool === true) {
                            static::$pathproduct1 = Date::pathfileproduct();
                            fputcsv( static::$pathproduct1, static::$arrayCsvPRODUCT, ',', '"');
@@ -47,7 +47,7 @@ class CSVinsertStart extends Date
                         break;
                     case 'T2S_POS_Info_WbStore';
                         if ($bool === true) {
-                            static::$pathpos = date::pathfilepos($name);
+                            static::$pathpos = date::pathfilepos();
                             fputcsv(static::$pathpos, Date::$ArrayCSvPOS, ',', '"');
                             $bool = false;
                         }

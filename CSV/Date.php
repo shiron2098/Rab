@@ -4,7 +4,8 @@ class date
 {
     const wp_product = 'WP-Product';
     const wp_provariation = 'WP-ProVariation';
-    const wp_provariationx = 'WP_ProVariationEx';
+    const wp_provariationx = 'WP-ProVariationEx';
+    const wp_users = 'WP-Users';
 
     protected static $Filetime;
     protected static $ArrayCSvPOS;
@@ -37,27 +38,23 @@ class date
         static::$arrayCsvPRODUCT3 = ['Parent_sku','sku','post_name','post_type','meta:_role_based_price',""];
     }
     public static function pathfileproduct(){
-        $rand = rand(1,10000000);
             $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_product . ' ' . static::$Filetime . ' ' . '.csv', 'a+');
             static::$pathtofileproduct1 = MYSQLDataOperator::filepathCsv . static::wp_product  . ' ' . static::$Filetime . ' '  . '.csv';
             return $f;
     }
     public static function pathfileproduct2(){
-        $rand = rand(1,10000000);
         $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_provariation  . ' '. static::$Filetime . ' '  . '.csv', 'a+');
         static::$pathtofileproduct2 = MYSQLDataOperator::filepathCsv . static::wp_provariation  . ' '  . static::$Filetime . ' '  . '.csv';
         return $f;
     }
     public static function pathfileproduct3(){
-        $rand = rand(1,10000000);
         $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_provariationx . ' ' . static::$Filetime . ' ' . '.csv', 'a+');
         static::$pathtofileproduct3 = MYSQLDataOperator::filepathCsv . static::wp_provariationx . ' ' . static::$Filetime . ' '  . '.csv';
         return $f;
     }
-    public static function pathfilepos($name){
-        $rand = rand(1,10000000);
-        $f = fopen(MYSQLDataOperator::filepathCsv . $name . static::$Filetime .  ' '  . '.csv', 'a+');
-        static::$pathtofilepos = MYSQLDataOperator::filepathCsv . $name . static::$Filetime . ' '  . '.csv';
+    public static function pathfilepos(){
+        $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_users . static::$Filetime .  ' '  . '.csv', 'a+');
+        static::$pathtofilepos = MYSQLDataOperator::filepathCsv . static::wp_users . static::$Filetime . ' '  . '.csv';
         return $f;
     }
 }

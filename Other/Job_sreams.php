@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/RequestProcessor.php';
-require_once __DIR__ .  '/CreateOperator/CreateTask.php';
+require_once __DIR__ . '/CreateOperator/CreateTask.php';
 require_once __DIR__ . '/VendmaxAndNayaxAndConnect/DbConnectProvider.php';
 require_once __DIR__ . '/Worker/WorkerReceiver1.php';
 require_once __DIR__ . '/vendor/php-amqplib/php-amqplib/PhpAmqpLib/Connection/AMQPStreamConnection.php';

@@ -68,18 +68,12 @@ class CSVinsertProduct2 extends Date
                     if ($attributepakages['package'] !== null) {
                         static::$paskagedata[] = $attributepakages['package'];
                     }
-/*                    if(!empty($attributepakages['pkp_id'])) {
-                        static::$pkp_id2 = $attributepakages['pkp_id'];
-                    }*/
                     $json = json_encode($attributepakages);
                     $jsondecode = json_decode($json, true);
                     foreach ($jsondecode as $item) {
                         if (!empty($item['package'])) {
                             static::$paskagedata2[] = $item['package'];
                         }
-/*                        if(!empty($item['pkp_id'])) {
-                            static::$pkp_id = $item['pkp_id'];
-                        }*/
                     }
                 }
             }
@@ -150,8 +144,6 @@ class CSVinsertProduct2 extends Date
                         case 'sku':
                                 array_push(static::$array, $pkp_id);
                                 break;
-/*                            array_push(static::$array, static::$pkp_id);
-                            break;*/
                         case 'downloadable':
                             array_push(static::$array, static::no);
                             break;
@@ -205,8 +197,6 @@ class CSVinsertProduct2 extends Date
                             break;
                         case 'meta:attribute_package-size':
                                 array_push(static::$array, $package);
-                                /*                            array_push(static ::$array, $arrayPacakage);
-                                                            break;*/
                             break;
                         case 'meta:_enable_role_based_price':
                             array_push(static::$array, static::numberone);

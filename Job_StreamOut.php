@@ -47,7 +47,6 @@ class Job_StreamOut extends Threaded
                         $this->bollpos= false;
                         $json = json_decode($WorkerJob);
                         $this->variable($json);
-                        MYSQLDataOperator::OperatorL2D(Job_StreamOut::$operator, $this->provider);
                         $this->StartXML = file_get_contents($json->Code->filepath);
                         $xml_parser = new Simple_Parser;
                         $xml_parser->parse($this->StartXML);
@@ -114,9 +113,12 @@ class Job_StreamOut extends Threaded
                     }
                 }
             }
+
             if(!empty($responselog) && isset($responselog)) {
                 if ($responselog === true) {
+                    MYSQLDataOperator::OperatorL2D(Job_StreamOut::$operator, $this->provider);
                     MYSQLDataOperator::LogL2D($this->id_operator, $this->command, $this->StartXML, $this->batch_id);
+                    MYSQLDataOperator::InsertTableT2s_dashboard($this->batch_id);
                 }
             }
             switch ($this->NameDataForProccesing) {
@@ -127,7 +129,7 @@ class Job_StreamOut extends Threaded
                     CSVinsertStart::InsertCsvFile($Path, $this->NameDataForProccesing);
                     break;
             }
-/*              unlink(__DIR__ . '/' . $Path);*/
+             unlink(__DIR__ . '/' . $Path);
         }
 
     private function Variable($json)

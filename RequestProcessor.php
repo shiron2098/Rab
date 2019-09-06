@@ -96,7 +96,7 @@ class RequestProcessor extends WorkerReceiver1
                     case 'get_pos_bi':
                         $this->responseData =  $this->command->get_t2s_exportPos();
                         break;
-                    case 'get_pr_bi':
+                    case 'get_pro_bi':
                         $this->responseData =  $this->command->get_t2s_exportPRO();
                         break;
                     case 'get_vvs_bi':

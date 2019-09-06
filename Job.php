@@ -39,4 +39,3 @@ class Job extends Threaded
                 $my->Run();
             }
         }
-/*    $my->start();*/

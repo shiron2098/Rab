@@ -29,16 +29,16 @@ abstract class MYSQL
     }
     public function DataFromOperators($id){
         $this->Dbconnect();
-        if(!empty($id)) {
+        if (!empty($id)) {
             $result = mysqli_query(
                 $this->linkConnect,
                 "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,connection_url,user_name,user_password FROM operators
                   JOIN jobs on jobs.operator_id =  operators.id
                   WHERE jobs.operator_id = $id"
             );
-             $row=mysqli_fetch_assoc($result);
+            $row = mysqli_fetch_assoc($result);
 
-             $this->DataOperators = $row;
+            $this->DataOperators = $row;
             return $this->DataOperators;
 
         }
@@ -52,7 +52,7 @@ abstract class MYSQL
 
         );
         FOREACH ($result as $row) {
-            if($row['streams'] !== 0 ) {
+            if ($row['streams'] !== 0) {
                 $arrayoper[] = $row;
                 return $arrayoper;
             }
