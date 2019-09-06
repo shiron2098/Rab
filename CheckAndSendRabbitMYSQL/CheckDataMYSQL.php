@@ -1,17 +1,18 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-include_once 'RabbitSendSqlTakeInDbMYSQL.php';
+require_once __DIR__ . '/RabbitSendSqlTakeInDbMYSQL.php';
 
 
 class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 {
 
 
-    private  $checkrowstime;
+    public  $checkrowstime;
     protected $jobcheckrowtime;
     protected $TimeTaskUpdate;
     protected $timetask;
     protected   $timestamp;
+    protected $bool = 0;
     private  $check;
     protected $timetasklogstart;
     protected $TimeTaskToRepeat;
@@ -35,19 +36,14 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             foreach ($response as $arrayTime) {
                 foreach ($arrayTime as $data) {
                     $this->check++;
-/*                   $this->timestamp = Date('Y-m-d H:i:s', time());*/
-                    /*$date = new DateTime('now');*/
-
                    $this->time();
-                 /*   $this->timestamp = $date->format('Y-m-d H:i:s.u');*/
                     $this->IDOperators = $data['id'];
                     $this->IdOperatorsFull($this->IDOperators);
-                    $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'On processing');
-                    $response = $this->DataFromVendmax($this->IDJobs);
-                    $responseTimeTableDate = $this->JobScheduleTime($this->IDJobs);
+                    $this->logDB($this->IDJobs,$this->timestamp,self::statusRUN,'[Job id #' . $this->IDJobs . ']' . 'is processing');
+                    $responseTimeTableDate = $this->JobScheduleTime();
                     $this->StringToUnix();
                     if (!empty($responseTimeTableDate)) {
-                        return $response;
+                        $this->CheckDataAndSendMessage();
                     } else {
                         $text = '[Job id #' . $this->IDJobs . ']' . 'Schedule is not defined';
                         $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
@@ -58,12 +54,11 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             $text = '[Job id #'. $this->IDOperators . ']' . 'Operator cannot be found';
             $this->logtext($text);
             $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
-            return $this->idcolumnjob;
         }
-        if($this->check === $this->checkrowstime){
-            $this->UpdateOperStreamsUp();
-        }
-        return $this->idcolumnjob;
+     //   if($this->check === $this->checkrowstime){
+            /** No jobs need to be run.Just logging into database */
+       //     $this->UpdateOperStreamsUp();
+       // }
     }
 
 
@@ -79,11 +74,10 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
         $this->timetask = Date('Y-m-d H:i:s', $TimeToUnix + $this->TimeTaskToRepeat);
     }
 
-    protected function JobScheduleTime($id)
+    protected function JobScheduleTime()
     {
-        $responseScheduleTime = $this->TimeJob($id);
+        $responseScheduleTime = $this->TimeJob();
         if (!empty($responseScheduleTime)) {
-            /** insert to time  */
             foreach ($responseScheduleTime as $rob) {
                 $this->TimeTaskToRepeat = $rob;
                 return $rob;
@@ -92,19 +86,21 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
             return null;
         }
     }
-    protected function CheckDataAndSendMessage($row)
+    protected function CheckDataAndSendMessage()
     {
         try {
             if ($this->timestamp >= $this->timetask) {
-
+                $responseDataFromOperator = $this->DataFromRabbit($this->IDJobs);
                 $response = ['time' => $this->timeMYSQLRabbit,
-                    'code' => $row];
-             return $response;
+                    'code' => $responseDataFromOperator,
+                     'idcolumnjob' => $this->idcolumnjob];
+
+                $this->SendAndCheckMessageMYSQL($response);
             } else {
                 $text='[Job id #' . $this->IDJobs . ']' . 'Task tried to be performed out of schedule ';
                 $this->logDB($this->IDJobs,$this->time(),self::statusERROR,$text);
+                $this->UpdateOperStreams($this->IDOperators,$this->bool);
                 $this->checkrowstime++;
-                $this->UpdateOperStreams();
                 throw new Exception($text);
             }
 
@@ -114,7 +110,7 @@ class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
         }
     }
 
-    protected function DataFromVendmax($idtask)
+    protected function DataFromRabbit($idtask)
     {
         $result = mysqli_query(
             $this->linkConnect,

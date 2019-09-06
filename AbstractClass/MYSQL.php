@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-include_once 'AbstractClass/Rabbimq.php';
+include_once __DIR__ . '/../AbstractClass/Rabbimq.php';
 
 /*require_once __DIR__ . '/vendor/autoload.php';
 include_once 'Rabbimq.php';*/
@@ -10,6 +10,7 @@ abstract class MYSQL
     const user = 'ret';
     const password = '123';
     const database = 'daws2';
+    const Changednew = "not changed";
 
     protected $DataOperators;
     protected $timestamp;
@@ -28,35 +29,37 @@ abstract class MYSQL
     }
     public function DataFromOperators($id){
         $this->Dbconnect();
-        if(!empty($id)) {
+        if (!empty($id)) {
             $result = mysqli_query(
                 $this->linkConnect,
                 "SELECT jobs.operator_id as operatorid,jobs.id as Jobsid,name,code,connection_url,user_name,user_password FROM operators
                   JOIN jobs on jobs.operator_id =  operators.id
                   WHERE jobs.operator_id = $id"
             );
-             $row=mysqli_fetch_assoc($result);
+            $row = mysqli_fetch_assoc($result);
 
-             $this->DataOperators = $row;
+            $this->DataOperators = $row;
             return $this->DataOperators;
 
         }
     }
 
-    protected function SelectToDbOperatorsDAWS($id)
+    protected function SelectToDbOperatorsDAWS($operid)
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "SELECT id,code FROM operators where id=$id"
+            "SELECT id,code,streams,name FROM operators where id = $operid"
 
         );
         FOREACH ($result as $row) {
-                $oper[] = $row;
-                return $oper;
+            if ($row['streams'] !== 0) {
+                $arrayoper[] = $row;
+                return $arrayoper;
+            }
         }
     }
 
-    protected function SelectToDbOperators()
+    public function SelectToDbOperators()
     {
         $result = mysqli_query(
             $this->linkConnect,
@@ -66,16 +69,11 @@ abstract class MYSQL
         $this->rows = $result->num_rows;
         FOREACH ($result as $row) {
             if ($row['streams'] === null || $row['streams'] == 0) {
-                $file[] = $row;
-                $id = $row['id'];
-                $result = mysqli_query(
-                    $this->linkConnect,
-                    "UPDATE operators SET streams = 1 WHERE id=$id"
-                );
-                return $file;
+                $arrayOperators[] = $row;
             }
 
         }
+        return $arrayOperators;
     }
 
     protected function JobsOperators($data)
@@ -89,12 +87,12 @@ abstract class MYSQL
                 );
                 if (!empty($result)) {
                     foreach ($result as $date)
-                        $file[$dataOperators['name']][] = $date;
+                        $arrayJobs[$dataOperators['name']][] = $date;
                 } else {
                     return null;
                 }
             }
-            return $file;
+            return $arrayJobs;
         }
     }
     Protected function IdOperatorsFull($idtask)
@@ -139,25 +137,6 @@ abstract class MYSQL
             $this->logtext($e->getMessage());
         }
     }
-
-    protected function CheckStreamsSelect(){
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM operators"
-
-        );
-        $this->rows = $result->num_rows;
-        FOREACH ($result as $row) {
-
-            if ($row['streams'] === null || $row['streams'] == 1) {
-                $file[] = $row;
-            }
-            if($row['streams'] === null || $row['streams'] == 2){
-                $file[] = $row;
-            }
-        }
-        return $file;
-    }
     public function time(){
         $this->timestamp =  DateTime::createFromFormat( 'U.u', sprintf('%.f', microtime(true)) )->format('Y-m-d H:i:s.u');
         return $this->timestamp;
@@ -170,6 +149,36 @@ abstract class MYSQL
         $row = mysqli_fetch_assoc($result2);
         return $row['LAST_INSERT_ID()'];
     }
+    public function SelectToDbOperatorsStreams()
+    {
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
 
+        );
+        $this->rows = $result->num_rows;
+        FOREACH ($result as $row) {
+            if ($row['streams'] === null || $row['streams'] == 0) {
+                $arrayOperators[] = $row;
+                return $arrayOperators;
+            }
+        }
+    }
+
+    public function SelectToDbOperatorsStreamsOut(){
+        $result = mysqli_query(
+            $this->linkConnect,
+            "SELECT * FROM operators"
+
+        );
+        $this->rows = $result->num_rows;
+        FOREACH ($result as $row) {
+            if ($row['streams_response'] === null || $row['streams_response'] == 0) {
+                $arrayOperators[] = $row;
+            }
+
+        }
+        return $arrayOperators;
+    }
 
 }

@@ -7,3 +7,10 @@ CREATE TABLE IF NOT EXISTS job_history (
 ) ENGINE InnoDB DEFAULT CHARSET = UTF8;
 CREATE INDEX IndexHistory on job_history(execute_dt,status);
 COMMIT;
+
+
+
+--Create Database t2s_bi_dashboard
+--insert every retuned xml into xml_log
+
+--need to fill in table Operators with correct data from Vendmax from cp_extension table.

@@ -1,6 +1,17 @@
 {
   "require": {
     "php-amqplib/php-amqplib": ">=2.6.1",
-    "peppeocchi/php-cron-scheduler": "^2.4"
-  }
+    "peppeocchi/php-cron-scheduler": "^2.4",
+    "ext-pthreads": ">=3.0.0",
+    "ext-soap": "*",
+    "ext-mysqli": "*",
+    "ext-xml": "*",
+    "ext-json": "*",
+    "ext-simplexml": "*"
+    },
+    "autoload": {
+      "psr-0": {
+        "Auto": "src/"
+      }
+    }
 }

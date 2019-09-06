@@ -1,47 +1,41 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-include_once ('MysqlDbConnect.php');
-include_once ('RabbiSendSqlTakeInDbMYSQL.php');
-use GO\Scheduler;
 
-class Job extends MysqlDbConnect
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/RequestProcessor.php';
+require_once __DIR__ . '/CreateOperator/CreateTask.php';
+
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
+
+
+class Job extends Threaded
 {
 
-    const NameTable = 'JobScheduler';
-    const Schedule = "*/5 * * * 4,5 /usr/bin/php7.3 /var/www/html/rab/index.php >/dev/null 2>&1";
-    const SQL = 'SELECT * FROM Product';
-    const columnname = 'Taskid';
+    private $idstreams;
+    public static  $operator;
+    private $bool = 0;
 
-    protected $Userid;
-    protected $TimeForScheduler;
-    protected $DateForMYSQL;
-
-    protected function SelectToDbOperators()
+    public function Run()
     {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM operators"
 
-        );
-        $row = mysqli_fetch_assoc($result);
-        $this->Userid = $row['id'];
-        return $row;
+                 $this->idstreams = Thread::getCurrentThreadId();
+                 $request = new RequestProcessor();
+                   $request->UpdateOperStreamsUp($this->idstreams, Job::$operator['id'],$this->bool);
+                 $request->read_job_from_queue(Job::$operator);
+/*                printf("%s is JobStreams #%lu\n", __CLASS__, Thread::getCurrentThreadId());
+                echo Thread::getCurrentThreadId();*/
     }
-    protected function SchedulerSingle()
-    {
-        $result = mysqli_query(
-            $this->linkConnect,
-            "SELECT * FROM jobs WHERE operator_id = $this->Userid"
-        );
-        if (!empty($result)) {
-            foreach ($result as $date)
-                $file[] = $date;
-            return $file;
-        } else {
-            $a = 'error empty response';
-            return $a;
-        }
-    }
-
 }
 
+
+
+     $classCreatetask = new CreateTask();
+    $dataresponseOperator = $classCreatetask->SelectToDbOperatorsStreams();
+        foreach($dataresponseOperator as $operator) {
+            if($operator['streams'] == 0) {
+                $my = new Job();
+                Job::$operator = $operator;
+                $my->Run();
+            }
+        }
