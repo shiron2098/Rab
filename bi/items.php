@@ -8,14 +8,16 @@ class items extends MYSQL_t2s_bi_avg
 
     private $upordown;
     private $interval;
+    private $int;
 
-    public function Week($date)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
+            $this->int = $int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-42 days');
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-42 days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_items_AVG($timemysql,$timemysqlfinishavg);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
@@ -32,13 +34,14 @@ class items extends MYSQL_t2s_bi_avg
             }
         }
     }
-    public function Months($date)
+    private function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
+            $this->int = $int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-182 days');
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-182 days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_items_AVG($timemysql,$timemysqlfinishavg);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
@@ -61,10 +64,10 @@ class items extends MYSQL_t2s_bi_avg
             $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
                 case '45':
-                    $this->Week($_GET['date']);
+                    $this->Week($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
                 case '180':
-                    $this->Months($_GET['date']);
+                    $this->Months($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
             }
         }

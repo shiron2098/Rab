@@ -8,14 +8,16 @@ class revenue extends MYSQL_t2s_bi_avg
 
     private $upordown;
     private $interval;
+    private $int;
 
-    public function Week($date)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
+            $this->int = $int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-42 days');
+            $unixtimeAVG = strtotime($date . '-'. $this->int . 'days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-42 days');
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_revenue_per_collection($timemysql);
             $datarevenue = $this->daily_array_revenue($timemysql);
@@ -46,13 +48,14 @@ class revenue extends MYSQL_t2s_bi_avg
         }
     }
 
-    public function Months($date)
+    private function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
+            $this->int = $int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-182 days');
+            $unixtimeAVG = strtotime($date . '-'. $this->int . 'days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-182 days');
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_revenue_per_collection($timemysql);
             $datarevenue = $this->daily_array_revenue($timemysql);
@@ -67,9 +70,7 @@ class revenue extends MYSQL_t2s_bi_avg
                     'maxRevenue' => (int)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
 
-                    /**
-                     * 7 last day and value
-                     */
+
                     'averageRevenueCollection' => [
                         'date' => $_GET['date'],
                         'series' => $datarevenue,
@@ -89,10 +90,10 @@ class revenue extends MYSQL_t2s_bi_avg
             $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
                 case '45':
-                    $this->Week($_GET['date']);
+                    $this->Week($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
                 case '180':
-                    $this->Months($_GET['date']);
+                    $this->Months($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
             }
         }

@@ -145,42 +145,83 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                 switch ($column) {
                     case 'less_50':
                         if ($row['less50'] <= $row2['less_50']) {
-                            $upandown[] = 'down';
+                            $upandown[] = array(
+                                'minTresholdSales' => '',
+                                'maxTresholdSales' => 50,
+                                'numberOfPos' => $row['less50'],
+                                'trend' => 'down');
                             break;
                         } else {
-                            $upandown[] = 'up';
+                            $upandown[] = array(
+                                'minTresholdSales' => '',
+                                'maxTresholdSales' =>  50,
+                                'numberOfPos' => $row['less50'],
+                                'trend' => 'up');
                             break;
                         }
                     case 'more_50_less_75':
                         if ($row['more50less75'] <= $row2['more_50_less_75']) {
-                            $upandown[] = 'down';
+                            $upandown[] = array(
+                                'minTresholdSales' => 50,
+                                'maxTresholdSales' => 75,
+                                'numberOfPos' => $row['more50less75'],
+                                'trend' => 'down');
                             break;
                         } else {
-                            $upandown[] = 'up';
+                            $upandown[] = array(
+                                'minTresholdSales' => 50,
+                                'maxTresholdSales' => 75,
+                                'numberOfPos' => $row['more50less75'],
+                                'trend' => 'up');
+                            break;
                             break;
                         }
                     case 'more_75_less_100':
                         if ($row['more75less100'] <= $row2['more_75_less_100']) {
-                            $upandown[] = 'down';
+                            $upandown[] = array(
+                                'minTresholdSales' => 75,
+                                'maxTresholdSales' => 100,
+                                'numberOfPos' => $row['more75less100'],
+                                'trend' => 'down');
                             break;
                         } else {
-                            $upandown[] = 'up';
+                            $upandown[] = array(
+                                'minTresholdSales' => 75,
+                                'maxTresholdSales' => 100,
+                                'numberOfPos' => $row['more75less100'],
+                                'trend' => 'up');
                             break;
                         }
                     case 'more_100_less_150':
                         if ($row['more100less150'] <= $row2['more_100_less_150']) {
-                            $upandown[] = 'down';
+                            $upandown[] = array(
+                                'minTresholdSales' => 100,
+                                'maxTresholdSales' => 150,
+                                'numberOfPos' => $row['more100less150'],
+                                'trend' => 'down');
                             break;
                         } else {
-                            $upandown[] = 'up';
+                            $upandown[] = array(
+                                'minTresholdSales' => 100,
+                                'maxTresholdSales' => 150,
+                                'numberOfPos' => $row['more100less150'],
+                                'trend' => 'up');
                             break;
                         }
                     case 'more_150':
                         if ($row['more150'] <= $row2['more_150']) {
-                            $upandown[] = 'down';
+                            $upandown[] = array(
+                                'minTresholdSales' => 150,
+                                'maxTresholdSales' => '',
+                                'numberOfPos' => $row['more150'],
+                                'trend' => 'down');
                             break;
                         } else {
-                            $upandown[] = 'up';
+                            $upandown[] = array(
+                                'minTresholdSales' => 150,
+                                'maxTresholdSales' => '',
+                                'numberOfPos' => $row['more150'],
+                                'trend' => 'up');
                             break;
                         }
                 }

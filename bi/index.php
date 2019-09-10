@@ -27,7 +27,7 @@ print_r($_REQUEST);*/
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="Charts.js"></script>
+    <script src="Zap/Charts.js"></script>
 </head>
 <body>
 <div class="container">

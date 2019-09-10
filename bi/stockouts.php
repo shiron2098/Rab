@@ -8,15 +8,17 @@ class stockouts extends MYSQL_t2s_bi_avg
 
     private $upordown;
     private $interval;
+    private $int;
 
 
-    public function Week($date,$int)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
+            $this->int = $int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-'.$int . 'days');
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             $this->upordown = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
@@ -36,13 +38,14 @@ class stockouts extends MYSQL_t2s_bi_avg
             }
         }
     }
-    public function Months($date,$int)
+    private function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
+            $this->int = $int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-'.$int . 'days');
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             $dataavg = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);

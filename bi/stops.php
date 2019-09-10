@@ -7,15 +7,16 @@ class stops extends MYSQL_t2s_bi_avg
 {
     private $upordown;
     private $interval;
+    private $int;
 
-    public function Week($date,$int)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
-
+             $this->int=$int;
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-'.$int . 'days');
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_stopsAVG($timemysql, $timemysqlfinishavg);
             $data = $this->daily_missed_stops($timemysql);
@@ -35,13 +36,14 @@ class stops extends MYSQL_t2s_bi_avg
             }
         }
     }
-        public function Months($date,$int)
+    private function Months($date,$int)
         {
             if (!empty($date) && isset($date)) {
+                $this->int=$int;
                 $time = date('Ymdhis', time());
                 $unixtime = strtotime($date);
-                $unixtimeAVG = strtotime($date . '-'.$int . 'days');
-                $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
+                $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
+                $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
                 $timemysql = date('Ymd', $unixtime);
                 $this->upordown = $this->daily_stopsAVG($timemysql, $timemysqlfinishavg);
                 $data = $this->daily_missed_stops($timemysql);
