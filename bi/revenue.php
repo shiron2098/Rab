@@ -85,13 +85,13 @@ class revenue extends MYSQL_t2s_bi_avg
     }
     public function start()
     {
-        if (isset($_GET['interval']) && !EMPTY($_GET['interval']) && isset($_GET['date']) && !empty($_GET['date'])) {
-            $this->interval = $_GET['interval'];
+        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date'])) {
+            $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
-                case 'lastWeek':
+                case '45':
                     $this->Week($_GET['date']);
                     break;
-                case 'lastMonth':
+                case '180':
                     $this->Months($_GET['date']);
                     break;
             }

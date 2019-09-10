@@ -10,13 +10,13 @@ class stockouts extends MYSQL_t2s_bi_avg
     private $interval;
 
 
-    public function Week($date)
+    public function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-42 days');
+            $unixtimeAVG = strtotime($date . '-'.$int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-42 days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             $this->upordown = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
@@ -36,13 +36,13 @@ class stockouts extends MYSQL_t2s_bi_avg
             }
         }
     }
-    public function Months($date)
+    public function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-182 days');
+            $unixtimeAVG = strtotime($date . '-'.$int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-182 days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             $dataavg = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
@@ -65,18 +65,17 @@ class stockouts extends MYSQL_t2s_bi_avg
 
     public function start()
     {
-        if (isset($_GET['interval']) && !EMPTY($_GET['interval']) && isset($_GET['date']) && !empty($_GET['date'])) {
-            $this->interval = $_GET['interval'];
+        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date'])) {
+            $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
-                case 'lastWeek':
-                    $this->Week($_GET['date']);
+                case '45':
+                    $this->Week($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
-                case 'lastMonth':
-                    $this->Months($_GET['date']);
+                case '180':
+                    $this->Months($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
             }
         }
-
     }
 }
 $start = new stockouts();

@@ -8,17 +8,16 @@ class stops extends MYSQL_t2s_bi_avg
     private $upordown;
     private $interval;
 
-    public function Week($date)
+    public function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
 
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-42 days');
+            $unixtimeAVG = strtotime($date . '-'.$int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-42 days');
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_stopsAVG($timemysql, $timemysqlfinishavg);
-
             $data = $this->daily_missed_stops($timemysql);
             if ($data !== null) {
                 $output = array(
@@ -36,18 +35,18 @@ class stops extends MYSQL_t2s_bi_avg
             }
         }
     }
-        public function Months($date)
+        public function Months($date,$int)
         {
             if (!empty($date) && isset($date)) {
                 $time = date('Ymdhis', time());
                 $unixtime = strtotime($date);
-                $unixtimeAVG = strtotime($date . '-182 days');
-                $threndinterval = date('Ymd', $unixtimeAVG);
+                $unixtimeAVG = strtotime($date . '-'.$int . 'days');
+                $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-' . $int . 'days');
                 $timemysql = date('Ymd', $unixtime);
-                $this->upordown = $this->dayly_stopsAVG($timemysql, $threndinterval);
+                $this->upordown = $this->daily_stopsAVG($timemysql, $timemysqlfinishavg);
                 $data = $this->daily_missed_stops($timemysql);
                 if ($data !== null) {
-                    $output[] = array(
+                    $output = array(
                         'totalScheduledStopsNumber' => (int)$data['scheduled_stops'],
                         'missedStopsNumber' => (int)$data['missed_stops'],
                         'missedStopsTrend' => (string)$this->upordown['0'],
@@ -65,19 +64,19 @@ class stops extends MYSQL_t2s_bi_avg
         }
     public function start()
     {
-        if (isset($_GET['interval']) && !EMPTY($_GET['interval']) && isset($_GET['date']) && !empty($_GET['date'])) {
-            $this->interval = $_GET['interval'];
+        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date'])) {
+            $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
-                case 'lastWeek':
-                    $this->Week($_GET['date']);
+                case '45':
+                    $this->Week($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
-                case 'lastMonth':
-                    $this->Months($_GET['date']);
+                case '180':
+                    $this->Months($_GET['date'],$_GET['trendIntervalComparer']);
                     break;
             }
         }
-
     }
+
 
 }
 $start = new stops();
