@@ -39,7 +39,7 @@ class Job_StreamOut extends Threaded
             if (!empty(Job_StreamOut::$operator) && isset(Job_StreamOut::$operator)) {
                 $this->idstreams = Thread::getCurrentThreadId();
                 $CreateTask = new CreateTask();
-/*                $CreateTask->UpdateOperStreamsUp($this->idstreams, Job_StreamOut::$operator['id'], $this->bool);*/
+               $CreateTask->UpdateOperStreamsUp($this->idstreams, Job_StreamOut::$operator['id'], $this->bool);
                 $request = new WorkerReceiver1();
                 $responseWorker = $request->Index(Job_StreamOut::$operator, $this->bool);
                 if (!empty($responseWorker) && isset($responseWorker)) {

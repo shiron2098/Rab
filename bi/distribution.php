@@ -1,34 +1,41 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_data.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 
-class distribution extends MYSQL_t2s_bi_data
+class distribution extends MYSQL_t2s_bi_avg
 {
-    public function index()
+    private $upordown;
+    private $interval;
+
+
+    public function Week($date)
     {
-        if (!empty($_GET['date']) && isset($_GET['date'])) {
+        if (!empty($date) && isset($date)) {
             $time = date('Ymdhis', time());
-            $unixtime = strtotime($_GET['date']);
-            $timemysql = date('Ymd', $unixtime);
+            $unixtimeAVG = strtotime($date . '-42 days');
+            $unixtimeMYSQL = strtotime($date);
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-42 days');
+            $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_collection_distribution($timemysql);
+            $this->upordown = $this->daily_distribution_AVG($timemysql, $timemysqlfinishavg);
             if ($data !== null) {
-                $output[] = array(
-                    'mintTresholdSales' => (int)$data['less_50'],
-                    'maxTresholdSales' => (int)$data['more_150'],
-                    'numberOfPos' => (int)$data['less_50'],
-                    'trend' => (string)'down',
-                );
-                $output[] = array(
+                $output = array(
                     'date' => $time,
-                    'threndIntervalComparer' => 'lastMonth',
+                    'threndIntervalComparer' => 'LastWeek',
+                    'salesDistributionCollection' => [
+                        'minTresholdSales' => '0',
+                        'maxTresholdSales' => 'less 50',
+                        'numberOfPos' => 'avg',
+                        'trend' => $this->upordown,
+                    ]
                 );
+            }
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stops)");
+                echo json_encode("no correct date(distribution)");
             }
         }
-    }
 }
 $start = new distribution();
-$start->index();
+$start->Week('20030420');

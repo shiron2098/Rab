@@ -1,46 +1,103 @@
 <?php
 header('Content-type: application/json');
-if(!empty($_GET['date'])&&isset($_GET['date'])){
-    $time = date('Ymdhis',time());
-    if ($_GET['date'] == '2019-09-04') {
-        $output[] = array(
-            'date' => (int) '333',
-            'averageRevenue' => (int) '321',
-            'beforeVisitTrend' => (string) 'up',
-            'averageRevenueTrend' => (int) '1999',
-            'minRevenue' => (int) '2095',
-            'minAverageRevenueTrend' => (int) '333',
-            'maxRevenue' => (int) '321',
-            'maxAverageRevenueTrend' => (string) 'down',
-            'averageRevenueCollection' => [
-                'date' => '2019-08-30',
-                'series' => 'number',
-            ]
-        );
-        $output[] =array(
-            'date' => $time,
-            'threndIntervalComparer' => 'lastYear',
-        );
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
+
+
+class revenue extends MYSQL_t2s_bi_avg
+{
+
+    private $upordown;
+    private $interval;
+
+    public function Week($date)
+    {
+        if (!empty($date) && isset($date)) {
+            $time = date('Ymdhis', time());
+            $unixtimeAVG = strtotime($date . '-42 days');
+            $unixtimeMYSQL = strtotime($date);
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-42 days');
+            $timemysql = date('Ymd', $unixtimeMYSQL);
+            $data = $this->daily_revenue_per_collection($timemysql);
+            $datarevenue = $this->daily_array_revenue($timemysql);
+            $this->upordown = $this->daily_revenue_AVG($timemysql, $timemysqlfinishavg);
+            if ($data !== null) {
+                $output = array(
+                    'date' => (int)$data['date_num'],
+                    'averageRevenue' => (int)$data['average_collect'],
+                    'averageRevenueTrend' => (string)$this->upordown['0'],
+                    'minRevenue' => (int)$data['min_collect'],
+                    'minAverageRevenueTrend' => (string)$this->upordown['1'],
+                    'maxRevenue' => (int)$data['max_collect'],
+                    'maxAverageRevenueTrend' => (string)$this->upordown['2'],
+                    /**
+                     * 7 last day and value
+                     */
+                    'averageRevenueCollection' => [
+                        'date' => $_GET['date'],
+                        'series' => $datarevenue,
+                    ],
+                    'date' => $time,
+                    'threndIntervalComparer' => 'lastWeek',
+                );
+                echo json_encode($output);
+            } else {
+                echo json_encode("no correct date(revenue)");
+            }
+        }
     }
-    if ($_GET['date'] == '2019-09-05') {
-        $output[] = array(
-            'date' => (int) '33325',
-            'averageRevenue' => (int) '666',
-            'beforeVisitTrend' => (string) 'down',
-            'averageRevenueTrend' => (int) '4242',
-            'minRevenue' => (int) '997',
-            'minAverageRevenueTrend' => (int) '8646',
-            'maxRevenue' => (int) '1235',
-            'maxAverageRevenueTrend' => (string) 'up',
-            'averageRevenueCollection' => [
-                'date' => '2019-08-30',
-                'series' => 'number',
-            ]
-        );
-        $output[] =array(
-            'date' => $time,
-            'threndIntervalComparer' => 'lastYear',
-        );
+
+    public function Months($date)
+    {
+        if (!empty($date) && isset($date)) {
+            $time = date('Ymdhis', time());
+            $unixtimeAVG = strtotime($date . '-182 days');
+            $unixtimeMYSQL = strtotime($date);
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG - '-182 days');
+            $timemysql = date('Ymd', $unixtimeMYSQL);
+            $data = $this->daily_revenue_per_collection($timemysql);
+            $datarevenue = $this->daily_array_revenue($timemysql);
+            $this->upordown = $this->daily_revenue_AVG($timemysql, $timemysqlfinishavg);
+            if ($data !== null) {
+                $output = array(
+                    'date' => (int)$data['date_num'],
+                    'averageRevenue' => (int)$data['average_collect'],
+                    'averageRevenueTrend' => (string)$this->upordown['0'],
+                    'minRevenue' => (int)$data['min_collect'],
+                    'minAverageRevenueTrend' => (string)$this->upordown['1'],
+                    'maxRevenue' => (int)$data['max_collect'],
+                    'maxAverageRevenueTrend' => (string)$this->upordown['2'],
+
+                    /**
+                     * 7 last day and value
+                     */
+                    'averageRevenueCollection' => [
+                        'date' => $_GET['date'],
+                        'series' => $datarevenue,
+                    ],
+                    'date' => $time,
+                    'threndIntervalComparer' => 'lastWeek',
+                );
+                echo json_encode($output);
+            } else {
+                echo json_encode("no correct date(revenue)");
+            }
+        }
     }
-    echo json_encode($output);
+    public function start()
+    {
+        if (isset($_GET['interval']) && !EMPTY($_GET['interval']) && isset($_GET['date']) && !empty($_GET['date'])) {
+            $this->interval = $_GET['interval'];
+            switch ($this->interval) {
+                case 'lastWeek':
+                    $this->Week($_GET['date']);
+                    break;
+                case 'lastMonth':
+                    $this->Months($_GET['date']);
+                    break;
+            }
+        }
+
+    }
 }
+$start = new revenue();
+$start->start();
