@@ -95,7 +95,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         static::DbconnectT2S_BI();
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
-            "SELECT date_num,average_collect FROM Daily_Avg_Collect
+            "SELECT date_num as date,average_collect as averageCollect FROM Daily_Avg_Collect
                   WHERE date_num <= $datetime
                   ORDER BY date_num DESC limit 7"
         );
@@ -103,11 +103,9 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         if (!empty($result)) {
             foreach ($result as $date)
                 $array[] = $date;
-                $newarray[]= array_slice($array,0,7);
-
         } else {
             return null;
         }
-        return $newarray;
+        return $array;
     }
 }

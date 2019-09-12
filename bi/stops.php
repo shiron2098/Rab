@@ -1,15 +1,17 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
 
 
-class stops extends MYSQL_t2s_bi_avg
+class stops extends MYSQL_t2s_bi_calendar
 {
+    const week = '45';
+    const month = '180';
     private $upordown;
     private $interval;
     private $int;
 
-    private function Week($date,$int)
+    public function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
              $this->int=$int;
@@ -20,15 +22,17 @@ class stops extends MYSQL_t2s_bi_avg
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_stopsAVG($timemysql, $timemysqlfinishavg);
             $data = $this->daily_missed_stops($timemysql);
+            $trashhold=  $this->daily_missed_stops_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'totalScheduledStopsNumber' => (int)$data['scheduled_stops'],
-                    'missedStopsNumber' => (int)$data['missed_stops'],
+                    'totalScheduledStopsNumber' => (string)$data['scheduled_stops'],
+                    'missedStopsNumber' => (string)$data['missed_stops'],
                     'missedStopsTrend' => (string)$this->upordown['0'],
-                    'outOfScheduleStopsNumber' => (int)$data['out_of_schedule_stops'],
+                    'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
                     'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
-                    'date' => $time,
-                    'threndIntervalComparer' => 'lastWeek',
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
             } else {
@@ -47,21 +51,22 @@ class stops extends MYSQL_t2s_bi_avg
                 $timemysql = date('Ymd', $unixtime);
                 $this->upordown = $this->daily_stopsAVG($timemysql, $timemysqlfinishavg);
                 $data = $this->daily_missed_stops($timemysql);
+                $trashhold=  $this->daily_missed_stops_CALENDAR($timemysql);
                 if ($data !== null) {
                     $output = array(
-                        'totalScheduledStopsNumber' => (int)$data['scheduled_stops'],
-                        'missedStopsNumber' => (int)$data['missed_stops'],
+                        'totalScheduledStopsNumber' => (string)$data['scheduled_stops'],
+                        'missedStopsNumber' => (string)$data['missed_stops'],
                         'missedStopsTrend' => (string)$this->upordown['0'],
-                        'outOfScheduleStopsNumber' => (int)$data['out_of_schedule_stops'],
+                        'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
                         'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
-                        'date' => $time,
-                        'threndIntervalComparer' => 'LastMonth',
+                        'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                        'date' => $trashhold['date'],
+                        'threndIntervalComparer' => static::month,
                     );
                     echo json_encode($output);
                 } else {
                     echo json_encode("no correct date(stops)");
                 }
-
             }
         }
     public function start()
