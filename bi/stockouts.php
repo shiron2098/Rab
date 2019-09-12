@@ -1,19 +1,17 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 
-class stockouts extends MYSQL_t2s_bi_calendar
+class stockouts extends MYSQL_t2s_bi_avg
 {
 
-    const week = '45';
-    const month = '180';
     private $upordown;
     private $interval;
     private $int;
 
 
-    public function Week($date,$int)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
@@ -24,17 +22,15 @@ class stockouts extends MYSQL_t2s_bi_calendar
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             $this->upordown = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
-            $trashhold= $this->daily_stockouts_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'beforeVisitNumberOfProducts' => (string)$data['before_stockouts'],
-                    'beforeVisitPercentOfProducts' => (string)$data['before_percentage'],
+                    'beforeVisitNumberOfProducts' => (int)$data['before_stockouts'],
+                    'beforeVisitPercentOfProducts' => (int)$data['before_percentage'],
                     'beforeVisitTrend' => (string) $this->upordown['0'],
-                    'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
-                    'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
-                    'threndIntervalComparer' => static::week,
+                    'afterVisitNumberOfProducts' => (int)$data['after_stockouts'],
+                    'afterVisitPercentOfProducts' => (int)$data['after_percentage'],
+                    'date' => $time,
+                    'threndIntervalComparer' => 'lastWeek',
                 );
                 echo json_encode($output);
             } else {
@@ -53,17 +49,15 @@ class stockouts extends MYSQL_t2s_bi_calendar
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             $dataavg = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
-            $trashhold= $this->daily_stockouts_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'beforeVisitNumberOfProducts' => (string)$data['before_stockouts'],
-                    'beforeVisitPercentOfProducts' => (string)$data['before_percentage'],
+                    'beforeVisitNumberOfProducts' => (int)$data['before_stockouts'],
+                    'beforeVisitPercentOfProducts' => (int)$data['before_percentage'],
                     'beforeVisitTrend' => (string) $dataavg['0'],
-                    'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
-                    'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
-                    'threndIntervalComparer' => static::month,
+                    'afterVisitNumberOfProducts' => (int)$data['after_stockouts'],
+                    'afterVisitPercentOfProducts' => (int)$data['after_percentage'],
+                    'date' => $time,
+                    'threndIntervalComparer' => 'lastMonth',
                 );
                 echo json_encode($output);
             } else {

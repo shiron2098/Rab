@@ -1,19 +1,16 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 
-class distribution extends MYSQL_t2s_bi_calendar
+class distribution extends MYSQL_t2s_bi_avg
 {
-    const week = '45';
-    const month = '180';
-
     private $upordown;
     private $interval;
     private $int;
 
 
-    public function Week($date,$int)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
@@ -24,11 +21,10 @@ class distribution extends MYSQL_t2s_bi_calendar
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_collection_distribution($timemysql);
             $this->upordown = $this->daily_distribution_AVG($timemysql, $timemysqlfinishavg);
-            $this->daily_distribution_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $time,
-                    'threndIntervalComparer' => static::week,
+                    'threndIntervalComparer' => 'LastWeek',
                     'salesDistributionCollection' => $this->upordown
                 );
             }
@@ -51,7 +47,7 @@ class distribution extends MYSQL_t2s_bi_calendar
             if ($data !== null) {
                 $output = array(
                     'date' => $time,
-                    'threndIntervalComparer' => static::month,
+                    'threndIntervalComparer' => 'LastWeek',
                     'salesDistributionCollection' => $this->upordown
                 );
             }

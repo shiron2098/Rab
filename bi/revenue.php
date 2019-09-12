@@ -1,22 +1,20 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 
-class revenue extends MYSQL_t2s_bi_calendar
+class revenue extends MYSQL_t2s_bi_avg
 {
-    const week = '45';
-    const month = '180';
 
     private $upordown;
     private $interval;
     private $int;
 
-    public function Week($date,$int)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $time = date('Ymd', time());
+            $time = date('Ymdhis', time());
             $unixtimeAVG = strtotime($date . '-'. $this->int . 'days');
             $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $unixtimeMYSQL = strtotime($date);
@@ -24,20 +22,24 @@ class revenue extends MYSQL_t2s_bi_calendar
             $data = $this->daily_revenue_per_collection($timemysql);
             $datarevenue = $this->daily_array_revenue($timemysql);
             $this->upordown = $this->daily_revenue_AVG($timemysql, $timemysqlfinishavg);
-            $trashhold = $this->daily_avg_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'date' => (string)$data['date_num'],
-                    'averageRevenue' => (string)$data['average_collect'],
+                    'date' => (int)$data['date_num'],
+                    'averageRevenue' => (int)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
-                    'minRevenue' => (string)$data['min_collect'],
+                    'minRevenue' => (int)$data['min_collect'],
                     'minAverageRevenueTrend' => (string)$this->upordown['1'],
-                    'maxRevenue' => (string)$data['max_collect'],
+                    'maxRevenue' => (int)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
-                    'averageRevenueCollection' => $datarevenue,
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
-                    'threndIntervalComparer' => static::week,
+                    /**
+                     * 7 last day and value
+                     */
+                    'averageRevenueCollection' => [
+                        'date' => $_GET['date'],
+                        'series' => $datarevenue,
+                    ],
+                    'date' => $time,
+                    'threndIntervalComparer' => 'lastWeek',
                 );
                 echo json_encode($output);
             } else {
@@ -58,20 +60,23 @@ class revenue extends MYSQL_t2s_bi_calendar
             $data = $this->daily_revenue_per_collection($timemysql);
             $datarevenue = $this->daily_array_revenue($timemysql);
             $this->upordown = $this->daily_revenue_AVG($timemysql, $timemysqlfinishavg);
-            $trashhold = $this->daily_avg_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'date' => (string)$data['date_num'],
-                    'averageRevenue' => (string)$data['average_collect'],
+                    'date' => (int)$data['date_num'],
+                    'averageRevenue' => (int)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
-                    'minRevenue' => (string)$data['min_collect'],
+                    'minRevenue' => (int)$data['min_collect'],
                     'minAverageRevenueTrend' => (string)$this->upordown['1'],
-                    'maxRevenue' => (string)$data['max_collect'],
+                    'maxRevenue' => (int)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
-                    'averageRevenueCollection' => $datarevenue,
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
-                    'threndIntervalComparer' => static::month,
+
+
+                    'averageRevenueCollection' => [
+                        'date' => $_GET['date'],
+                        'series' => $datarevenue,
+                    ],
+                    'date' => $time,
+                    'threndIntervalComparer' => 'lastWeek',
                 );
                 echo json_encode($output);
             } else {
