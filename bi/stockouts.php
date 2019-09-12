@@ -1,87 +1,35 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_data.php';
 
 
-class stockouts extends MYSQL_t2s_bi_avg
+class stockouts extends MYSQL_t2s_bi_data
 {
-
-    const week = '45';
-    const month = '180';
-    private $upordown;
-    private $interval;
-    private $int;
-
-
-    public function Week($date,$int)
+    public function index()
     {
-        if (!empty($date) && isset($date)) {
-            $this->int = $int;
+        if (!empty($_GET['date']) && isset($_GET['date'])) {
             $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
-            $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
-            $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_stockouts_and_not_picked($timemysql);
-            $this->upordown = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
+            $unixtime = strtotime($_GET['date']);
+            $timemysql = date('Ymd', $unixtime);
+            $data = $this->daily_stockouts_and_not_pickedhide($timemysql);
             if ($data !== null) {
-                $output = array(
-                    'beforeVisitNumberOfProducts' => (string)$data['before_stockouts'],
-                    'beforeVisitPercentOfProducts' => (string)$data['before_percentage'],
-                    'beforeVisitTrend' => (string) $this->upordown['0'],
-                    'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
-                    'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
+                $output[] = array(
+                    'beforeVisitNumberOfProducts' => (int)$data['before_stockouts'],
+                    'beforeVisitPercentOfProducts' => (int)$data['before_percentage'],
+                    'beforeVisitTrend' => (string)'up',
+                    'afterVisitNumberOfProducts' => (int)$data['after_stockouts'],
+                    'afterVisitPercentOfProducts' => (int)$data['after_percentage'],
+                );
+                $output[] = array(
                     'date' => $time,
-                    'threndIntervalComparer' => static::week,
+                    'threndIntervalComparer' => 'lastMonth',
                 );
                 echo json_encode($output);
             } else {
                 echo json_encode("no correct date(stockout)");
-            }
-        }
-    }
-    private function Months($date,$int)
-    {
-        if (!empty($date) && isset($date)) {
-            $this->int = $int;
-            $time = date('Ymdhis', time());
-            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
-            $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
-            $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_stockouts_and_not_picked($timemysql);
-            $dataavg = $this->daily_stockouts_AVG($timemysql,$timemysqlfinishavg);
-            if ($data !== null) {
-                $output = array(
-                    'beforeVisitNumberOfProducts' => (string)$data['before_stockouts'],
-                    'beforeVisitPercentOfProducts' => (string)$data['before_percentage'],
-                    'beforeVisitTrend' => (string) $dataavg['0'],
-                    'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
-                    'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
-                    'date' => $time,
-                    'threndIntervalComparer' => static::month,
-                );
-                echo json_encode($output);
-            } else {
-                echo json_encode("no correct date(stockout)");
-            }
-        }
-    }
-
-    public function start()
-    {
-        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date'])) {
-            $this->interval = $_GET['trendIntervalComparer'];
-            switch ($this->interval) {
-                case '45':
-                    $this->Week($_GET['date'],$_GET['trendIntervalComparer']);
-                    break;
-                case '180':
-                    $this->Months($_GET['date'],$_GET['trendIntervalComparer']);
-                    break;
             }
         }
     }
 }
 $start = new stockouts();
-$start->start();
+$start->index();

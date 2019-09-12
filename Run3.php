@@ -14,7 +14,7 @@ class Run3 extends CreateTask
         );
         $rows = $result->num_rows;
         for ($i = 0; $i < $rows; $i++) {
-            exec('/usr/bin/php /home/ubuntu/Downloads/Rab/Job_StreamOut.php > /dev/null 2>/dev/null &');
+            exec('/usr/bin/php /home/shiro/Downloads/Rab/Job_StreamOut.php > /dev/null 2>/dev/null &');
         }
     }
 }

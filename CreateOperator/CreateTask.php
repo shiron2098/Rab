@@ -62,12 +62,12 @@ class CreateTask extends CheckDataMYSQL
     {
         $result = mysqli_query(
             $this->linkConnect,
-            "insert into commands (code,description) values ('export_pro_wbstore','export_pos_wbstore')"
+            "insert into commands (code,description) values ('exec t2s_exportPRO No','t2s_exportPRO')"
         );
         if($result == false){
             $result = mysqli_query(
                 $this->linkConnect,
-            "SELECT * FROM commands WHERE code = 'export_pro_wbstore'"
+            "SELECT * FROM commands WHERE code = 'exec t2s_exportPRO No'"
         );
             foreach ($result as $res){
                 $this->commands = $res['id'];
