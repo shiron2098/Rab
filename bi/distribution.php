@@ -5,12 +5,15 @@ require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 class distribution extends MYSQL_t2s_bi_avg
 {
+    const week = '45';
+    const month = '180';
+
     private $upordown;
     private $interval;
     private $int;
 
 
-    private function Week($date,$int)
+    public function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
@@ -24,7 +27,7 @@ class distribution extends MYSQL_t2s_bi_avg
             if ($data !== null) {
                 $output = array(
                     'date' => $time,
-                    'threndIntervalComparer' => 'LastWeek',
+                    'threndIntervalComparer' => static::week,
                     'salesDistributionCollection' => $this->upordown
                 );
             }
@@ -47,7 +50,7 @@ class distribution extends MYSQL_t2s_bi_avg
             if ($data !== null) {
                 $output = array(
                     'date' => $time,
-                    'threndIntervalComparer' => 'LastWeek',
+                    'threndIntervalComparer' => static::month,
                     'salesDistributionCollection' => $this->upordown
                 );
             }

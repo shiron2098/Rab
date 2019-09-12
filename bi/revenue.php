@@ -5,16 +5,18 @@ require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 class revenue extends MYSQL_t2s_bi_avg
 {
+    const week = '45';
+    const month = '180';
 
     private $upordown;
     private $interval;
     private $int;
 
-    private function Week($date,$int)
+    public function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $time = date('Ymdhis', time());
+            $time = date('Ymd', time());
             $unixtimeAVG = strtotime($date . '-'. $this->int . 'days');
             $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $unixtimeMYSQL = strtotime($date);
@@ -24,22 +26,16 @@ class revenue extends MYSQL_t2s_bi_avg
             $this->upordown = $this->daily_revenue_AVG($timemysql, $timemysqlfinishavg);
             if ($data !== null) {
                 $output = array(
-                    'date' => (int)$data['date_num'],
-                    'averageRevenue' => (int)$data['average_collect'],
+                    'date' => (string)$data['date_num'],
+                    'averageRevenue' => (string)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
-                    'minRevenue' => (int)$data['min_collect'],
+                    'minRevenue' => (string)$data['min_collect'],
                     'minAverageRevenueTrend' => (string)$this->upordown['1'],
-                    'maxRevenue' => (int)$data['max_collect'],
+                    'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
-                    /**
-                     * 7 last day and value
-                     */
-                    'averageRevenueCollection' => [
-                        'date' => $_GET['date'],
-                        'series' => $datarevenue,
-                    ],
+                    'averageRevenueCollection' => $datarevenue,
                     'date' => $time,
-                    'threndIntervalComparer' => 'lastWeek',
+                    'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
             } else {
@@ -62,21 +58,16 @@ class revenue extends MYSQL_t2s_bi_avg
             $this->upordown = $this->daily_revenue_AVG($timemysql, $timemysqlfinishavg);
             if ($data !== null) {
                 $output = array(
-                    'date' => (int)$data['date_num'],
-                    'averageRevenue' => (int)$data['average_collect'],
+                    'date' => (string)$data['date_num'],
+                    'averageRevenue' => (string)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
-                    'minRevenue' => (int)$data['min_collect'],
+                    'minRevenue' => (string)$data['min_collect'],
                     'minAverageRevenueTrend' => (string)$this->upordown['1'],
-                    'maxRevenue' => (int)$data['max_collect'],
+                    'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
-
-
-                    'averageRevenueCollection' => [
-                        'date' => $_GET['date'],
-                        'series' => $datarevenue,
-                    ],
+                    'averageRevenueCollection' => $datarevenue,
                     'date' => $time,
-                    'threndIntervalComparer' => 'lastWeek',
+                    'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
             } else {

@@ -5,6 +5,8 @@ require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 class items extends MYSQL_t2s_bi_avg
 {
+    const week = '45';
+    const month = '180';
 
     private $upordown;
     private $interval;
@@ -23,10 +25,10 @@ class items extends MYSQL_t2s_bi_avg
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'numberOfProducts' => (int) $data['not_picked'],
+                    'numberOfProducts' => (string) $data['not_picked'],
                     'trend' => (string) $this->upordown['0'],
                     'date' => $time,
-                    'threndIntervalComparer' => 'LastWeek',
+                    'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
             } else {
@@ -34,7 +36,7 @@ class items extends MYSQL_t2s_bi_avg
             }
         }
     }
-    private function Months($date,$int)
+    public function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
@@ -47,10 +49,10 @@ class items extends MYSQL_t2s_bi_avg
             $data = $this->daily_stockouts_and_not_picked($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'numberOfProducts' => (int) $data['not_picked'],
+                    'numberOfProducts' => (string) $data['not_picked'],
                     'trend' => (string) $this->upordown['0'],
                     'date' => $time,
-                    'threndIntervalComparer' => 'LastMonth',
+                    'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
             } else {

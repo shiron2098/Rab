@@ -5,6 +5,8 @@ require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
 
 class stops extends MYSQL_t2s_bi_avg
 {
+    const week = '45';
+    const month = '180';
     private $upordown;
     private $interval;
     private $int;
@@ -22,13 +24,13 @@ class stops extends MYSQL_t2s_bi_avg
             $data = $this->daily_missed_stops($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'totalScheduledStopsNumber' => (int)$data['scheduled_stops'],
-                    'missedStopsNumber' => (int)$data['missed_stops'],
+                    'totalScheduledStopsNumber' => (string)$data['scheduled_stops'],
+                    'missedStopsNumber' => (string)$data['missed_stops'],
                     'missedStopsTrend' => (string)$this->upordown['0'],
-                    'outOfScheduleStopsNumber' => (int)$data['out_of_schedule_stops'],
+                    'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
                     'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
                     'date' => $time,
-                    'threndIntervalComparer' => 'lastWeek',
+                    'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
             } else {
@@ -49,19 +51,18 @@ class stops extends MYSQL_t2s_bi_avg
                 $data = $this->daily_missed_stops($timemysql);
                 if ($data !== null) {
                     $output = array(
-                        'totalScheduledStopsNumber' => (int)$data['scheduled_stops'],
-                        'missedStopsNumber' => (int)$data['missed_stops'],
+                        'totalScheduledStopsNumber' => (string)$data['scheduled_stops'],
+                        'missedStopsNumber' => (string)$data['missed_stops'],
                         'missedStopsTrend' => (string)$this->upordown['0'],
-                        'outOfScheduleStopsNumber' => (int)$data['out_of_schedule_stops'],
+                        'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
                         'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
                         'date' => $time,
-                        'threndIntervalComparer' => 'LastMonth',
+                        'threndIntervalComparer' => static::month,
                     );
                     echo json_encode($output);
                 } else {
                     echo json_encode("no correct date(stops)");
                 }
-
             }
         }
     public function start()

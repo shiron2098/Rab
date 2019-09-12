@@ -13,7 +13,7 @@ class Run2 extends CreateTask
              $row = $this->SingleJobArray();
                 foreach($row as $oper) {
                     if ($oper['streams'] == 0) {
-                        exec('/usr/bin/php /home/shiro/Downloads/Rab/Job.php > /dev/null 2>/dev/null &');
+                        exec('/usr/bin/php /home/ubuntu/Downloads/Rab/Job.php > /dev/null 2>/dev/null &');
                     }
                 }
         }
