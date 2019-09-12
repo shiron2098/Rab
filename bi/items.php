@@ -1,10 +1,12 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_avg.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
 
 
-class items extends MYSQL_t2s_bi_avg
+class items extends MYSQL_t2s_bi_calendar
 {
+    const week = '45';
+    const month = '180';
 
     private $upordown;
     private $interval;
@@ -21,12 +23,15 @@ class items extends MYSQL_t2s_bi_avg
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_items_AVG($timemysql,$timemysqlfinishavg);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
+            $trashhold =  $this->daily_items_CALENDAR($date);
             if ($data !== null) {
                 $output = array(
-                    'numberOfProducts' => (int) $data['not_picked'],
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
                     'trend' => (string) $this->upordown['0'],
-                    'date' => $time,
-                    'threndIntervalComparer' => 'LastWeek',
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
             } else {
@@ -34,7 +39,7 @@ class items extends MYSQL_t2s_bi_avg
             }
         }
     }
-    private function Months($date,$int)
+    public function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
@@ -45,12 +50,15 @@ class items extends MYSQL_t2s_bi_avg
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $this->upordown = $this->daily_items_AVG($timemysql,$timemysqlfinishavg);
             $data = $this->daily_stockouts_and_not_picked($timemysql);
+            $trashhold =  $this->daily_items_CALENDAR($date);
             if ($data !== null) {
                 $output = array(
-                    'numberOfProducts' => (int) $data['not_picked'],
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
                     'trend' => (string) $this->upordown['0'],
-                    'date' => $time,
-                    'threndIntervalComparer' => 'LastMonth',
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
             } else {
