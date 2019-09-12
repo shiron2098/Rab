@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../../AbstractClass/MYSQL.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL.php';
 
 
 class Log extends MYSQL
