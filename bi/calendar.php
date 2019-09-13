@@ -7,13 +7,12 @@ class calendar extends MYSQL_t2s_bi_calendar
 {
 
     private $datefrom;
-    private $dateto;
     private $interval;
     private $int;
 
     public function Week($array,$int)
     {
-        $array = array(
+/*        $array = array(
             '20030420',
             '20030421',
             '20030422',
@@ -21,7 +20,7 @@ class calendar extends MYSQL_t2s_bi_calendar
             '20030424',
             '20030425',
             '20030426',
-        );
+        );*/
         if (!empty($array) && isset($array)) {
 
             foreach ($array as $date) {
@@ -30,6 +29,7 @@ class calendar extends MYSQL_t2s_bi_calendar
                 $this->int = $int;
                 $this->datefrom = $date;
                 $arraydate[] = $this->daily_missed_stops_CALENDAR($this->datefrom);
+                $arraydate[] = $this->daily_items_CALENDAR($this->datefrom);
                 $arraydate[] = $this->daily_avg_CALENDAR($this->datefrom);
                 $arraydate[] = $this->daily_stockouts_CALENDAR($this->datefrom);
                 $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);
@@ -77,7 +77,7 @@ class calendar extends MYSQL_t2s_bi_calendar
                 $arraydate[] = $this->daily_items_CALENDAR($this->datefrom);
                 $arraydate[] = $this->daily_avg_CALENDAR($this->datefrom);
                 $arraydate[] = $this->daily_stockouts_CALENDAR($this->datefrom);
-/*                $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);*/
+                $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);
                 foreach($arraydate as $dateOKANDALLERT) {
                     if (!empty($arraydate['0'])&&isset($arraydate)) {
                         if($dateOKANDALLERT['value'] === 'OK'){
@@ -127,5 +127,4 @@ class calendar extends MYSQL_t2s_bi_calendar
 
 }
 $start = new calendar();
-$start->Week('20030420',45);
-/*$start->start();*/
+$start->start();

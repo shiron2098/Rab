@@ -76,4 +76,5 @@ class distribution extends MYSQL_t2s_bi_calendar
     }
 }
 $start = new distribution();
+$start->Week('20030418',45);
 $start->start();
