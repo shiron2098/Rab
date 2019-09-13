@@ -17,7 +17,6 @@ class stockouts extends MYSQL_t2s_bi_calendar
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $time = date('Ymdhis', time());
             $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
             $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
@@ -46,7 +45,6 @@ class stockouts extends MYSQL_t2s_bi_calendar
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $time = date('Ymdhis', time());
             $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
             $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
