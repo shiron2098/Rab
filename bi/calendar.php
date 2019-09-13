@@ -35,7 +35,7 @@ class calendar extends MYSQL_t2s_bi_calendar
                 $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);
                 foreach($arraydate as $dateOKANDALLERT) {
                     if (!empty($arraydate['0'])&&isset($arraydate)) {
-                        if($dateOKANDALLERT['value'] === 'OK'){
+                        if($dateOKANDALLERT['value'] === 'ok'){
                             $finishdate = array(
                                     'date' => $dateOKANDALLERT['date'],
                                     'levelDateByThreshold' => $dateOKANDALLERT['value'],
@@ -80,7 +80,7 @@ class calendar extends MYSQL_t2s_bi_calendar
                 $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);
                 foreach($arraydate as $dateOKANDALLERT) {
                     if (!empty($arraydate['0'])&&isset($arraydate)) {
-                        if($dateOKANDALLERT['value'] === 'OK'){
+                        if($dateOKANDALLERT['value'] === 'ok'){
                             $finishdate = array(
                                 'date' => $dateOKANDALLERT['date'],
                                 'levelDateByThreshold' => $dateOKANDALLERT['value'],

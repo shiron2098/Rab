@@ -25,7 +25,7 @@ class MYSQL_t2s_bi_calendar extends MYSQL_t2s_bi_avg
             foreach ($result as $date)
                 if($date['missed_stops'] < static::missed){
                     $value['date']=$dateStart;
-                    $value['value']='OK';
+                    $value['value']='ok';
                     return $value;
                 }
                 else{
@@ -88,7 +88,7 @@ class MYSQL_t2s_bi_calendar extends MYSQL_t2s_bi_avg
             foreach ($result as $date)
                 if($date['average_collect'] > static::avg){
                     $value['date']=$dateStart;
-                    $value['value']='OK';
+                    $value['value']='ok';
                     return $value;
                 }
                 else{
@@ -113,7 +113,7 @@ class MYSQL_t2s_bi_calendar extends MYSQL_t2s_bi_avg
             foreach ($result as $date)
                 if($date['before_percentage'] < static::stockout){
                     $value['date']=$dateStart;
-                    $value['value']='OK';
+                    $value['value']='ok';
                     return $value;
                 }
                 else{
@@ -138,7 +138,7 @@ class MYSQL_t2s_bi_calendar extends MYSQL_t2s_bi_avg
             foreach ($result as $date)
                 if($date['after_not_picked'] < static::items){
                     $value['date']=$dateStart;
-                    $value['value']='OK';
+                    $value['value']='ok';
                     return $value;
                 }
                 else{
