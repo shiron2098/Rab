@@ -30,7 +30,7 @@ class stops extends MYSQL_t2s_bi_calendar
                     'missedStopsTrend' => (string)$this->upordown['0'],
                     'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
                     'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'levelMissedStopsNumberByThreshold' => $trashhold['value'],
                     'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::week,
                 );
@@ -59,7 +59,7 @@ class stops extends MYSQL_t2s_bi_calendar
                         'missedStopsTrend' => (string)$this->upordown['0'],
                         'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
                         'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
-                        'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                        'levelMissedStopsNumberByThreshold' => $trashhold['value'],
                         'date' => $trashhold['date'],
                         'threndIntervalComparer' => static::month,
                     );

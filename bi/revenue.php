@@ -35,7 +35,7 @@ class revenue extends MYSQL_t2s_bi_calendar
                     'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
                     'averageRevenueCollection' => $datarevenue,
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'levelAverageRevenueByThreshold' => $trashhold['value'],
                     'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::week,
                 );
@@ -69,7 +69,7 @@ class revenue extends MYSQL_t2s_bi_calendar
                     'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
                     'averageRevenueCollection' => $datarevenue,
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'levelAverageRevenueByThreshold' => $trashhold['value'],
                     'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::month,
                 );

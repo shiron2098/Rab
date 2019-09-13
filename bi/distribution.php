@@ -27,7 +27,7 @@ class distribution extends MYSQL_t2s_bi_calendar
             $this->daily_distribution_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'date' => $time,
+                    'date' => $date,
                     'threndIntervalComparer' => static::week,
                     'salesDistributionCollection' => $this->upordown
                 );
@@ -50,7 +50,7 @@ class distribution extends MYSQL_t2s_bi_calendar
             $this->upordown = $this->daily_distribution_AVG($timemysql, $timemysqlfinishavg);
             if ($data !== null) {
                 $output = array(
-                    'date' => $time,
+                    'date' => $date,
                     'threndIntervalComparer' => static::month,
                     'salesDistributionCollection' => $this->upordown
                 );
@@ -76,5 +76,4 @@ class distribution extends MYSQL_t2s_bi_calendar
     }
 }
 $start = new distribution();
-$start->Week('20030418',45);
 $start->start();

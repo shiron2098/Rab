@@ -1,15 +1,10 @@
-Options +FollowSymLinks
-IndexIgnore */*
-RewriteEngine on
-
-# Перенаправление с ДОМЕН на ДОМЕН/api
-RewriteCond %{REQUEST_URI} ^/$
-RewriteRule ^(.*)$ /bi/$1 [R=301]
+RewriteEngine On
+# If an existing asset or directory is requested go to it as it is
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^.]+)$ $1.php [NC,L]
 
-#Если URI начинается с api/ то перенаправлять все запросы на index45625345.php
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^bi/(.*)$ /index.php
+# If the requested resource doesn't exist, use index.html
+RewriteRule ^ /index.html

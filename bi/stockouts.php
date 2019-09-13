@@ -32,7 +32,7 @@ class stockouts extends MYSQL_t2s_bi_calendar
                     'beforeVisitTrend' => (string) $this->upordown['0'],
                     'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
                     'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
                     'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::week,
                 );
@@ -61,7 +61,7 @@ class stockouts extends MYSQL_t2s_bi_calendar
                     'beforeVisitTrend' => (string) $dataavg['0'],
                     'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
                     'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
-                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
                     'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::month,
                 );
