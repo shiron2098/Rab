@@ -151,7 +151,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '',
                                 'maxTresholdSales' => '50',
-                                'levelLessNumberOfProductsByThreshold' => static::ok,
+                                'levelLessByThreshold' => static::ok,
                                 'numberOfPos' => (string)$row['less50'],
                                 'trend' => 'down');
                             break;
@@ -159,7 +159,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '',
                                 'maxTresholdSales' =>  '50',
-                                'levelLessNumberOfProductsByThreshold' => static::ok,
+                                'levelLessByThreshold' => static::ok,
                                 'numberOfPos' => (string)$row['less50'],
                                 'trend' => 'up');
                             break;
@@ -169,7 +169,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '50',
                                 'maxTresholdSales' => '75',
-                                'levelLessNumberOfProductsByThreshold' => static::ok,
+                                'levelLessByThreshold' => static::ok,
                                 'numberOfPos' => (string) $row['more50less75'],
                                 'trend' => 'down');
                             break;
@@ -177,10 +177,9 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '50',
                                 'maxTresholdSales' => '75',
-                                'levelLessNumberOfProductsByThreshold' => static::ok,
+                                'levelLessByThreshold' => static::ok,
                                 'numberOfPos' => (string) $row['more50less75'],
                                 'trend' => 'up');
-                            break;
                             break;
                         }
                     case 'more_75_less_100':
@@ -188,7 +187,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '75',
                                 'maxTresholdSales' => '100',
-                                'levelLessNumberOfProductsByThreshold' => static::alert,
+                                'levelLessByThreshold' => static::alert,
                                 'numberOfPos' => (string)$row['more75less100'],
                                 'trend' => 'down');
                             break;
@@ -196,7 +195,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '75',
                                 'maxTresholdSales' => '100',
-                                'levelLessNumberOfProductsByThreshold' => static::alert,
+                                'levelLessByThreshold' => static::alert,
                                 'numberOfPos' => (string) $row['more75less100'],
                                 'trend' => 'up');
                             break;
@@ -206,7 +205,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '100',
                                 'maxTresholdSales' => '150',
-                                'levelLessNumberOfProductsByThreshold' => static::alert,
+                                'levelLessByThreshold' => static::alert,
                                 'numberOfPos' => (string) $row['more100less150'],
                                 'trend' => 'down');
                             break;
@@ -214,7 +213,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '100',
                                 'maxTresholdSales' => '150',
-                                'levelLessNumberOfProductsByThreshold' => static::alert,
+                                'levelLessByThreshold' => static::alert,
                                 'numberOfPos' => (string) $row['more100less150'],
                                 'trend' => 'up');
                             break;
@@ -224,7 +223,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '150',
                                 'maxTresholdSales' => '',
-                                'levelLessNumberOfProductsByThreshold' => static::alert,
+                                'levelLessByThreshold' => static::alert,
                                 'numberOfPos' => (string) $row['more150'],
                                 'trend' => 'down');
                             break;
@@ -232,7 +231,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                             $upandown[] = array(
                                 'minTresholdSales' => '150',
                                 'maxTresholdSales' => '',
-                                'levelLessNumberOfProductsByThreshold' => static::alert,
+                                'levelLessByThreshold' => static::alert,
                                 'numberOfPos' => (string)$row['more150'],
                                 'trend' => 'up');
                             break;
