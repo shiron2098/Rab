@@ -152,7 +152,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '',
                                 'maxTresholdSales' => '50',
                                 'levelLessByThreshold' => static::ok,
-                                'numberOfPos' => (string)$row['less50'],
+                                'numberOfPos' => (string)$row2['less_50'],
                                 'trend' => 'down');
                             break;
                         } else {
@@ -160,7 +160,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '',
                                 'maxTresholdSales' =>  '50',
                                 'levelLessByThreshold' => static::ok,
-                                'numberOfPos' => (string)$row['less50'],
+                                'numberOfPos' => (string)$row2['less_50'],
                                 'trend' => 'up');
                             break;
                         }
@@ -170,7 +170,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '50',
                                 'maxTresholdSales' => '75',
                                 'levelLessByThreshold' => static::ok,
-                                'numberOfPos' => (string) $row['more50less75'],
+                                'numberOfPos' => (string) $row2['more_50_less_75'],
                                 'trend' => 'down');
                             break;
                         } else {
@@ -178,7 +178,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '50',
                                 'maxTresholdSales' => '75',
                                 'levelLessByThreshold' => static::ok,
-                                'numberOfPos' => (string) $row['more50less75'],
+                                'numberOfPos' => (string) $row2['more_50_less_75'],
                                 'trend' => 'up');
                             break;
                         }
@@ -188,7 +188,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '75',
                                 'maxTresholdSales' => '100',
                                 'levelLessByThreshold' => static::alert,
-                                'numberOfPos' => (string)$row['more75less100'],
+                                'numberOfPos' => (string)$row2['more_75_less_100'],
                                 'trend' => 'down');
                             break;
                         } else {
@@ -196,7 +196,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '75',
                                 'maxTresholdSales' => '100',
                                 'levelLessByThreshold' => static::alert,
-                                'numberOfPos' => (string) $row['more75less100'],
+                                'numberOfPos' => (string) $row2['more_75_less_100'],
                                 'trend' => 'up');
                             break;
                         }
@@ -206,7 +206,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '100',
                                 'maxTresholdSales' => '150',
                                 'levelLessByThreshold' => static::alert,
-                                'numberOfPos' => (string) $row['more100less150'],
+                                'numberOfPos' => (string) $row2['more_100_less_150'],
                                 'trend' => 'down');
                             break;
                         } else {
@@ -214,7 +214,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '100',
                                 'maxTresholdSales' => '150',
                                 'levelLessByThreshold' => static::alert,
-                                'numberOfPos' => (string) $row['more100less150'],
+                                'numberOfPos' => (string) $row2['more_100_less_150'],
                                 'trend' => 'up');
                             break;
                         }
@@ -224,7 +224,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '150',
                                 'maxTresholdSales' => '',
                                 'levelLessByThreshold' => static::alert,
-                                'numberOfPos' => (string) $row['more150'],
+                                'numberOfPos' => (string) $row2['more_150'],
                                 'trend' => 'down');
                             break;
                         } else {
@@ -232,7 +232,7 @@ class MYSQL_t2s_bi_avg extends MYSQL_t2s_bi_data
                                 'minTresholdSales' => '150',
                                 'maxTresholdSales' => '',
                                 'levelLessByThreshold' => static::alert,
-                                'numberOfPos' => (string)$row['more150'],
+                                'numberOfPos' => (string)$row2['more_150'],
                                 'trend' => 'up');
                             break;
                         }
