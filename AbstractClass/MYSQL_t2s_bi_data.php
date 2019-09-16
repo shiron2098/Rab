@@ -4,7 +4,6 @@ require_once __DIR__ . '/MYSQLDataOperator.php';
 
 class MYSQL_t2s_bi_data extends MYSQLDataOperator
 {
-    private $datetime;
 
     protected function daily_missed_stops($datenum)
     {

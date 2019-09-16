@@ -30,7 +30,7 @@ class Job extends Threaded
 
 
 
-     $classCreatetask = new CreateTask();
+   $classCreatetask = new CreateTask();
     $dataresponseOperator = $classCreatetask->SelectToDbOperatorsStreams();
         foreach($dataresponseOperator as $operator) {
             if($operator['streams'] == 0) {

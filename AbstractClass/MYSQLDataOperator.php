@@ -11,8 +11,8 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
 {
     const host = '127.0.0.1';
     const filepathCsv = __DIR__ . '/../VendmaxAndNayaxAndConnect/File/Csv/';
-    const user = 'shiro';
-    const password = '2479465';
+    const user = 'ret';
+    const password = '123';
     const databaseT2S = 't2s_dashboard';
     const databaseT2S_BI = 't2s_bi_dashboard';
     Const NoConnect = 'NoConnect';

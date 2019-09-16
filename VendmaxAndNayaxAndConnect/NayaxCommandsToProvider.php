@@ -89,4 +89,18 @@ class NayaxCommands extends DbConnectProvider implements generic_command_interfa
         $this->logtext($text);
         return false;
     }
+
+    public function get_t2s_export_pro_wbstore()
+    {
+        $text = 'get_t2s_export_pro_wbstore true';
+        $this->logtext($text);
+        return false;
+    }
+
+    public function get_t2s_export_pos_wbstore()
+    {
+        $text = 'get_t2s_export_pos_wbstore true';
+        $this->logtext($text);
+        return false;
+    }
 }
