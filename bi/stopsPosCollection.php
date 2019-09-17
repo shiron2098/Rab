@@ -3,7 +3,7 @@ header('Content-type: application/json');
 require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
 
 
-class POS  extends MYSQL_t2s_bi_calendar
+class stopsPosCollection  extends MYSQL_t2s_bi_calendar
 {
     const week = '45';
     const month = '180';
