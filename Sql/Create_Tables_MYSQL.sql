@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS points_of_sale (  -- for this table command: get_pos_
   vvs_record_id integer AUTO_INCREMENT
  ,operator_id       integer
  ,pos_id            varchar(32) null
- ,visit_date        datetime null
+ ,visit_date        date null
  ,vvs_id            varchar(32) null        -- update using vvs_id
  ,sco_id            varchar(32) null
  ,scheduled         varchar(3)  null  -- yes/no

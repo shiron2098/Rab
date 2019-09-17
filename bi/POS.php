@@ -60,16 +60,20 @@ class POS  extends MYSQL_t2s_bi_calendar
 
     public function start()
     {
-        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date']) && isset($_GET['offset']) && !empty($_GET['offset']) && isset($_GET['count']) && !empty($_GET['count'])) {
+
+        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date']) && isset($_GET['offset']) && isset($_GET['count'])) {
             $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
                 case '45':
+                    echo json_encode($_GET);
                     $this->Week($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count']);
                     break;
                 case '180':
                     $this->Months($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count']);
                     break;
             }
+        }else{
+            echo json_encode('no correct data for POS');
         }
     }
 }
