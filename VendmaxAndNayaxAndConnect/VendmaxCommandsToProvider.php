@@ -20,7 +20,7 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
     const exportPOS = 'exec t2s_exportPos \'No\'';
     const exportPRO = 'exec t2s_exportPro_BI \'No\'';
     const exportVISITS = 'exec t2s_exportVisits';
-    const exportPRO_WbStore = 'exec t2s_exportPro_WbStore \'No\'';
+    const exportPRO_WbStore = 'exec t2s_exportPRO_WbStore \'No\'';
     const exportPOS_WbStore = 'exec t2s_exportPOS_WbStore \'No\'';
 
     public $command;

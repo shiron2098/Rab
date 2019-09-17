@@ -25,17 +25,8 @@ class date
             'meta_billing_address_2', 'meta_billing_city', 'meta_billing_state', 'meta_billing_postcode', 'meta_shipping_first_name', 'meta_shipping_last_name', 'meta_shipping_company', 'meta_shipping_country',
             'meta_shipping_address_1', 'meta_shipping_address_2', 'meta_shipping_city', 'meta_shipping_state', 'meta_shipping_postcode', 'meta_sesssion_tokens', 'meta__woocommerce_persistent_cart',
             'meta_manageedit-shop_ordercolumnshidden', 'next_del_date', 'vmax_type', 'vmax_id', ""];
-        static::$arrayCsvPRODUCT = ['post_title','post_name','ID','post_excerpt','post_content','post_status','menu_order','post_date','post_parent','post_author','comment_status','sku',
-            'downloadable','virtual','visibility','stock','stock_status','backorders','manage_stock','regular_price','sale_price','weight','length','width','height','tax_status',
-            'tax_class','upsell_ids','crossell_ids','featured','sale_price_dates_from','sale_price_dates_to','download_limit','download_expiry','product_url','button_text','meta:_yoast_wpseo_focuskw',
-            'meta:_yoast_wpseo_title','meta:_yoast_wpseo_metadesc','meta:_yoast_wpseo_metakeywords','images','downloadable_files','tax:product_type','tax:product_cat','tax:product_tag','tax:product_shipping_class',
-            'meta:Brand','meta:eg_html5_ratio','meta:eg_settings_custom_meta_element','meta:eg_settings_custom_meta_setting','meta:eg_settings_custom_meta_skin','meta:eg_settings_custom_meta_style','meta:eg_soundcloud_ratio',
-            'meta:eg_sources_html5_mp4','meta:eg_sources_html5_ogv','meta:eg_sources_html5_webm','meta:eg_sources_iframe','meta:eg_sources_image','meta:eg_sources_revslider','meta:eg_sources_soundcloud','meta:eg_sources_vimeo',
-            'meta:eg_sources_wistia','meta:eg_sources_youtube','meta:eg_vimeo_ratio','meta:eg_wistia_ratio','meta:eg_youtube_ratio','meta:slide_template','meta:total_sales','attribute:Package Size','attribute_data:Package Size',
-            'attribute_default:Package Size','meta:_enable_role_based_price',""];
-        static::$arrayCsvPRODUCT2 = ['Parent','parent_sku','post_parent','ID','post_status','menu_order','sku','downloadable','virtual','stock','stock_status','regular_price','saleprice','weight','length','width','height','tax_class',
-            'file_path','file_paths','download_limit','images','downloadable_files','tax:product_shipping_class','meta:attribute_package-size','meta:_enable_role_based_price','meta:_role_based_price',""];
-        static::$arrayCsvPRODUCT3 = ['Parent_sku','sku','post_name','post_type','meta:_role_based_price',""];
+        static::$arrayCsvPRODUCT = ['post_title','post_excerpt','post_status','sku','downloadable','visibility','stock_status','manage_stock','tax_status','tax_class','attribute:Package Size','attribute_data:Package Size','attribute_default:Package Size',""];
+        static::$arrayCsvPRODUCT2 = ['parent_sku','post_status','sku','stock_status','tax_class','meta:attribute_package-size','meta:_enable_role_based_price','meta:_role_based_price',""];
     }
     public static function pathfileproduct(){
             $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_product . ' ' . static::$Filetime . ' ' . '.csv', 'a+');
@@ -45,11 +36,6 @@ class date
     public static function pathfileproduct2(){
         $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_provariation  . ' '. static::$Filetime . ' '  . '.csv', 'a+');
         static::$pathtofileproduct2 = MYSQLDataOperator::filepathCsv . static::wp_provariation  . ' '  . static::$Filetime . ' '  . '.csv';
-        return $f;
-    }
-    public static function pathfileproduct3(){
-        $f = fopen(MYSQLDataOperator::filepathCsv . static::wp_provariationx . ' ' . static::$Filetime . ' ' . '.csv', 'a+');
-        static::$pathtofileproduct3 = MYSQLDataOperator::filepathCsv . static::wp_provariationx . ' ' . static::$Filetime . ' '  . '.csv';
         return $f;
     }
     public static function pathfilepos(){

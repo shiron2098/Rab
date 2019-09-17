@@ -12,20 +12,25 @@ class CSVinsertProduct2 extends Date
     private static $array = null;
     private static $arraycolumn = null;
     private static $package = null;
+    private static $price = null;
+    private static $packageforprice = null;
+    private static $pro_code = null ;
+    private static $item;
 
     private static $pro_description = null;
-    private static $pkp_id = null;
-    private static $pkp_id2 = null;
+    private static $pkp_upc = null;
+    private static $pkp_upc2 = null;
     private static $pro_id = null;
     private static $paskagedata = null ;
-    private static $paskagedata2 = null;
+
+    private static $role_based_price = null;
 
     public static function createCsvArray($xml)
     {
         if (!empty($xml) && isset($xml)) {
             self::start($xml);
             self::packagedata();
-            self::paskage(static::$paskagedata,static::$paskagedata2);
+            self::paskage(static::$paskagedata);
         }
     }
 
@@ -33,6 +38,8 @@ class CSVinsertProduct2 extends Date
     {
         $data2 = file_get_contents(self::$pathtofileproduct2);
         static::$package = $xml->packages;
+        static::$packageforprice = $xml->packages->package;
+        static::$price = $xml->packages->package->prices;
         static::$array = [];
         static::$arraycolumn = explode(',', $data2);
         $data = json_encode($xml->attributes());
@@ -40,6 +47,9 @@ class CSVinsertProduct2 extends Date
         foreach ($jsondecode as $xmlstring) {
             foreach ($xmlstring as $key => $value) {
                 switch ($key) {
+                    case 'pro_code':
+                        static::$pro_code = $value;
+                        break;
                     case 'pro_description':
                         static::$pro_description = $value;
                         break;
@@ -54,28 +64,11 @@ class CSVinsertProduct2 extends Date
     private static function packagedata(){
         if (!empty(self::$package) && isset(self::$package)) {
             static::$paskagedata = [];
-            static::$paskagedata2 = [];
             if(!empty(static::$paskagedata)) {
                 static::DeleteArrayFile(static::$paskagedata);
             }
-            if(!empty(static::$paskagedata2)) {
-                static::DeleteArrayFile(static::$paskagedata2);
-            }
-            $json = json_encode(self::$package);
-            $jsondecode = json_decode($json, true);
-            foreach ($jsondecode as $atrribute) {
-                foreach ($atrribute as $attributepakages) {
-                    if ($attributepakages['package'] !== null) {
-                        static::$paskagedata[] = $attributepakages['package'];
-                    }
-                    $json = json_encode($attributepakages);
-                    $jsondecode = json_decode($json, true);
-                    foreach ($jsondecode as $item) {
-                        if (!empty($item['package'])) {
-                            static::$paskagedata2[] = $item['package'];
-                        }
-                    }
-                }
+            foreach(static::$packageforprice as $paskageprice) {
+                        static::$paskagedata[] = $paskageprice;
             }
             return true;
         } else {
@@ -88,25 +81,25 @@ class CSVinsertProduct2 extends Date
     private static function pkp()
     {
         if (!empty(self::$package) && isset(self::$package)) {
-            static::$pkp_id = [];
-            static::$pkp_id2 = [];
+            static::$pkp_upc = [];
+            static::$pkp_upc2 = [];
             $json = json_encode(self::$package);
             $jsondecode = json_decode($json, true);
             foreach ($jsondecode as $atrribute) {
                 foreach ($atrribute as $attributepakages) {
-                    if(!empty($attributepakages['pkp_id'])) {
-                        static::$pkp_id2 []= $attributepakages['pkp_id'];
-                        return static::$pkp_id2;
+                    if(!empty($attributepakages['pkp_upc'])) {
+                        static::$pkp_upc2 []= $attributepakages['pkp_upc'];
+                        return static::$pkp_upc2;
                     }
                     $json = json_encode($attributepakages);
                     $jsondecode = json_decode($json, true);
                     foreach ($jsondecode as $item) {
-                        if(!empty($item['pkp_id'])) {
-                            static::$pkp_id []= $item['pkp_id'];
+                        if(!empty($item['pkp_upc'])) {
+                            static::$pkp_upc []= $item['pkp_upc'];
                         }
                     }
                 }
-                return static::$pkp_id;
+                return static::$pkp_upc;
             }
         } else {
             $text  = 'Pkp_id column data for insert in csv empty (product2)';
@@ -115,7 +108,7 @@ class CSVinsertProduct2 extends Date
         }
     }
 
-    private static function InsertCSv($package,$pkp_id)
+    private static function InsertCSv($package,$pkp_upc,$price)
     {
         if (!empty(static::$arraycolumn) && isset(self::$arraycolumn)) {
             if(!empty(static::$array)) {
@@ -123,77 +116,20 @@ class CSVinsertProduct2 extends Date
             }
                 foreach (static::$arraycolumn as $column) {
                     switch ($column) {
-                        case 'Parent':
-                            array_push(static::$array, static::$pro_description);
-                            break;
                         case 'parent_sku':
-                            array_push(static::$array, static::$pro_id);
-                            break;
-                        case 'post_parent':
-                            array_push(static::$array, static::numberzero);
-                            break;
-                        case 'ID':
-                            array_push(static::$array, static::numberzero);
+                            array_push(static::$array, static::$pro_code);
                             break;
                         case 'post_status':
                             array_push(static::$array, 'publish');
                             break;
-                        case 'menu_order':
-                            array_push(static::$array, static::numberone);
-                            break;
                         case 'sku':
-                                array_push(static::$array, $pkp_id);
+                                array_push(static::$array, $pkp_upc);
                                 break;
-                        case 'downloadable':
-                            array_push(static::$array, static::no);
-                            break;
-                        case 'virtual':
-                            array_push(static::$array, static::no);
-                            break;
-                        case 'stock':
-                            array_push(static::$array, "");
-                            break;
                         case 'stock_status':
                             array_push(static::$array, 'instock');
                             break;
-                        case 'regular_price':
-                            array_push(static::$array, "");
-                            break;
-                        case 'saleprice':
-                            array_push(static::$array, "");
-                            break;
-                        case 'weight':
-                            array_push(static::$array, "");
-                            break;
-                        case 'length':
-                            array_push(static::$array, "");
-                            break;
-                        case 'width':
-                            array_push(static::$array, "");
-                            break;
-                        case 'height':
-                            array_push(static::$array, "");
-                            break;
                         case 'tax_class':
-                            array_push(static::$array, "");
-                            break;
-                        case 'file_path':
-                            array_push(static::$array, "");
-                            break;
-                        case 'file_paths':
-                            array_push(static::$array, "");
-                            break;
-                        case 'download_limit':
-                            array_push(static::$array, "");
-                            break;
-                        case 'images':
-                            array_push(static::$array, "");
-                            break;
-                        case 'downloadable_files':
-                            array_push(static::$array, static::no);
-                            break;
-                        case 'tax:product_shipping_class':
-                            array_push(static::$array, "");
+                            array_push(static::$array, "parent");
                             break;
                         case 'meta:attribute_package-size':
                                 array_push(static::$array, $package);
@@ -202,7 +138,7 @@ class CSVinsertProduct2 extends Date
                             array_push(static::$array, static::numberone);
                             break;
                         case 'meta:_role_based_price':
-                            array_push(static::$array, "");
+                            array_push(static::$array, $price);
                             break;
                     }
                 }
@@ -222,26 +158,22 @@ class CSVinsertProduct2 extends Date
             return null;
         }
     }
-    private  static function paskage($paskage,$paskage2)
+    private  static function paskage($paskage)
     {
-        if(!empty($paskage)) {
-            foreach ($paskage as  $packagedata) {
-                $packagefinish = $packagedata;
-            }
-                $full = static::pkp();
-                foreach ($full as $item) {
-                    static::InsertCSv($packagefinish,$item);
+        static::$item = 0;
+        foreach($paskage as $paskagedatafinish) {
+                if (!empty($paskagedatafinish)) {
+                    $full = static::pkp();
+                    $attribute = $paskagedatafinish->attributes();
+                        static::$price = $paskagedatafinish->prices;
+                        $array = $attribute['package'];
+                        if (static::$price) {
+                            $price = static::price(static::$price);
+                        }
+                        static::InsertCSv($array['0'], $full[static::$item], $price);
+                        static::$item++;
+                    }
                 }
-        }
-        if(!empty($paskage2)){
-                $full = static::pkp();
-                $item= 0;
-            foreach ($paskage2 as $packagedata2) {
-                $packagefinish = $packagedata2;
-                    static::InsertCSv($packagefinish,$full[$item]);
-                $item++;
-            }
-        }
     }
     private  static function DeleteArrayFile($file){
         $file[] = null;
@@ -250,7 +182,28 @@ class CSVinsertProduct2 extends Date
         }
         static::$array = $file;
         static::$paskagedata = $file;
-        static:: $paskagedata2 = $file;
         return $file;
+    }
+    private static function price($price)
+    {
+        if (!empty(static::$price) && isset(static::$price)) {
+            $json = json_encode($price);
+            $jsondecode = json_decode($json, true);
+            foreach ($jsondecode as $atrribute) {
+                foreach ($atrribute as $dataprice) {
+                    $json = json_encode($dataprice);
+                    $jsondecode = json_decode($json, true);
+                    foreach ($jsondecode as $jsondecode2) {
+                        $jsondata[$jsondecode2['pos_id']] = ["regular_price" => $jsondecode2['regular_price'], "selling_price" => $jsondecode2['regular_price']];
+                        $jsondatafinish = json_encode($jsondata);
+                    }
+                }
+            }
+            return static::$role_based_price = $jsondatafinish;
+        }else{
+            $text  = 'Price column data for insert in csv empty (product3)';
+            log::logtext($text);
+            return null;
+        }
     }
 }

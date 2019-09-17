@@ -3,7 +3,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/CSVinsertPOS.php';
 require_once __DIR__ . '/CSVinsertProduct1.php';
 require_once __DIR__ . '/CSVinsertProduct2.php';
-require_once __DIR__ . '/CSVinsertProduct3.php';
 require_once __DIR__ . '/Date.php';
 
 
@@ -36,14 +35,10 @@ class CSVinsertStart extends Date
                             static::$pathproduct2 = Date::pathfileproduct2();
                             fputcsv( static::$pathproduct2, static::$arrayCsvPRODUCT2, ',', '"');
                             fclose(static::$pathproduct2);
-                            static::$pathproduct3 = Date::pathfileproduct3();
-                            fputcsv(static::$pathproduct3, static::$arrayCsvPRODUCT3, ',', '"');
-                            fclose(static::$pathproduct3);
                             $bool = false;
                         }
                          CSVinsertProduct1::createCsvArray($data);
                          CSVinsertProduct2::createCsvArray($data);
-                         CSVinsertProduct3::createCsvArray($data);
                         break;
                     case 'T2S_POS_Info_WbStore';
                         if ($bool === true) {

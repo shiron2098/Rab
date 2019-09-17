@@ -94,7 +94,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         static::DbconnectT2S_BI();
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
-            "SELECT date_num as date,average_collect as averageCollect FROM Daily_Avg_Collect
+            "SELECT distinct date_num as date,average_collect as averageCollect FROM Daily_Avg_Collect
                   WHERE date_num <= $datetime
                   ORDER BY date_num DESC limit 7"
         );
@@ -107,4 +107,26 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         }
         return $array;
     }
+    protected function daily_array_TableStops($date,$offset,$count){
+        $items = 0;
+        static::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "SELECT DISTINCT pos.pos_id,pos.cus_code,pos.cus_description,pos.pos_code,pos.pos_description FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where v.visit_date = $date
+                    ORDER BY v.visit_date limit $offset,$count"
+        );
+            $row = mysqli_fetch_assoc($result);
+        if (!empty($result)) {
+            foreach ($result as $date) {
+                $array['date' . $items] = $date;
+                $items++;
+            }
+        } else {
+            return null;
+        }
+        $array['number']=$items;
+        return $array;
+        }
 }
