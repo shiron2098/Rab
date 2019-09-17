@@ -10,49 +10,47 @@ class POS  extends MYSQL_t2s_bi_calendar
     private $interval;
     private $int;
 
-    public function Week($date, $int, $offset, $count)
+    public function Week($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $unixtimeAVG = strtotime($date . '-' . $this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_array_TableStops($timemysql,$offset,$count);
+            $data = $this->daily_array_TableStops($timemysql,$offset,$count,$sort);
+            $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
                     'threndIntervalComparer' => static::week,
                     'items' => $data,
-                    'totalCount' => $data['number'],
+                    'totalCount' => $dataCount
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stops)");
+                echo json_encode("no correct date(POS)");
             }
         }
     }
 
-    private function Months($date, $int, $offset, $count)
+    private function Months($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
             $unixtime = strtotime($date);
-            $unixtimeAVG = strtotime($date . '-' . $this->int . 'days');
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtime);
-            $data = $this->daily_array_TableStops($timemysql,$offset,$count);
+            $data = $this->daily_array_TableStops($timemysql,$offset,$count,$sort);
+            $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 if ($data !== null) {
                     $output = array(
                         'date' => $date,
                         'threndIntervalComparer' => static::month,
                         'items' => $data,
-                        'totalCount' => $data['number'],
+                        'totalCount' => $dataCount
                     );
                     echo json_encode($output);
                 } else {
-                    echo json_encode("no correct date(stops)");
+                    echo json_encode("no correct date(POS)");
                 }
             }
         }
@@ -60,16 +58,14 @@ class POS  extends MYSQL_t2s_bi_calendar
 
     public function start()
     {
-
         if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date']) && isset($_GET['offset']) && isset($_GET['count'])) {
             $this->interval = $_GET['trendIntervalComparer'];
             switch ($this->interval) {
                 case '45':
-                    echo json_encode($_GET);
-                    $this->Week($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count']);
+                    $this->Week($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count'],$_GET['sorting']);
                     break;
                 case '180':
-                    $this->Months($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count']);
+                    $this->Months($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count'],$_GET['sorting']);
                     break;
             }
         }else{
@@ -78,5 +74,5 @@ class POS  extends MYSQL_t2s_bi_calendar
     }
 }
 $start = new POS();
-/*$start->Week('20040202',45,20,30);*/
+/*$start->Week('20040202',45,0,20,$sorting = array(['pos_id','descending']));*/
 $start->start();

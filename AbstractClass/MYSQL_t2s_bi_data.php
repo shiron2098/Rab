@@ -107,26 +107,70 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         }
         return $array;
     }
-    protected function daily_array_TableStops($date,$offset,$count){
+    protected function daily_array_TableStops($date,$offset,$count,$arraysorting)
+    {
         $items = 0;
+            if ($arraysorting['1'] == 'ascending') {
+                $columnsorting = $arraysorting['0'];
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pos.pos_id,pos.cus_code,pos.cus_description,pos.pos_code,pos.pos_description FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where v.visit_date = $date
+                    ORDER BY pos.$columnsorting ASC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $array['date' . $items] = $data;
+                        $items++;
+                    }
+                } else {
+                    return null;
+                }
+            }
+            else if($arraysorting['1'] == 'descending'){
+                static::DbconnectT2S_BI();
+                $columnsorting = $arraysorting['0'];
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pos.pos_id,pos.cus_code,pos.cus_description,pos.pos_code,pos.pos_description FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where v.visit_date = $date
+                    ORDER BY pos.$columnsorting DESC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $array['date' . $items] = $data;
+                        $items++;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        return $array;
+    }
+    protected function daily_count_POS($date)
+    {
         static::DbconnectT2S_BI();
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
-            "SELECT DISTINCT pos.pos_id,pos.cus_code,pos.cus_description,pos.pos_code,pos.pos_description FROM visits v
+            "SELECT count(DISTINCT pos.pos_id) FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
-                    where v.visit_date = $date
-                    ORDER BY v.visit_date limit $offset,$count"
+                    where v.visit_date = $date"
         );
-            $row = mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
         if (!empty($result)) {
             foreach ($result as $date) {
-                $array['date' . $items] = $date;
-                $items++;
+                foreach($date as $item) {
+                    $array = $item;
+                }
             }
         } else {
-            return null;
-        }
-        $array['number']=$items;
-        return $array;
-        }
+                return null;
+            }
+            return $array;
+    }
 }
