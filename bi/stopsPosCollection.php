@@ -58,14 +58,14 @@ class stopsPosCollection  extends MYSQL_t2s_bi_calendar
 
     public function start()
     {
-        if (isset($_GET['trendIntervalComparer']) && !EMPTY($_GET['trendIntervalComparer']) && isset($_GET['date']) && !empty($_GET['date']) && isset($_GET['offset']) && isset($_GET['count'])) {
-            $this->interval = $_GET['trendIntervalComparer'];
+        if (isset($_POST['trendIntervalComparer']) && !EMPTY($_POST['trendIntervalComparer']) && isset($_POST['date']) && !empty($_POST['date']) && isset($_POST['offset']) && isset($_POST['count'])) {
+            $this->interval = $_POST['trendIntervalComparer'];
             switch ($this->interval) {
                 case '45':
-                    $this->Week($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count'],$_GET['sorting']);
+                    $this->Week($_POST['date'], $_POST['trendIntervalComparer'], $_POST['offset'], $_POST['count'],$_POST['sorting']);
                     break;
                 case '180':
-                    $this->Months($_GET['date'], $_GET['trendIntervalComparer'], $_GET['offset'], $_GET['count'],$_GET['sorting']);
+                    $this->Months($_POST['date'], $_POST['trendIntervalComparer'], $_POST['offset'], $_POST['count'],$_POST['sorting']);
                     break;
             }
         }else{
@@ -74,5 +74,5 @@ class stopsPosCollection  extends MYSQL_t2s_bi_calendar
     }
 }
 $start = new stopsPosCollection();
-/*$start->Week('20030418',45,0,20,$sorting = ['pos_id','descending']);*/
+/*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
 $start->start();

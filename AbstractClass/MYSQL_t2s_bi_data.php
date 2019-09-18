@@ -115,7 +115,8 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription FROM visits v
+                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription,
+                    pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY pos.$columnsorting ASC limit $offset,$count"
@@ -123,8 +124,17 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
-                        $array[] = $data;
+                        $stringAdress =$data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
+                        $dataPOS = array(
+                            'posGlobalKey' => $data['posGlobalKey'],
+                            'customerCode' => $data['customerCode'],
+                            'customerDescription' => $data['customerDescription'],
+                            'PosCode' => $data['PosCode'],
+                            'posDescription' => $data['posDescription'],
+                            'address' => $stringAdress,
+                        );
                         $items++;
+                        $array[] = $dataPOS;
                     }
                 } else {
                     return null;
@@ -135,7 +145,8 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 $columnsorting = $arraysorting['0'];
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription FROM visits v
+                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription,
+                    pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY pos.$columnsorting DESC limit $offset,$count"
@@ -143,8 +154,17 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
-                        $array[] = $data;
+                        $stringAdress =$data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
+                        $dataPOS = array(
+                            'posGlobalKey' => $data['posGlobalKey'],
+                            'customerCode' => $data['customerCode'],
+                            'customerDescription' => $data['customerDescription'],
+                            'PosCode' => $data['PosCode'],
+                            'posDescription' => $data['posDescription'],
+                            'address' => $stringAdress,
+                        );
                         $items++;
+                        $array[] = $dataPOS;
                     }
                 } else {
                     return null;
