@@ -118,7 +118,7 @@ class Job_StreamOut extends Threaded
                 if ($responselog === true) {
                     MYSQLDataOperator::OperatorL2D(Job_StreamOut::$operator, $this->provider);
                     MYSQLDataOperator::LogL2D($this->id_operator, $this->command, $this->StartXML, $this->batch_id);
-                    MYSQLDataOperator::InsertTableT2s_dashboard($this->batch_id);
+                   MYSQLDataOperator::InsertTableT2s_dashboard($this->batch_id);
                 }
             }
             switch ($this->NameDataForProccesing) {
