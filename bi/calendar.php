@@ -127,5 +127,4 @@ class calendar extends MYSQL_t2s_bi_calendar
 
 }
 $start = new calendar();
-$start->Week(['20030425'],45);
-/*$start->start();*/
+$start->start();
