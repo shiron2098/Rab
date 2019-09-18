@@ -115,7 +115,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as  posCode,pos.pos_description as posDescription FROM visits v
+                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY pos.$columnsorting ASC limit $offset,$count"
@@ -135,7 +135,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 $columnsorting = $arraysorting['0'];
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pos.pos_id,pos.cus_code,pos.cus_description,pos.pos_code,pos.pos_description FROM visits v
+                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY pos.$columnsorting DESC limit $offset,$count"
