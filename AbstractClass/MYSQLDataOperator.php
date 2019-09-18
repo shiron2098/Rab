@@ -11,8 +11,8 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
 {
     const host = '127.0.0.1';
     const filepathCsv = __DIR__ . '/../VendmaxAndNayaxAndConnect/File/Csv/';
-    const user = 'shiro';
-    const password = '2479465';
+    const user = 'ret';
+    const password = '123';
     const databaseT2S = 't2s_dashboard';
     const databaseT2S_BI = 't2s_bi_dashboard';
     Const NoConnect = 'NoConnect';
@@ -252,8 +252,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
             $text = "Procedure usp_update_warehouse_tables records added/updated successfully.";
             log::logtext($text);
         } else{
-            print_r(static::$linkConnectT2S);
-            $text = "ERROR: Couldn't execute $sql. " . static::$linkConnectT2S;
+            $text = "ERROR: Couldn't execute " . $sql;
             log::logtext($text);
         }
     }

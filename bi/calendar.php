@@ -40,7 +40,7 @@ class calendar extends MYSQL_t2s_bi_calendar
                                     'date' => $dateOKANDALLERT['date'],
                                     'levelDateByThreshold' => $dateOKANDALLERT['value'],
                             );
-                        }else{
+                        }elseif($dateOKANDALLERT['value'] === 'alert'){
                             $finishdate = array(
                                 'date' => $dateOKANDALLERT['date'],
                                 'levelDateByThreshold' => $dateOKANDALLERT['value'],
@@ -127,4 +127,5 @@ class calendar extends MYSQL_t2s_bi_calendar
 
 }
 $start = new calendar();
-$start->start();
+$start->Week(['20030425'],45);
+/*$start->start();*/

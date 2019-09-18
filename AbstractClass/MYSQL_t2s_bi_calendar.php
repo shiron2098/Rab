@@ -66,7 +66,7 @@ class MYSQL_t2s_bi_calendar extends MYSQL_t2s_bi_avg
                     $value['date']=$dateStart;
                     $value['value']='ok';
                     return $value;
-                }else {
+                }elseif($summ1> $procentandsumm2){
                     $value['date']=$dateStart;
                     $value['value']='alert';
                     return $value;
@@ -81,7 +81,7 @@ class MYSQL_t2s_bi_calendar extends MYSQL_t2s_bi_avg
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
             "SELECT DISTINCT * FROM Daily_Avg_Collect
-                WHERE date_num  = $dateStart"
+                WHERE date_num = $dateStart"
         );
         $row = mysqli_fetch_assoc($result);
         if (!empty($result)) {

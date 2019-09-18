@@ -74,5 +74,5 @@ class stopsPosCollection  extends MYSQL_t2s_bi_calendar
     }
 }
 $start = new stopsPosCollection();
-/*$start->Week('20040202',45,0,20,$sorting = array(['pos_id','descending']));*/
+/*$start->Week('20030418',45,0,20,$sorting = ['pos_id','descending']);*/
 $start->start();
