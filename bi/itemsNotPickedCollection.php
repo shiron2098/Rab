@@ -16,7 +16,7 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
             $this->int = $int;
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_array_itemsPOS($timemysql,$offset,$count,$sort);
+            $data = $this->daily_array_items_POS($timemysql,$offset,$count,$sort);
             $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 $output = array(
@@ -38,7 +38,7 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
             $this->int = $int;
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
-            $data = $this->daily_array_itemsPOS($timemysql,$offset,$count,$sort);
+            $data = $this->daily_array_items_POS($timemysql,$offset,$count,$sort);
             $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 if ($data !== null) {
@@ -81,6 +81,6 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
 $json_str = file_get_contents('php://input');
 $json_obj = json_decode($json_str);
 
-$start = new stopsPosCollection();
+$start = new itemsNotPickedCollection();
 /*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
 $start->start($json_obj);

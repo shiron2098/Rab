@@ -244,7 +244,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                     "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
                     left join products pro on pro.pro_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY pos.$columnsorting ASC limit $offset,$count"
+                    ORDER BY pro.$columnsorting ASC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
@@ -283,7 +283,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                     "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
                     left join products pro on pro.pro_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY pos.$columnsorting ASC limit $offset,$count"
+                    ORDER BY pro.$columnsorting ASC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
