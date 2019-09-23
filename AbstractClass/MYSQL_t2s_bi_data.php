@@ -153,7 +153,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                             'posGlobalKey' => $data['posGlobalKey'],
                             'customerCode' => $data['customerCode'],
                             'customerDescription' => $data['customerDescription'],
-                            'PosCode' => $data['posCode'],
+                            'posCode' => $data['posCode'],
                             'posDescription' => $data['posDescription'],
                             'address' => $stringAdress,
                         );
@@ -185,7 +185,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                 }
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as PosCode,pos.pos_description as posDescription,
+                    "SELECT DISTINCT pos.pos_id as posGlobalKey,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.pos_code as posCode,pos.pos_description as posDescription,
                     pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
@@ -199,7 +199,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                             'posGlobalKey' => $data['posGlobalKey'],
                             'customerCode' => $data['customerCode'],
                             'customerDescription' => $data['customerDescription'],
-                            'PosCode' => $data['posCode'],
+                            'posCode' => $data['posCode'],
                             'posDescription' => $data['posDescription'],
                             'address' => $stringAdress,
                         );

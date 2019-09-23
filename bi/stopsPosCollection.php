@@ -27,7 +27,13 @@ class stopsPosCollection  extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(POS)");
+                $output = array(
+                    'date' => $date,
+                    'threndIntervalComparer' => static::week,
+                    'items' => $data,
+                    'totalCount' => $dataCount
+                );
+                echo json_encode($output);
             }
         }
     }
@@ -50,7 +56,13 @@ class stopsPosCollection  extends MYSQL_t2s_bi_calendar
                     );
                     echo json_encode($output);
                 } else {
-                    echo json_encode("no data");
+                    $output = array(
+                        'date' => $date,
+                        'threndIntervalComparer' => static::week,
+                        'items' => $data,
+                        'totalCount' => $dataCount
+                    );
+                    echo json_encode($output);
                 }
             }
         }
@@ -58,18 +70,23 @@ class stopsPosCollection  extends MYSQL_t2s_bi_calendar
 
     public function start($post)
     {
-        if (isset($post->trendIntervalComparer) && !EMPTY($post->trendIntervalComparer) && isset($post->date) && !empty($post->date) && isset($post->offset) && isset($post->count)) {
-            $this->interval = $post->trendIntervalComparer;
-            switch ($this->interval) {
-                case '45':
-                    $this->Week($post->date, $post->trendIntervalComparer, $post->offset, $post->count, $post->sorting);
-                    break;
-                case '180':
-                    $this->Months($post->date, $post->trendIntervalComparer, $post->offset, $post->count, $post->sorting);
-                    break;
+        try {
+            if (isset($post->trendIntervalComparer) && !EMPTY($post->trendIntervalComparer) && isset($post->date) && !empty($post->date) && isset($post->offset) && isset($post->count)) {
+                $this->interval = $post->trendIntervalComparer;
+                switch ($this->interval) {
+                    case '45':
+                        $this->Week($post->date, $post->trendIntervalComparer, $post->offset, $post->count, $post->sorting);
+                        break;
+                    case '180':
+                        $this->Months($post->date, $post->trendIntervalComparer, $post->offset, $post->count, $post->sorting);
+                        break;
+                }
+            } else {
+                $text = 'Data not correct';
+                throw new Exception($text);
             }
-        } else {
-            echo json_encode('no correct data for P5235423232323');
+        }catch (Exception $e){
+            echo $e->getMessage();
         }
     }
 }
