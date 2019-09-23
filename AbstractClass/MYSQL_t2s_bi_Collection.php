@@ -21,7 +21,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
     const posCodeStockouts = 'pos_code';
     const posDescriptionStockouts = 'pos_description';
     const customerCodeStockouts = 'cus_id';
-    const customerDescriptionStockouts ='cus_description';
+    const customerDescriptionStockouts = 'cus_description';
 
     protected function daily_array_stops_collection($date, $offset, $count, $arraysorting)
     {
@@ -212,6 +212,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
         }
         return $array;
     }
+
     public function daily_array_stockouts_collection($date, $offset, $count, $arraysorting)
     {
         $items = 0;
@@ -313,7 +314,9 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 } else {
                     return null;
                 }
-        return $array;
+                return $array;
+            }
+        }
     }
 
 }
