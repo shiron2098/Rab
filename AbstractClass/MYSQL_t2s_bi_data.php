@@ -10,6 +10,11 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
     const poscode = 'pos_code';
     const posdescription = 'pos_description';
 
+    const productGlobalKey = 'pro_id';
+    const productCode = 'pro_code';
+    const productDescription = 'pro_description';
+    const quantity = '2';
+
     protected function daily_missed_stops($datenum)
     {
         static::DbconnectT2S_BI();
@@ -213,6 +218,95 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         }
         return $array;
     }
+    public function daily_array_items_POS($date,$offset,$count,$arraysorting){
+        $items = 0;
+        $dataPOS = [];
+        foreach($arraysorting as $datasorting) {
+            if ($datasorting->rule == 'ascending') {
+                switch ($datasorting->field) {
+                    case 'productGlobalKey':
+                        $columnsorting = static::posGlobalKey;
+                        break;
+                    case 'productCode':
+                        $columnsorting = static::customerCode;
+                        break;
+                    case 'productDescription':
+                        $columnsorting = static::customerDescription;
+                        break;
+                    case 'quantity':
+                        $columnsorting = static::quantity;
+                        break;
+                }
+                $this->DeleteArrayFile($dataPOS);
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
+                    left join products pro on pro.pro_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY pos.$columnsorting ASC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $dataPOS = array(
+                            'productGlobalKey' => $data['productGlobalKey'],
+                            'productCode' => $data['productCode'],
+                            'productDescription' => $data['productDescription'],
+                            'quantity' => static::quantity,
+                        );
+                        $items++;
+                        $array[] = $dataPOS;
+                    }
+                } else {
+                    return null;
+                }
+            } else if ($datasorting->rule == 'descending') {
+                switch ($datasorting->field) {
+                    case 'productGlobalKey':
+                        $columnsorting = static::posGlobalKey;
+                        break;
+                    case 'productCode':
+                        $columnsorting = static::customerCode;
+                        break;
+                    case 'productDescription':
+                        $columnsorting = static::customerDescription;
+                        break;
+                    case 'quantity':
+                        $columnsorting = static::quantity;
+                        break;
+                }
+                $this->DeleteArrayFile($dataPOS);
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
+                    left join products pro on pro.pro_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY pos.$columnsorting ASC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $dataPOS = array(
+                            'productGlobalKey' => $data['productGlobalKey'],
+                            'productCode' => $data['productCode'],
+                            'productDescription' => $data['productDescription'],
+                            'quantity' => static::quantity,
+                        );
+                        $items++;
+                        $array[] = $dataPOS;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
+        return $array;
+
+
+    }
+
     protected function daily_count_POS($date)
     {
         static::DbconnectT2S_BI();
