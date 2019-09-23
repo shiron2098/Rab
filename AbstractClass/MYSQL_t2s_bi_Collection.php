@@ -16,12 +16,6 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
     const productDescription = 'pro_description';
     const quantity = '2';
 
-    const productCodeStockouts = 'pro_code';
-    const productDescriptionStockouts = 'pro_description';
-    const posCodeStockouts = 'pos_code';
-    const posDescriptionStockouts = 'pos_description';
-    const customerCodeStockouts = 'cus_id';
-    const customerDescriptionStockouts = 'cus_description';
 
     protected function daily_array_stops_collection($date, $offset, $count, $arraysorting)
     {
@@ -221,16 +215,16 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
             if ($datasorting->rule == 'ascending') {
                 switch ($datasorting->field) {
                     case 'productCode':
-                        $columnsorting = static::productCodeStockouts;
+                        $columnsorting = static::productCode;
                         break;
                     case 'productDescription':
-                        $columnsorting = static::productDescriptionStockouts;
+                        $columnsorting = static::productDescription;
                         break;
                     case 'posCode':
-                        $columnsorting = static::posCodeStockouts;
+                        $columnsorting = static::poscode;
                         break;
                     case 'posDescription':
-                        $columnsorting = static::posDescriptionStockouts;
+                        $columnsorting = static::posdescription;
                         break;
                     case 'customerCode':
                         $columnsorting = static::customerCode;
@@ -269,16 +263,16 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
             } else if ($datasorting->rule == 'descending') {
                 switch ($datasorting->field) {
                     case 'productCode':
-                        $columnsorting = static::productCodeStockouts;
+                        $columnsorting = static::productCode;
                         break;
                     case 'productDescription':
-                        $columnsorting = static::productDescriptionStockouts;
+                        $columnsorting = static::productDescription;
                         break;
                     case 'posCode':
-                        $columnsorting = static::posCodeStockouts;
+                        $columnsorting = static::productCode;
                         break;
                     case 'posDescription':
-                        $columnsorting = static::posDescriptionStockouts;
+                        $columnsorting = static::productDescription;
                         break;
                     case 'customerCode':
                         $columnsorting = static::customerCode;
@@ -319,4 +313,214 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
         }
     }
 
+    public function daily_array_revenue_collection($date, $offset, $count, $arraysorting)
+    {
+        $items = 0;
+        $dataPOS = [];
+        foreach ($arraysorting as $datasorting) {
+            if ($datasorting->rule == 'ascending') {
+                switch ($datasorting->field) {
+                    case 'posCode':
+                        $columnsorting = static::poscode;
+                        break;
+                    case 'posDescription':
+                        $columnsorting = static::posdescription;
+                        break;
+                    case 'customerCode':
+                        $columnsorting = static::customerCode;
+                        break;
+                    case 'customerDescription':
+                        $columnsorting = static::customerDescription;
+                        break;
+                    case 'collectionsValue':
+                        $columnsorting = '80';
+                        break;
+                    case 'address':
+                        $columnsorting = 'address_1';
+                        break;
+                }
+                $this->DeleteArrayFile($dataPOS);
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip   FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
+                        $dataPOS = array(
+                            'posCode' => $data['posCode'],
+                            'posDescription' => $data['posDescription'],
+                            'customerCode' => $data['customerCode'],
+                            'customerDescription' => $data['customerDescription'],
+                            'collectionsValue' => '80',
+                            'address' => $stringAdress,
+                        );
+                        $items++;
+                        $array[] = $dataPOS;
+                    }
+                } else {
+                    return null;
+                }
+            } else if ($datasorting->rule == 'descending') {
+                switch ($datasorting->field) {
+                    case 'posCode':
+                        $columnsorting = static::poscode;
+                        break;
+                    case 'posDescription':
+                        $columnsorting = static::posdescription;
+                        break;
+                    case 'customerCode':
+                        $columnsorting = static::customerCode;
+                        break;
+                    case 'customerDescription':
+                        $columnsorting = static::customerDescription;
+                        break;
+                    case 'collectionsValue':
+                        $columnsorting = '80';
+                        break;
+                    case 'address':
+                        $columnsorting = 'address_1';
+                        break;
+                }
+                $this->DeleteArrayFile($dataPOS);
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip   FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY $columnsorting DESC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
+                        $dataPOS = array(
+                            'posCode' => $data['posCode'],
+                            'posDescription' => $data['posDescription'],
+                            'customerCode' => $data['customerCode'],
+                            'customerDescription' => $data['customerDescription'],
+                            'collectionsValue' => '80',
+                            'address' => $stringAdress,
+                        );
+                        $items++;
+                        $array[] = $dataPOS;
+                    }
+                } else {
+                    return null;
+                }
+                return $array;
+            }
+        }
+    }
+    public function daily_array_distribution_collection($date, $offset, $count, $arraysorting)
+    {
+        $items = 0;
+        $dataPOS = [];
+        foreach ($arraysorting as $datasorting) {
+            if ($datasorting->rule == 'ascending') {
+                switch ($datasorting->field) {
+                    case 'posCode':
+                        $columnsorting = static::poscode;
+                        break;
+                    case 'posDescription':
+                        $columnsorting = static::posdescription;
+                        break;
+                    case 'customerCode':
+                        $columnsorting = static::customerCode;
+                        break;
+                    case 'customerDescription':
+                        $columnsorting = static::customerDescription;
+                        break;
+                    case 'collectionsValue':
+                        $columnsorting = '80';
+                        break;
+                    case 'address':
+                        $columnsorting = 'address_1';
+                        break;
+                }
+                $this->DeleteArrayFile($dataPOS);
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip   FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
+                        $dataPOS = array(
+                            'posCode' => $data['posCode'],
+                            'posDescription' => $data['posDescription'],
+                            'customerCode' => $data['customerCode'],
+                            'customerDescription' => $data['customerDescription'],
+                            'collectionsValue' => '80',
+                            'address' => $stringAdress,
+                        );
+                        $items++;
+                        $array[] = $dataPOS;
+                    }
+                } else {
+                    return null;
+                }
+            } else if ($datasorting->rule == 'descending') {
+                switch ($datasorting->field) {
+                    case 'posCode':
+                        $columnsorting = static::poscode;
+                        break;
+                    case 'posDescription':
+                        $columnsorting = static::posdescription;
+                        break;
+                    case 'customerCode':
+                        $columnsorting = static::customerCode;
+                        break;
+                    case 'customerDescription':
+                        $columnsorting = static::customerDescription;
+                        break;
+                    case 'collectionsValue':
+                        $columnsorting = '80';
+                        break;
+                    case 'address':
+                        $columnsorting = 'address_1';
+                        break;
+                }
+                $this->DeleteArrayFile($dataPOS);
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip   FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY $columnsorting DESC limit $offset,$count"
+                );
+                $row = mysqli_fetch_assoc($result);
+                if (!empty($result)) {
+                    foreach ($result as $data) {
+                        $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
+                        $dataPOS = array(
+                            'posCode' => $data['posCode'],
+                            'posDescription' => $data['posDescription'],
+                            'customerCode' => $data['customerCode'],
+                            'customerDescription' => $data['customerDescription'],
+                            'collectionsValue' => '80',
+                            'address' => $stringAdress,
+                        );
+                        $items++;
+                        $array[] = $dataPOS;
+                    }
+                } else {
+                    return null;
+                }
+                return $array;
+            }
+        }
+    }
 }

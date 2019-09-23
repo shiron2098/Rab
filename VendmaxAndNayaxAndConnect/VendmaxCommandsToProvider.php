@@ -17,11 +17,15 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
     const non_vending_equipment = "select top 1000 * from VEQ_View";
     const equipment =  'select * from VVI_View';
     const items  = 'select top 1000 * from VEQ_View';
-    const exportPOS = 'exec t2s_exportPos \'No\'';
+    const exportPOS = 'exec t2s_exportPos_BI \'No\'';
     const exportPRO = 'exec t2s_exportPro_BI \'No\'';
-    const exportVISITS = 'exec t2s_exportVisits';
+    const exportVISITS = 'exec t2s_exportVisits_BI';
+
+
+
     const exportPRO_WbStore = 'exec t2s_exportPRO_WbStore \'No\'';
     const exportPOS_WbStore = 'exec t2s_exportPOS_WbStore \'No\'';
+
 
     public $command;
     public $softwireprovider;
@@ -61,6 +65,7 @@ class VendmaxCommands extends DbConnectProvider implements generic_command_inter
         return  $this->ExecuteStatment(VendmaxCommands::locations);
     }
    public function get_non_vending_equipment(){
+
        return  $this->ExecuteStatment(VendmaxCommands::non_vending_equipment);
    }
 

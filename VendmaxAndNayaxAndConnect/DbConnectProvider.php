@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../AbstractClass/Rabbimq.php';
+ini_set('default_socket_timeout', 1000);
 
 class DbConnectProvider extends Rabbimq
 {
@@ -50,26 +51,34 @@ class DbConnectProvider extends Rabbimq
     }
     public function Db_Connect(){
 
+        while (openssl_error_string()) {}
         /** @var array $connect */
         /** @var array SqlParamForExecuteDbStatement */
-        $this->SqlParamToExecuteDbStatement = array("listOfRequests"=>array("ServiceCallInfo"=>array("CallType"=>"SQL","Sql"=>$this->SqlParam ,
+        $this->SqlParamToExecuteDbStatement = array("listOfRequests"=>array("ServiceCallInfo"=>array("CallType"=>"SQL","Sql"=> $this->SqlParam ,
             'Parameters'=> array('OfPairOfString' =>array('PairOfString' =>  'true')),
-            'ProcessResultToXml'=> True,'HasResult' => true,'CompressResult'=> false,
+            'ProcessResultToXml'=> true,'HasResult' => true,'CompressResult'=> false,
             'accept-encoding' => 'deflate',"Sid"=>1)));
 
         try {
             $connect = new SoapClient(DbConnectProvider::WSDL, array('location' => $this->HeaderLocal, 'url' => DbConnectProvider::UrlNamespace,
-                'trace' => TRUE,
+                'trace' => true,
                 'exceptions' => false,
-                'connection_timeout' => 120));
-        } catch (SoapFault $e) {
+            ));
+        } catch (SoapFault $e){
             $e->getMessage();
         }
 
-        /**AuthenticateUser @Param array  @response Object(Status,LoginType) */
+        /**AuthenticateUser
+         * @Param array
+         * @response Object(Status,LoginType)
+         */
         $connect->AuthenticateUser($this->ParamsToAuthenticateUser);
 
-        /** ExecuteDbStatement @param array  @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed) @type ResponseDataCompressed = zip */
+        /** ExecuteDbStatement
+         * @param array
+         * @response Object(IsCompresedResponse,Response,Status,ResponseDataCompressed)
+         * @type ResponseDataCompressed = zip
+         */
         sleep(2);
         $ToParamResponseDb= $connect->ExecuteDbStatement($this->SqlParamToExecuteDbStatement);
         if(!empty($ToParamResponseDb)) {

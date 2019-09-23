@@ -13,6 +13,7 @@ class Simple_Parser
 
     function parse($data)
     {
+        ini_set('memory_limit', '2048M');
         $this->parser = xml_parser_create('UTF-8');
         xml_set_object($this->parser, $this);
         xml_parser_set_option($this->parser, XML_OPTION_SKIP_WHITE, 1);

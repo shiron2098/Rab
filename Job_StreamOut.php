@@ -39,37 +39,39 @@ class Job_StreamOut extends Threaded
             if (!empty(Job_StreamOut::$operator) && isset(Job_StreamOut::$operator)) {
                 $this->idstreams = Thread::getCurrentThreadId();
                 $CreateTask = new CreateTask();
-               $CreateTask->UpdateOperStreamsUp($this->idstreams, Job_StreamOut::$operator['id'], $this->bool);
+                $CreateTask->UpdateOperStreamsUp($this->idstreams, Job_StreamOut::$operator['id'], $this->bool);
                 $request = new WorkerReceiver1();
                 $responseWorker = $request->Index(Job_StreamOut::$operator, $this->bool);
                 if (!empty($responseWorker) && isset($responseWorker)) {
                     foreach ($responseWorker as $WorkerJob) {
-                        $this->bollpos= false;
+                        $this->bollpos = false;
                         $json = json_decode($WorkerJob);
                         $this->variable($json);
                         $this->StartXML = file_get_contents($json->Code->filepath);
+                        $response = simplexml_load_file($json->Code->filepath);
+                        $response2 = $response->Table;
                         $xml_parser = new Simple_Parser;
                         $xml_parser->parse($this->StartXML);
                         $XmlString = $xml_parser->data['NEWDATASET']['0']['child']['TABLE'];
-                        if(!empty($file)&&isset($file)) {
+                        if (!empty($file) && isset($file)) {
                             $file = $this->DeleteArrayFile($file);
                         }
                         $this->CreateFileDecoding();
                         $this->PosRootStart($json);
-                        foreach ($XmlString as $Atribut) {
-                            foreach ($Atribut['attribs'] as $FullString) {
-                                if($json->Code->command == 'export_pos_wbstore' || $json->Code->command == 'export_pro_wbstore'){
+                        foreach ($response as $Atribut) {
+                            foreach ($Atribut->attributes() as $FullString) {
+                                if ($json->Code->command == 'export_pos_wbstore' || $json->Code->command == 'export_pro_wbstore') {
                                     $string = str_replace("'", "'", "$FullString");
                                     $file[] = $string;
-                                }else {
+                                } else {
                                     $string = str_replace("'", "\'", "$FullString");
                                     $file[] = $string;
                                 }
                             }
                         }
-                        file_put_contents(__DIR__ . '/' . $this->time, $file,FILE_APPEND);
-                           $this->PosRootFinish($json);
-                      $this->DataXmlConverter($this->time);
+                        file_put_contents(__DIR__ . '/' . $this->time, $file, FILE_APPEND);
+                        $this->PosRootFinish($json);
+                        $this->DataXmlConverter($this->time);
                     }
                 } else {
                     $text = 'Rabbit ResponseOperator queue empty #' . Job_StreamOut::$operator['id'];
@@ -86,34 +88,55 @@ class Job_StreamOut extends Threaded
         $CreateTask->UpdateOperStreams(Job_StreamOut::$operator['id'], $this->bool);
     }
 
-    private function DataXmlConverter($Path)
+    public function DataXmlConverter($Path)
     {
-            $data = file_get_contents(__DIR__ . '/' . $Path);
-            $response = simplexml_load_string($data);
-            foreach ($response as $DataName => $DataXml) {
-                $this->NameDataForProccesing = $DataName;
-                $DataXmlJson = json_encode($DataXml);
-                $DataXmlObject = json_decode($DataXmlJson);
-                foreach ($DataXmlObject as $DataXmlCompleteObject) {
-                    if (!empty($DataXmlCompleteObject->batch_id) && isset($DataXmlCompleteObject->batch_id)) {
-                        $this->batch_id = $DataXmlCompleteObject->batch_id;
-                        switch ($this->NameDataForProccesing) {
-                            case 'Product':
-                                $responselog = MYSQLDataOperator::ProductOut($DataXmlCompleteObject);
-                                break;
-                            case 'Visit':
-                                $responselog = MYSQLDataOperator::VisitsOut($DataXmlCompleteObject);
-                                break;
-                            case 'POS':
-                                $responselog = MYSQLDataOperator::Points_of_saleOut($DataXmlCompleteObject);
-                                break;
-                        }
-                    } else {
-                        break;
+
+        $data = file_get_contents(__DIR__ . '/' . $Path);
+        $response = simplexml_load_string($data);
+        foreach ($response as $DataName => $DataXml) {
+            foreach ($DataXml as $dataArrayValue) {
+                $array = $dataArrayValue->attributes();
+                $json = json_encode($array);
+                $array2 = json_decode($json,TRUE);
+                foreach($array2 as $k => $v) {
+                    $json2 = json_decode(json_encode($v),false);
+                }
+                $responselog = MYSQLDataOperator::VisitsOut($json2);
+            }
+            if ($DataName == 'product_sellouts') {
+                foreach ($DataXml as $dataArrayValue) {
+                    $array = $dataArrayValue->attributes();
+                    $json = json_encode($array);
+                    $array2 = json_decode($json, TRUE);
+                    foreach ($array2 as $k => $v) {
+                        $json2 = json_decode(json_encode($v), false);
                     }
+                    $responselog = MYSQLDataOperator::Product_OUT($json2);
                 }
             }
-
+        }
+        exit();
+        $this->NameDataForProccesing = $DataName;
+        $DataXmlJson = json_encode($DataXml);
+        $DataXmlObject = json_decode($DataXmlJson);
+        foreach ($DataXmlObject as $DataXmlCompleteObject) {
+            if (!empty($DataXmlCompleteObject->batch_id) && isset($DataXmlCompleteObject->batch_id)) {
+                $this->batch_id = $DataXmlCompleteObject->batch_id;
+                switch ($this->NameDataForProccesing) {
+                    case 'Product':
+                        $responselog = MYSQLDataOperator::ProductOut($DataXmlCompleteObject);
+                        break;
+                    case 'Visits':
+                        $responselog = MYSQLDataOperator::VisitsOut($DataXmlCompleteObject);
+                        break;
+                    case 'POS':
+                        $responselog = MYSQLDataOperator::Points_of_saleOut($DataXmlCompleteObject);
+                        break;
+                }
+            } else {
+                break;
+            }
+        }
             if(!empty($responselog) && isset($responselog)) {
                 if ($responselog === true) {
                     MYSQLDataOperator::OperatorL2D(Job_StreamOut::$operator, $this->provider);
@@ -195,7 +218,8 @@ foreach($DataResponseOperator as $operator) {
     if ($operator['streams_response'] == 0) {
         $my = new Job_StreamOut();
         Job_StreamOut::$operator = $operator;
-        $my->Run();
+/*   $my->DataXmlConverter('49719418458-02-27 23:33:37');*/
+     $my->Run();
     }
 
 }
