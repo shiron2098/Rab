@@ -27,7 +27,13 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(POS)");
+                $output = array(
+                    'date' => $date,
+                    'threndIntervalComparer' => static::week,
+                    'items' => $data,
+                    'totalCount' => $dataCount
+                );
+                echo json_encode($output);
             }
         }
     }
@@ -50,7 +56,13 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
                     );
                     echo json_encode($output);
                 } else {
-                    echo json_encode("no correct date(POS)");
+                    $output = array(
+                        'date' => $date,
+                        'threndIntervalComparer' => static::week,
+                        'items' => $data,
+                        'totalCount' => $dataCount
+                    );
+                    echo json_encode($output);
                 }
             }
         }

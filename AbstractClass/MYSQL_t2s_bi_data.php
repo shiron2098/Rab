@@ -225,13 +225,13 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
             if ($datasorting->rule == 'ascending') {
                 switch ($datasorting->field) {
                     case 'productGlobalKey':
-                        $columnsorting = static::posGlobalKey;
+                        $columnsorting = static::productGlobalKey;
                         break;
                     case 'productCode':
-                        $columnsorting = static::customerCode;
+                        $columnsorting = static::productCode;
                         break;
                     case 'productDescription':
-                        $columnsorting = static::customerDescription;
+                        $columnsorting = static::productDescription;
                         break;
                     case 'quantity':
                         $columnsorting = static::quantity;
@@ -264,13 +264,13 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
             } else if ($datasorting->rule == 'descending') {
                 switch ($datasorting->field) {
                     case 'productGlobalKey':
-                        $columnsorting = static::posGlobalKey;
+                        $columnsorting = static::productGlobalKey;
                         break;
                     case 'productCode':
-                        $columnsorting = static::customerCode;
+                        $columnsorting = static::productCode;
                         break;
                     case 'productDescription':
-                        $columnsorting = static::customerDescription;
+                        $columnsorting = static::productDescription;
                         break;
                     case 'quantity':
                         $columnsorting = static::quantity;
@@ -283,7 +283,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
                     "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
                     left join products pro on pro.pro_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY pro.$columnsorting ASC limit $offset,$count"
+                    ORDER BY pro.$columnsorting DESC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
