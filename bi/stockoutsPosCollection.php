@@ -1,23 +1,23 @@
 <?php
-header("Content-Type: application/json");
+header('Content-type: application/json');
 require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_Collection.php';
 
 
-class stopsPosCollection  extends MYSQL_t2s_bi_Collection
+class stockoutsPosCollection  extends MYSQL_t2s_bi_Collection
 {
     const week = '45';
     const month = '180';
     private $interval;
     private $int;
 
-    public function Week($date, $int, $offset, $count, $sort)
+    public function Week($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_array_stops_collection($timemysql, $offset, $count, $sort);
-            $dataCount = $this->daily_count_POS($timemysql);
+            $data = $this->daily_array_stockouts_collection($timemysql,$offset,$count,$sort);
+            $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
@@ -38,14 +38,14 @@ class stopsPosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 
-    private function Months($date, $int, $offset, $count, $sort)
+    private function Months($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
-            $data = $this->daily_array_stops_collection($timemysql, $offset, $count, $sort);
-            $dataCount = $this->daily_count_POS($timemysql);
+            $data = $this->daily_array_stockouts_collection($timemysql,$offset,$count,$sort);
+            $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 if ($data !== null) {
                     $output = array(
@@ -93,6 +93,6 @@ class stopsPosCollection  extends MYSQL_t2s_bi_Collection
 $json_str = file_get_contents('php://input');
 $json_obj = json_decode($json_str);
 
-$start = new stopsPosCollection();
+$start = new stockoutsPosCollection();
 /*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
 $start->start($json_obj);

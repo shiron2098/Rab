@@ -1,9 +1,9 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
+require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_Collection.php';
 
 
-class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
+class itemsNotPickedCollection  extends MYSQL_t2s_bi_Collection
 {
     const week = '45';
     const month = '180';
@@ -16,7 +16,7 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
             $this->int = $int;
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_array_items_POS($timemysql,$offset,$count,$sort);
+            $data = $this->daily_array_items_Collection($timemysql,$offset,$count,$sort);
             $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 $output = array(
@@ -44,7 +44,7 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_calendar
             $this->int = $int;
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
-            $data = $this->daily_array_items_POS($timemysql,$offset,$count,$sort);
+            $data = $this->daily_array_items_Collection($timemysql,$offset,$count,$sort);
             $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 if ($data !== null) {
