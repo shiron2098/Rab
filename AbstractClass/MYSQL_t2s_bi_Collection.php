@@ -348,6 +348,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY $columnsorting ASC limit $offset,$count"
                 );
+                print_r($columnsorting);
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
@@ -418,7 +419,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
             }
         }
     }
-    public function daily_array_distribution_collection($date, $offset, $count, $arraysorting)
+    public function daily_array_distribution_collection($date, $offset, $count, $arraysorting,$minsales,$maxsales)
     {
         $items = 0;
         $dataPOS = [];
@@ -445,6 +446,18 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         break;
                 }
                 $this->DeleteArrayFile($dataPOS);
+                switch ($maxsales){
+                    case '50':
+                        static::DbconnectT2S_BI();
+                        $result = mysqli_query(
+                            MYSQLDataOperator::$linkConnectT2S,
+                            "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip   FROM visits v
+                    left join points_of_sale pos on pos.pos_id = v.pos_id
+                    where CONVERT (v.visit_date,date) = $date
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                        );
+
+                }
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,

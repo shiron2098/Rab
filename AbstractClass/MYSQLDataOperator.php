@@ -11,8 +11,8 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
 {
     const host = '127.0.0.1';
     const filepathCsv = __DIR__ . '/../VendmaxAndNayaxAndConnect/File/Csv/';
-    const user = 'shiro';
-    const password = '2479465';
+    const user = 'ret';
+    const password = '123';
     const databaseT2S = 't2s_dashboard';
     const databaseT2S_BI = 't2s_bi_dashboard';
     Const NoConnect = 'NoConnect';
@@ -111,14 +111,14 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
     public static function VisitsOut($response)
     {
         MYSQLDataOperator::DbconnectT2S_BI();
-        if (isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins)) {
+        if (isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins)&&isset($response->total_picked)) {
             $result = mysqli_query(
                 MYSQLDataOperator::$linkConnectT2S,
-                "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,pro_empty_after,not_picked,created_dt,batch_id) 
+                "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,not_picked,created_dt,batch_id) 
                                values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "','" . $response->vvs_id . "','" . $response->scheduled . "',
                                '" . $response->serviced . "','" . $response->collect . "','" . $response->actual_Sales_Bills . "','" . $response->actual_Sales_Coins . "',
-                               '" . $response->number_of_columns . "','" . $response->col_sold_out . "','" . $response->pro_sold_out . "',
-                               '" . $response->col_empty_after . "', '" . $response->pro_empty_after . "','" . $response->not_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+                               '" . $response->number_of_columns_before . "','" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "',
+                               '" . $response->col_empty_after . "','" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
             );
             if ($result === true) {
                 $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
@@ -132,15 +132,59 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                 Log::logtextL2D($text, MYSQLDataOperator::Visits);
                 return $result;
             }
-        } else {
-            if(isset($response->not_picked)) {
+        }
+        elseif(isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins)&& !isset($response->total_picked)){
+            $result = mysqli_query(
+                MYSQLDataOperator::$linkConnectT2S,
+                "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,created_dt,batch_id) 
+                               values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "','" . $response->vvs_id . "','" . $response->scheduled . "',
+                               '" . $response->serviced . "','" . $response->collect . "','" . $response->actual_Sales_Bills . "','" . $response->actual_Sales_Coins . "',
+                               '" . $response->number_of_columns_before . "','" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "',
+                               '" . $response->col_empty_after . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+            );
+            if ($result === true) {
+                $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+                Log::logtextL2D($text, MYSQLDataOperator::Visits);
+                MYSQLDataOperator::$boollog = true;
+                return MYSQLDataOperator::$boollog;
+            } else {
+                $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                    true);
+                $text = 'String Visits insert error' . $results2;
+                Log::logtextL2D($text, MYSQLDataOperator::Visits);
+                return $result;
+            }
+            }else {
+            if(isset($response->total_picked)&&isset($response->pro_empty_after)) {
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
                     "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,pro_empty_after,not_picked,created_dt,batch_id)
                                            values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
-                                           '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns . "',
-                                           '" . $response->col_sold_out . "','" . $response->pro_sold_out . "','" . $response->col_empty_after . "',
-                                           '" . $response->pro_empty_after . "','" . $response->not_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+                                           '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns_before . "',
+                                           '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
+                                           '" . $response->pro_empty_after . "','" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+                );
+                print_R(MYSQLDataOperator::$linkConnectT2S);
+                if ($result === true) {
+                    $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+                    Log::logtextL2D($text, MYSQLDataOperator::Visits);
+                    MYSQLDataOperator::$boollog = true;
+                    return MYSQLDataOperator::$boollog;
+                } else {
+                    $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                        true);
+                    $text = 'String Visits insert error' . $results2;
+                    Log::logtextL2D($text, MYSQLDataOperator::Visits);
+                    return $result;
+                }
+            }else if (isset($response->total_picked)){
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,not_picked,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
+                                           '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns_before . "',
+                                           '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
+                                           '" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
                 );
                 if ($result === true) {
                     $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
@@ -157,11 +201,11 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
             }else{
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,pro_empty_after,created_dt,batch_id)
+                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,created_dt,batch_id)
                                            values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
-                                           '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns . "',
-                                           '" . $response->col_sold_out . "','" . $response->pro_sold_out . "','" . $response->col_empty_after . "',
-                                           '" . $response->pro_empty_after . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+                                           '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns_before . "',
+                                           '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
+                                           '" . $response->created_dt . "','" . $response->batch_id . "')"
                 );
                 if ($result === true) {
                     $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();

@@ -37,3 +37,39 @@ limit 1
 /** REQUEST **/
 {"Timestamp read from MYSQL":"30.07.2019 12:03:18","timestamp sent to Rabbit":"30.07.2019 12:03:18","Code":{"operatorid":"1","Jobsid":"1","command":"Get Products","software_provider":"vendmax"}}
 
+
+-- to get Stockouts
+select
+[pos_info]
+[product_info]
+from sold_out_products s
+	inner join products p
+		on s.pro_id = p.pro_id
+    inner join points_of_sale  pos
+		on s.pos_id = pos.pos_id
+where s.visit_date   =
+group by s.pro_id, s.pos_id
+
+
+
+-- to get average revenue
+select
+[pos_info]
+coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection
+from visits
+    inner join points_of_sale  p
+		on v.pos_id = p.pos_id
+where v.collect = 'Yes'
+	and v.visit_date  =
+
+
+--to get specific collection
+select
+[pos_info]
+coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection
+from visits
+    inner join points_of_sale  p
+		on v.pos_id = p.pos_id
+where v.collect = 'Yes'
+	and v.visit_date =
+	and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between (x, y) -- where X and Y values from chart
