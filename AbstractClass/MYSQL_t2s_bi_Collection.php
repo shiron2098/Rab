@@ -308,9 +308,9 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 } else {
                     return null;
                 }
-                return $array;
             }
         }
+        return $array;
     }
 
     public function daily_array_revenue_collection($date, $offset, $count, $arraysorting)
@@ -343,7 +343,8 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip   FROM visits v
+                    "SELECT DISTINCT pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription
+                    ,pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY $columnsorting ASC limit $offset,$count"
@@ -414,11 +415,11 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 } else {
                     return null;
                 }
-                return $array;
             }
         }
+        return $array;
     }
-    public function daily_array_distribution_collection($date, $offset, $count, $arraysorting)
+    public function daily_array_distribution_collection($date, $offset, $count, $arraysorting,$minsales,$maxsales)
     {
         $items = 0;
         $dataPOS = [];
@@ -453,6 +454,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY $columnsorting ASC limit $offset,$count"
                 );
+                print_r(MYSQLDataOperator::$linkConnectT2S);
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
@@ -501,6 +503,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     where CONVERT (v.visit_date,date) = $date
                     ORDER BY $columnsorting DESC limit $offset,$count"
                 );
+
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
@@ -519,8 +522,8 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 } else {
                     return null;
                 }
-                return $array;
             }
         }
+        return $array;
     }
 }
