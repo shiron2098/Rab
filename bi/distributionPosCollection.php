@@ -46,7 +46,7 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
             $this->int = $int;
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
-            $data = $this->daily_array_distribution_collection($timemysql,$offset,$count,$sort);
+            $data = $this->daily_array_distribution_collection($timemysql,$offset,$count,$sort,$minsales,$maxsales);
             $dataCount= $this->daily_count_POS($timemysql);
             if ($data !== null) {
                 if ($data !== null) {
