@@ -10,6 +10,10 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
     const customerDescription = 'cus_description';
     const poscode = 'pos_code';
     const posdescription = 'pos_description';
+    const distcollection = 'collection';
+
+    private $maxsales;
+    private $minsales;
 
     const productGlobalKey = 'pro_id';
     const productCode = 'pro_code';
@@ -333,7 +337,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $columnsorting = static::customerDescription;
                         break;
                     case 'collectionsValue':
-                        $columnsorting = '80';
+                        $columnsorting = static::distcollection;
                         break;
                     case 'address':
                         $columnsorting = 'address_1';
@@ -386,7 +390,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $columnsorting = static::customerDescription;
                         break;
                     case 'collectionsValue':
-                        $columnsorting = '80';
+                        $columnsorting = static::distcollection;
                         break;
                     case 'address':
                         $columnsorting = 'address_1';
@@ -448,17 +452,18 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $columnsorting = static::customerDescription;
                         break;
                     case 'collectionsValue':
-                        $columnsorting = '80';
+                        $columnsorting = static::distcollection;
                         break;
                     case 'address':
                         $columnsorting = 'address_1';
                         break;
                 }
                 $this->DeleteArrayFile($dataPOS);
-                        static::DbconnectT2S_BI();
-                        $result = mysqli_query(
-                            MYSQLDataOperator::$linkConnectT2S,
-                            "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                if (isset($minsales) && isset($maxsales)) {
+                    static::DbconnectT2S_BI();
+                    $result = mysqli_query(
+                        MYSQLDataOperator::$linkConnectT2S,
+                        "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
                                     ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                                     ,p.address_1,p.address_2,p.city,p.state,p.zip
                                     from visits v
@@ -468,7 +473,40 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     and CONVERT (v.visit_date,date) = $date
                     and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $maxsales 
                     ORDER BY $columnsorting ASC limit $offset,$count"
-                        );
+                    );
+                } else if (isset($minsales) && !isset($maxsales) && empty($maxsales) || $minsales == '0'){
+                    $this->maxsales ='9999999';
+                    static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                                    ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
+                                    ,p.address_1,p.address_2,p.city,p.state,p.zip
+                                    from visits v
+                                    inner join points_of_sale  p
+		                            on v.pos_id = p.pos_id
+                                    where v.collect = 'Yes'
+                    and CONVERT (v.visit_date,date) = $date
+                    and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $this->maxsales
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                );
+            }else if(isset($maxsales) && !isset($minsales) && empty($minsales)) {
+                    $this->minsales = '0';
+                static::DbconnectT2S_BI();
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                                    ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
+                                    ,p.address_1,p.address_2,p.city,p.state,p.zip
+                                    from visits v
+                                    inner join points_of_sale  p
+		                            on v.pos_id = p.pos_id
+                                    where v.collect = 'Yes'
+                    and CONVERT (v.visit_date,date) = $date
+                    and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $this->minsales and  $maxsales
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                );
+            }
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
@@ -502,17 +540,18 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $columnsorting = static::customerDescription;
                         break;
                     case 'collectionsValue':
-                        $columnsorting = '80';
+                        $columnsorting = static::distcollection;
                         break;
                     case 'address':
                         $columnsorting = 'address_1';
                         break;
                 }
-                $this->DeleteArrayFile($dataPOS);
-                static::DbconnectT2S_BI();
-                $result = mysqli_query(
-                    MYSQLDataOperator::$linkConnectT2S,
-                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                        $this->DeleteArrayFile($dataPOS);
+                        if (isset($minsales) && isset($maxsales)) {
+                            static::DbconnectT2S_BI();
+                            $result = mysqli_query(
+                                MYSQLDataOperator::$linkConnectT2S,
+                                "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
                                     ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                                     ,p.address_1,p.address_2,p.city,p.state,p.zip
                                     from visits v
@@ -521,8 +560,41 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                                     where v.collect = 'Yes'
                     and CONVERT (v.visit_date,date) = $date
                     and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $maxsales 
-                    ORDER BY $columnsorting DESC limit $offset,$count"
-                );
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                            );
+                        } else if (isset($minsales) && !isset($maxsales) && empty($maxsales) || $minsales == '0'){
+                            $this->maxsales ='9999999';
+                            static::DbconnectT2S_BI();
+                            $result = mysqli_query(
+                                MYSQLDataOperator::$linkConnectT2S,
+                                "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                                    ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
+                                    ,p.address_1,p.address_2,p.city,p.state,p.zip
+                                    from visits v
+                                    inner join points_of_sale  p
+		                            on v.pos_id = p.pos_id
+                                    where v.collect = 'Yes'
+                    and CONVERT (v.visit_date,date) = $date
+                    and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $this->maxsales
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                            );
+                        }else if(isset($maxsales) && !isset($minsales) && empty($minsales)) {
+                            $this->minsales = '0';
+                            static::DbconnectT2S_BI();
+                            $result = mysqli_query(
+                                MYSQLDataOperator::$linkConnectT2S,
+                                "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                                    ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
+                                    ,p.address_1,p.address_2,p.city,p.state,p.zip
+                                    from visits v
+                                    inner join points_of_sale  p
+		                            on v.pos_id = p.pos_id
+                                    where v.collect = 'Yes'
+                    and CONVERT (v.visit_date,date) = $date
+                    and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $this->minsales and  $maxsales
+                    ORDER BY $columnsorting ASC limit $offset,$count"
+                            );
+                        }
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
                     foreach ($result as $data) {
@@ -545,4 +617,5 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
         }
         return $array;
     }
+
 }
