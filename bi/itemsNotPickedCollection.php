@@ -17,13 +17,13 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_Collection
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_array_items_Collection($timemysql,$offset,$count,$sort);
-            $dataCount= $this->daily_count_POS($timemysql);
+            $datecount = $this->daily_count_items($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
                     'threndIntervalComparer' => static::week,
                     'items' => $data,
-                    'totalCount' => $dataCount
+                    'totalCount' => $datecount
                 );
                 echo json_encode($output);
             } else {
@@ -31,7 +31,7 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_Collection
                     'date' => $date,
                     'threndIntervalComparer' => static::week,
                     'items' => $data,
-                    'totalCount' => $dataCount
+                    'totalCount' => $datecount
                 );
                 echo json_encode($output);
             }
@@ -45,14 +45,13 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_Collection
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
             $data = $this->daily_array_items_Collection($timemysql,$offset,$count,$sort);
-            $dataCount= $this->daily_count_POS($timemysql);
-            if ($data !== null) {
+            $datecount = $this->daily_count_items($timemysql);
                 if ($data !== null) {
                     $output = array(
                         'date' => $date,
                         'threndIntervalComparer' => static::month,
                         'items' => $data,
-                        'totalCount' => $dataCount
+                        'totalCount' => $datecount,
                     );
                     echo json_encode($output);
                 } else {
@@ -60,12 +59,11 @@ class itemsNotPickedCollection  extends MYSQL_t2s_bi_Collection
                         'date' => $date,
                         'threndIntervalComparer' => static::week,
                         'items' => $data,
-                        'totalCount' => $dataCount
+                        'totalCount' => $datecount,
                     );
                     echo json_encode($output);
                 }
             }
-        }
     }
 
     public function start($post)

@@ -18,7 +18,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
     const productGlobalKey = 'pro_id';
     const productCode = 'pro_code';
     const productDescription = 'pro_description';
-    const quantity = '2';
+    const quantity = 'vvs_id';
 
 
     protected function daily_array_stops_collection($date, $offset, $count, $arraysorting)
@@ -147,7 +147,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT p.pro_code as productCode,p.pro_description as productDescription,pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription from not_picked_products n
+                    "SELECT p.pro_code as productCode,p.pro_description as productDescription,p.pro_id as productGlobalKey,n.vvs_id as quantity from not_picked_products n
 	                          inner join products p
 		                      on n.pro_id = p.pro_id
                               inner join points_of_sale  pos
@@ -163,7 +163,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                             'productGlobalKey' => $data['productGlobalKey'],
                             'productCode' => $data['productCode'],
                             'productDescription' => $data['productDescription'],
-                            'quantity' => static::quantity,
+                            'quantity' => $data['quantity'],
                         );
                         $items++;
                         $array[] = $dataPOS;
@@ -190,7 +190,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT p.pro_code as productCode,p.pro_description as productDescription,pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription from not_picked_products n
+                    "SELECT p.pro_code as productCode,p.pro_description as productDescription,p.pro_id as productGlobalKey,n.vvs_id as quantity from not_picked_products n
 	                          inner join products p
 		                      on n.pro_id = p.pro_id
                               inner join points_of_sale  pos
@@ -206,11 +206,12 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                             'productGlobalKey' => $data['productGlobalKey'],
                             'productCode' => $data['productCode'],
                             'productDescription' => $data['productDescription'],
-                            'quantity' => static::quantity,
+                            'quantity' => $data['quantity'],
                         );
                         $items++;
                         $array[] = $dataPOS;
                     }
+
                 } else {
                     return null;
                 }

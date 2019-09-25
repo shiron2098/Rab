@@ -92,11 +92,11 @@ class Job_StreamOut extends Threaded
     public function DataXmlConverter($Path)
     {
 
-       /* $data = file_get_contents(__DIR__ . '/' . '/VendmaxAndNayaxAndConnect/File/Visits.xml');*/
+       /*$data = file_get_contents(__DIR__ . '/' . '/VendmaxAndNayaxAndConnect/File/Visits.xml');*/
        $data = file_get_contents(__DIR__ . '/' . $Path);
         $response = simplexml_load_string($data);
         foreach ($response as $DataName => $DataXml) {
-                        if ($DataName == 'Visits') {
+                       if ($DataName == 'Visits') {
                             foreach ($DataXml as $dataArrayValue) {
                                 $this->batch_id = $dataArrayValue->batch_id;
                                 $array = $dataArrayValue->attributes();
@@ -109,7 +109,7 @@ class Job_StreamOut extends Threaded
                                 $responselog = MYSQLDataOperator::VisitsOut($json2);
                             }
                         }
-              if ($DataName == 'product_sellouts') {
+             if ($DataName == 'product_sellouts') {
                    foreach ($DataXml as $dataArrayValue) {
                        $array = $dataArrayValue->attributes();
                        $json = json_encode($array);
@@ -233,7 +233,7 @@ foreach($DataResponseOperator as $operator) {
     if ($operator['streams_response'] == 0) {
         $my = new Job_StreamOut();
         Job_StreamOut::$operator = $operator;
-/* $my->DataXmlConverter('49719418458-02-27 23:33:37');*/
+ /*$my->DataXmlConverter('49719418458-02-27 23:33:37');*/
      $my->Run();
     }
 

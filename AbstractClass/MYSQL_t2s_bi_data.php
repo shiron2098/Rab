@@ -130,6 +130,22 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
             }
             return $array;
     }
+    protected function daily_count_items($date)
+    {
+        static::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "SELECT p.pro_code as productCode,p.pro_description as productDescription,p.pro_id as productGlobalKey,n.vvs_id as quantity from not_picked_products n
+	                          inner join products p
+		                      on n.pro_id = p.pro_id
+                              inner join points_of_sale  pos
+		                          on n.pos_id = pos.pos_id
+                                where CONVERT (n.visit_datetime,date) = $date
+                              group by n.pro_id,n.pos_id"
+        );
+        $array = $result->num_rows;
+        return $array;
+    }
     public function DeleteArrayFile($file){
         $file[] = null;
         foreach ($file as $i => $key) {
