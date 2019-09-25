@@ -11,8 +11,8 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
 {
     const host = '127.0.0.1';
     const filepathCsv = __DIR__ . '/../VendmaxAndNayaxAndConnect/File/Csv/';
-    const user = 'shiro';
-    const password = '2479465';
+    const user = 'ret';
+    const password = '123';
     const databaseT2S = 't2s_dashboard';
     const databaseT2S_BI = 't2s_bi_dashboard';
     Const NoConnect = 'NoConnect';
@@ -84,9 +84,11 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
         MYSQLDataOperator::DbconnectT2S_BI();
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
-            "insert into points_of_sale (operator_id,pos_code,pos_description,veq_code,veq_description,loc_code,loc_description,cus_code,cus_description,pos_id,veq_id,loc_id,cus_id,created_dt,batch_id) 
+            "insert into points_of_sale (operator_id,pos_code,pos_description,veq_code,veq_description,loc_code,loc_description,cus_code,cus_description,address_1,address_2,city,state,zip,pos_id,veq_id,loc_id,cus_id,created_dt,batch_id) 
                                values ('" . $response->operator_id . "','" . $response->pos_code . "','" . $response->pos_description . "','" . $response->veq_code . "',
-                               '" . $response->veq_description . "','" . $response->loc_code . "','" . $response->loc_description . "','" . $response->cus_code . "','" . $response->cus_description . "','" . $response->pos_id . "',
+                               '" . $response->veq_description . "','" . $response->loc_code . "','" . $response->loc_description . "','" . $response->cus_code . "','" . $response->cus_description . "',
+                              '" . $response->address_1 . "','" . $response->address_2 . "','" . $response->city . "','" . $response->state . "','" . $response->zip . "',
+                               '" . $response->pos_id . "',
                                '" . $response->veq_id . "','" . $response->loc_id . "','" . $response->cus_id . "','" . $response->created_dt . "','" . $response->batch_id . "')"
         );
         if($result === true){
@@ -110,6 +112,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
      */
     public static function VisitsOut($response)
     {
+
         MYSQLDataOperator::DbconnectT2S_BI();
         if (isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins)&&isset($response->total_picked)) {
             $result = mysqli_query(
@@ -164,7 +167,6 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                            '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
                                            '" . $response->pro_empty_after . "','" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
                 );
-                print_R(MYSQLDataOperator::$linkConnectT2S);
                 if ($result === true) {
                     $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
@@ -198,13 +200,12 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
                     return $result;
                 }
-            }else{
+            }else if(isset($response->visit_date)&&isset($response->week_num)&&isset($response->month_num)&&isset($response->scheduled)&&isset($response->serviced)){
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,created_dt,batch_id)
+                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,scheduled,serviced,created_dt,batch_id)
                                            values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
-                                           '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns_before . "',
-                                           '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
+                                         '" . $response->scheduled . "','" . $response->serviced . "',
                                            '" . $response->created_dt . "','" . $response->batch_id . "')"
                 );
                 if ($result === true) {
@@ -219,7 +220,47 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
                     return $result;
                 }
+            }else {
+                $result = mysqli_query(
+                    MYSQLDataOperator::$linkConnectT2S,
+                    "insert into visits (operator_id,pos_id,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->created_dt . "','" . $response->batch_id . "')"
+                );
+                if ($result === true) {
+                    $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+                    Log::logtextL2D($text, MYSQLDataOperator::Visits);
+                    MYSQLDataOperator::$boollog = true;
+                    return MYSQLDataOperator::$boollog;
+                } else {
+                    $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                        true);
+                    $text = 'String Visits insert error' . $results2;
+                    Log::logtextL2D($text, MYSQLDataOperator::Visits);
+                    return $result;
+                }
             }
+        }
+    }
+    public static function Product_sold_OUT($response){
+        MYSQLDataOperator::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "insert into sold_out_products (operator_id,visit_date,pos_id,vvs_id,pro_id,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->visit_datetime . "','" . $response->pos_id . "',
+                                         '" . $response->vvs_id . "','" . $response->pro_id . "',
+                                           '" . $response->created_dt . "','" . $response->batch_id . "')"
+        );
+        if ($result === true) {
+            $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+            Log::logtextL2D($text, MYSQLDataOperator::Visits);
+            MYSQLDataOperator::$boollog = true;
+            return MYSQLDataOperator::$boollog;
+        } else {
+            $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                true);
+            $text = 'String Visits insert error' . $results2;
+            Log::logtextL2D($text, MYSQLDataOperator::Visits);
+            return $result;
         }
     }
 
@@ -258,6 +299,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
      * @return bool|mysqli_result
      */
     public static function LogL2D($id,$command,$xml,$batchid){
+        MYSQLDataOperator::DbconnectT2S_BI();
         $result = mysqli_query(
             MYSQLDataOperator::$linkConnectT2S,
             "insert into xml_log (operator_id,command_type,xml_value,batch_id) 

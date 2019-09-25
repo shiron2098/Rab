@@ -94,54 +94,54 @@ class Job_StreamOut extends Threaded
         $data = file_get_contents(__DIR__ . '/' . $Path);
         $response = simplexml_load_string($data);
         foreach ($response as $DataName => $DataXml) {
-            foreach ($DataXml as $dataArrayValue) {
-                $array = $dataArrayValue->attributes();
-                $json = json_encode($array);
-                $array2 = json_decode($json,TRUE);
-                foreach($array2 as $k => $v) {
-                    $json2 = json_decode(json_encode($v),false);
-                }
-                $responselog = MYSQLDataOperator::VisitsOut($json2);
-            }
-            if ($DataName == 'product_sellouts') {
-                foreach ($DataXml as $dataArrayValue) {
-                    $array = $dataArrayValue->attributes();
-                    $json = json_encode($array);
-                    $array2 = json_decode($json, TRUE);
-                    foreach ($array2 as $k => $v) {
-                        $json2 = json_decode(json_encode($v), false);
+                        if ($DataName == 'Visits') {
+                            foreach ($DataXml as $dataArrayValue) {
+                                $this->batch_id = $dataArrayValue->batch_id;
+                                $array = $dataArrayValue->attributes();
+                                $json = json_encode($array);
+                                $array2 = json_decode($json, TRUE);
+                                foreach ($array2 as $k => $v) {
+                                    $json2 = json_decode(json_encode($v), false);
+                                }
+                                $this->batch_id = $json2->batch_id;
+                                $responselog = MYSQLDataOperator::VisitsOut($json2);
+                            }
+                        }
+              if ($DataName == 'product_sellouts') {
+                   foreach ($DataXml as $dataArrayValue) {
+                       $array = $dataArrayValue->attributes();
+                       $json = json_encode($array);
+                       $array2 = json_decode($json, TRUE);
+                       foreach ($array2 as $k => $v) {
+                           $json2 = json_decode(json_encode($v), false);
+                       }
+                       $responselog = MYSQLDataOperator::Product_sold_OUT($json2);
+                   }
+               }
+            $this->NameDataForProccesing = $DataName;
+            $DataXmlJson = json_encode($DataXml);
+            $DataXmlObject = json_decode($DataXmlJson);
+            foreach ($DataXmlObject as $DataXmlCompleteObject) {
+                if (!empty($DataXmlCompleteObject->batch_id) && isset($DataXmlCompleteObject->batch_id)) {
+                    $this->batch_id = $DataXmlCompleteObject->batch_id;
+                    switch ($this->NameDataForProccesing) {
+                        case 'Product':
+                            $responselog = MYSQLDataOperator::ProductOut($DataXmlCompleteObject);
+                            break;
+                        case 'POS':
+                            $responselog = MYSQLDataOperator::Points_of_saleOut($DataXmlCompleteObject);
+                            break;
                     }
-                    $responselog = MYSQLDataOperator::Product_OUT($json2);
+                } else {
+                    break;
                 }
             }
         }
-        exit();
-        $this->NameDataForProccesing = $DataName;
-        $DataXmlJson = json_encode($DataXml);
-        $DataXmlObject = json_decode($DataXmlJson);
-        foreach ($DataXmlObject as $DataXmlCompleteObject) {
-            if (!empty($DataXmlCompleteObject->batch_id) && isset($DataXmlCompleteObject->batch_id)) {
-                $this->batch_id = $DataXmlCompleteObject->batch_id;
-                switch ($this->NameDataForProccesing) {
-                    case 'Product':
-                        $responselog = MYSQLDataOperator::ProductOut($DataXmlCompleteObject);
-                        break;
-                    case 'Visits':
-                        $responselog = MYSQLDataOperator::VisitsOut($DataXmlCompleteObject);
-                        break;
-                    case 'POS':
-                        $responselog = MYSQLDataOperator::Points_of_saleOut($DataXmlCompleteObject);
-                        break;
-                }
-            } else {
-                break;
-            }
-        }
-            if(!empty($responselog) && isset($responselog)) {
+            if (!empty($responselog) && isset($responselog)) {
                 if ($responselog === true) {
                     MYSQLDataOperator::OperatorL2D(Job_StreamOut::$operator, $this->provider);
                     MYSQLDataOperator::LogL2D($this->id_operator, $this->command, $this->StartXML, $this->batch_id);
-                   MYSQLDataOperator::InsertTableT2s_dashboard($this->batch_id);
+                    MYSQLDataOperator::InsertTableT2s_dashboard($this->batch_id);
                 }
             }
             switch ($this->NameDataForProccesing) {
@@ -152,8 +152,8 @@ class Job_StreamOut extends Threaded
                     CSVinsertStart::InsertCsvFile($Path, $this->NameDataForProccesing);
                     break;
             }
-             unlink(__DIR__ . '/' . $Path);
-        }
+        unlink(__DIR__ . '/' . $Path);
+    }
 
     private function Variable($json)
     {
