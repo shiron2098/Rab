@@ -60,7 +60,7 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
                 } else {
                     $output = array(
                         'date' => $date,
-                        'threndIntervalComparer' => static::week,
+                        'threndIntervalComparer' => static::month,
                         'items' => $data,
                         'totalCount' => $dataCount
                     );
