@@ -19,6 +19,8 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
     const Product = 'Product';
     const Points = 'Points_of_sale';
     const Visits = 'Visits';
+    const Not_picked = 'NotPicked';
+    const product_sold_out = 'ProductSoldOut';
     const Operator = 'Operator';
     const Xml_log = 'Xml_log';
 
@@ -251,15 +253,37 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                            '" . $response->created_dt . "','" . $response->batch_id . "')"
         );
         if ($result === true) {
-            $text = 'String Visits insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
-            Log::logtextL2D($text, MYSQLDataOperator::Visits);
+            $text = 'String product_sold_out insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+            Log::logtextL2D($text, MYSQLDataOperator::product_sold_out);
             MYSQLDataOperator::$boollog = true;
             return MYSQLDataOperator::$boollog;
         } else {
             $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
                 true);
-            $text = 'String Visits insert error' . $results2;
-            Log::logtextL2D($text, MYSQLDataOperator::Visits);
+            $text = 'String product_sold_out insert error' . $results2;
+            Log::logtextL2D($text, MYSQLDataOperator::product_sold_out);
+            return $result;
+        }
+    }
+    public static function not_picked_OUT($response){
+        MYSQLDataOperator::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "insert into not_picked_products (operator_id,visit_datetime,pos_id,vvs_id,pro_id,not_picked,total_picked,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->visit_datetime . "','" . $response->pos_id . "',
+                                         '" . $response->vvs_id . "','" . $response->pro_id . "','" . $response->not_picked . "','" . $response->total_picked . "',
+                                           '" . $response->created_dt . "','" . $response->batch_id . "')"
+        );
+        if ($result === true) {
+            $text = 'String not_picked insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
+            Log::logtextL2D($text, MYSQLDataOperator::Not_picked);
+            MYSQLDataOperator::$boollog = true;
+            return MYSQLDataOperator::$boollog;
+        } else {
+            $results2 = print_r(MYSQLDataOperator::$linkConnectT2S,
+                true);
+            $text = 'String not_picked insert error' . $results2;
+            Log::logtextL2D($text, MYSQLDataOperator::Not_picked);
             return $result;
         }
     }
@@ -288,6 +312,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
             Log::logtextL2D($text,MYSQLDataOperator::Operator);
             return $result;
         }
+
     }
 
     /**

@@ -147,10 +147,14 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
-                    left join products pro on pro.pro_id = v.pos_id
-                    where CONVERT (v.visit_date,date) = $date
-                    ORDER BY pro.$columnsorting ASC limit $offset,$count"
+                    "SELECT p.pro_code as productCode,p.pro_description as productDescription,pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription from not_picked_products n
+	                          inner join products p
+		                      on n.pro_id = p.pro_id
+                              inner join points_of_sale  pos
+		                          on n.pos_id = pos.pos_id
+                                where CONVERT (n.visit_datetime,date) = $date
+                              group by n.pro_id,n.pos_id
+                              ORDER BY $columnsorting ASC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
@@ -186,10 +190,14 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "SELECT DISTINCT pro.pro_id as productGlobalKey,pro.pro_code as productCode,pro.pro_description as productDescription  FROM visits v
-                    left join products pro on pro.pro_id = v.pos_id
-                    where CONVERT (v.visit_date,date) = $date
-                    ORDER BY pro.$columnsorting DESC limit $offset,$count"
+                    "SELECT p.pro_code as productCode,p.pro_description as productDescription,pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription from not_picked_products n
+	                          inner join products p
+		                      on n.pro_id = p.pro_id
+                              inner join points_of_sale  pos
+		                          on n.pos_id = pos.pos_id
+                                where CONVERT (n.visit_datetime,date) = $date
+                              group by n.pro_id,n.pos_id
+                              ORDER BY $columnsorting DESC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {

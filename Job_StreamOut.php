@@ -8,8 +8,9 @@ require_once __DIR__ . '/Simple_Parser.php';
 require_once __DIR__ . '/AbstractClass/MYSQLDataOperator.php';
 require_once __DIR__ . '/Interface/mysql_insert_interface.php';
 require_once __DIR__ . '/CSV/CSVinsertStart.php';
-
-
+ini_set('mysql.connect_timeout', 1000);
+/*set global net_buffer_length=1000000;
+set global max_allowed_packet=1000000000;*/
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -91,7 +92,8 @@ class Job_StreamOut extends Threaded
     public function DataXmlConverter($Path)
     {
 
-        $data = file_get_contents(__DIR__ . '/' . $Path);
+       /* $data = file_get_contents(__DIR__ . '/' . '/VendmaxAndNayaxAndConnect/File/Visits.xml');*/
+       $data = file_get_contents(__DIR__ . '/' . $Path);
         $response = simplexml_load_string($data);
         foreach ($response as $DataName => $DataXml) {
                         if ($DataName == 'Visits') {
@@ -118,6 +120,19 @@ class Job_StreamOut extends Threaded
                        $responselog = MYSQLDataOperator::Product_sold_OUT($json2);
                    }
                }
+            if($DataName == 'not_picked_items'){
+                foreach ($DataXml as $dataArrayValue) {
+                    $this->batch_id = $dataArrayValue->batch_id;
+                    $array = $dataArrayValue->attributes();
+                    $json = json_encode($array);
+                    $array2 = json_decode($json, TRUE);
+                    foreach ($array2 as $k => $v) {
+                        $json2 = json_decode(json_encode($v), false);
+                    }
+                    $responselog = MYSQLDataOperator::not_picked_OUT($json2);
+                }
+            }
+
             $this->NameDataForProccesing = $DataName;
             $DataXmlJson = json_encode($DataXml);
             $DataXmlObject = json_decode($DataXmlJson);
@@ -218,7 +233,7 @@ foreach($DataResponseOperator as $operator) {
     if ($operator['streams_response'] == 0) {
         $my = new Job_StreamOut();
         Job_StreamOut::$operator = $operator;
-/*   $my->DataXmlConverter('49719418458-02-27 23:33:37');*/
+/* $my->DataXmlConverter('49719418458-02-27 23:33:37');*/
      $my->Run();
     }
 

@@ -116,9 +116,9 @@ CREATE TABLE IF NOT EXISTS points_of_sale (  -- for this table command: get_pos_
  ,date_num			int				-- 20191123
  ,week_num			int				-- 201923
  ,month_num			int				-- 201910
- ,pos_id            int null   
- ,vvs_id               int null
- ,pro_id			int(2) null
+ ,pos_id            varchar (32) null
+ ,vvs_id               varchar(32) null
+ ,pro_id			varchar(32) null
  ,not_picked        int null          -- number of items not picked (when added < pre-kit number in service order)
  ,total_picked      int null          -- total number of picked items from sco
  ,created_dt        datetime null
