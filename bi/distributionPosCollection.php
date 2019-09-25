@@ -40,15 +40,15 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 
-    private function Months($date, $int, $offset, $count,$sort,$maxsales,$minsales)
+    private function Months($date, $int, $offset, $count,$sort,$minsales,$maxsales)
     {
+
         if (!empty($date) && isset($date)) {
             $this->int = $int;
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
             $data = $this->daily_array_distribution_collection($timemysql,$offset,$count,$sort,$minsales,$maxsales);
             $dataCount= $this->daily_count_POS($timemysql);
-            if ($data !== null) {
                 if ($data !== null) {
                     $output = array(
                         'date' => $date,
@@ -66,7 +66,6 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
                     );
                     echo json_encode($output);
                 }
-            }
         }
     }
 
