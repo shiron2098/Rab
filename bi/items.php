@@ -34,7 +34,7 @@ class items extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stockout)");
+                echo json_encode("no correct date(items)");
             }
         }
     }
@@ -60,7 +60,7 @@ class items extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stockout)");
+                echo json_encode("no correct date(items)");
             }
         }
     }

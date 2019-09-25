@@ -12,15 +12,6 @@ class calendar extends MYSQL_t2s_bi_calendar
 
     public function Week($array,$int)
     {
-/*        $array = array(
-            '20030420',
-            '20030421',
-            '20030422',
-            '20030423',
-            '20030424',
-            '20030425',
-            '20030426',
-        );*/
         if (!empty($array) && isset($array)) {
 
             foreach ($array as $date) {
@@ -66,47 +57,60 @@ class calendar extends MYSQL_t2s_bi_calendar
     }
     public function Months($array,$int)
     {
+/*                $array = array(
+            '20030420',
+            '20030421',
+            '20030422',
+            '20030423',
+            '20030424',
+            '20030425',
+            '20030426',
+        );*/
+
         if (!empty($array) && isset($array)) {
 
-            foreach ($array as $date) {
-                $arraydate= [];
-                $this->DeleteArrayFile($arraydate);
-                $this->int = $int;
-                $this->datefrom = $date;
-                $arraydate[] = $this->daily_missed_stops_CALENDAR($this->datefrom);
-                $arraydate[] = $this->daily_items_CALENDAR($this->datefrom);
-                $arraydate[] = $this->daily_avg_CALENDAR($this->datefrom);
-                $arraydate[] = $this->daily_stockouts_CALENDAR($this->datefrom);
-                $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);
-                foreach($arraydate as $dateOKANDALLERT) {
-                    if (!empty($arraydate['0'])&&isset($arraydate)) {
-                        if($dateOKANDALLERT['value'] === 'ok'){
-                            $finishdate = array(
-                                'date' => $dateOKANDALLERT['date'],
-                                'levelDateByThreshold' => $dateOKANDALLERT['value'],
-                            );
+            if (!empty($array) && isset($array)) {
+
+                foreach ($array as $date) {
+                    $arraydate= [];
+                    $this->DeleteArrayFile($arraydate);
+                    $this->int = $int;
+                    $this->datefrom = $date;
+                    $arraydate[] = $this->daily_missed_stops_CALENDAR($this->datefrom);
+                    $arraydate[] = $this->daily_items_CALENDAR($this->datefrom);
+                    $arraydate[] = $this->daily_avg_CALENDAR($this->datefrom);
+                    $arraydate[] = $this->daily_stockouts_CALENDAR($this->datefrom);
+                    $arraydate[] = $this->daily_distribution_CALENDAR($this->datefrom);
+                    foreach($arraydate as $dateOKANDALLERT) {
+                        if (!empty($arraydate['0'])&&isset($arraydate)) {
+                            if($dateOKANDALLERT['value'] === 'ok'){
+                                $finishdate = array(
+                                    'date' => $dateOKANDALLERT['date'],
+                                    'levelDateByThreshold' => $dateOKANDALLERT['value'],
+                                );
+                            }elseif($dateOKANDALLERT['value'] === 'alert'){
+                                $finishdate = array(
+                                    'date' => $dateOKANDALLERT['date'],
+                                    'levelDateByThreshold' => $dateOKANDALLERT['value'],
+                                );
+                                break;
+                            }
                         }else{
                             $finishdate = array(
-                                'date' => $dateOKANDALLERT['date'],
-                                'levelDateByThreshold' => $dateOKANDALLERT['value'],
+                                'date' => $date,
+                                'levelDateByThreshold' => 'nodata',
                             );
                             break;
                         }
-                    }else{
-                        $finishdate = array(
-                            'date' => $date,
-                            'levelDateByThreshold' => 'nodata',
-                        );
-                        break;
                     }
+                    $arrayjson[]=$finishdate;
                 }
-                $arrayjson[]=$finishdate;
+                $date = array(
+                    'threndIntervalComparer' => '180',
+                    'dateCollection' => $arrayjson,
+                );
+                echo json_encode($date);
             }
-            $date = array(
-                'threndIntervalComparer' => '45',
-                'dateCollection' => $arrayjson,
-            );
-            echo json_encode($date);
         }
     }
     public function start()

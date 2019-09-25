@@ -408,7 +408,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
 	                      on v.pos_id = p.pos_id
                             where v.collect = 'Yes'
                     and CONVERT (v.visit_date,date) = $date
-                    ORDER BY $columnsorting ASC limit $offset,$count"
+                    ORDER BY $columnsorting DESC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
@@ -560,7 +560,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                                     where v.collect = 'Yes'
                     and CONVERT (v.visit_date,date) = $date
                     and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $maxsales 
-                    ORDER BY $columnsorting ASC limit $offset,$count"
+                    ORDER BY $columnsorting DESC limit $offset,$count"
                             );
                         } else if (isset($minsales) && !isset($maxsales) && empty($maxsales) || $minsales == '0'){
                             $this->maxsales ='9999999';
@@ -576,7 +576,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                                     where v.collect = 'Yes'
                     and CONVERT (v.visit_date,date) = $date
                     and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $this->maxsales
-                    ORDER BY $columnsorting ASC limit $offset,$count"
+                    ORDER BY $columnsorting DESC limit $offset,$count"
                             );
                         }else if(isset($maxsales) && !isset($minsales) && empty($minsales)) {
                             $this->minsales = '0';
@@ -592,7 +592,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                                     where v.collect = 'Yes'
                     and CONVERT (v.visit_date,date) = $date
                     and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $this->minsales and  $maxsales
-                    ORDER BY $columnsorting ASC limit $offset,$count"
+                    ORDER BY $columnsorting DESC limit $offset,$count"
                             );
                         }
                 $row = mysqli_fetch_assoc($result);

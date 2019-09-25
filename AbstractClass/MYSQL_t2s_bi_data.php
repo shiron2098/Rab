@@ -30,6 +30,7 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
             "SELECT * FROM Daily_Collection_Distribution
                   WHERE date_num = $datenum"
         );
+
         $row = mysqli_fetch_assoc($result);
         if (!empty($result)) {
             foreach ($result as $date)
