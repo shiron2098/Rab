@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS points_of_sale (  -- for this table command: get_pos_
  ,week_num			int				-- 201923
  ,month_num			int				-- 201910
  ,pos_id            varchar(32) null
- ,vvs_id			int(2) null
- ,pro_id			int(2) null
+ ,vvs_id			varchar(32) null
+ ,pro_id			varchar(32) null
  ,created_dt        datetime null
  ,batch_id          varchar(60) null
  ,record_timestamp	timestamp default now()
