@@ -58,16 +58,20 @@ BEGIN
             , t.operator_id  
 			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
-			, sum(coalesce(v.pro_sold_out, 0))	/ (case when 
-															sum(coalesce(v.number_of_columns,0)) = 0
-															then sum(coalesce(v.pro_sold_out, 0))
-															else sum(coalesce(v.number_of_columns,0)) 
-                                                        end)				-- as before_percentage            
-			, sum(coalesce(v.pro_empty_after, 0))	/ (case when 
-															sum(coalesce(v.number_of_columns,0)) = 0
-															then sum(coalesce(v.pro_empty_after, 0))
-															else sum(coalesce(v.number_of_columns,0)) 
-                                                        end)											-- as after_percentage                        
+			, sum(coalesce(v.pro_sold_out, 0))	/ coalesce((case 
+																when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_sold_out, 0)) = 0
+																	then 1
+																when sum(coalesce(v.number_of_columns,0)) = 0 
+																	then sum(coalesce(v.pro_sold_out, 0))
+																else sum(coalesce(v.number_of_columns,0)) 
+                                                        end), 1)											-- as before_percentage            
+			, sum(coalesce(v.pro_empty_after, 0))	/ coalesce((case 
+																	when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_empty_after, 0)) = 0
+																		then 1
+                                                                    when sum(coalesce(v.number_of_columns,0)) = 0     
+																		then sum(coalesce(v.pro_empty_after, 0))
+																	else sum(coalesce(v.number_of_columns,0)) 
+                                                        end),1)											-- as after_percentage 
             , sum(coalesce(v.not_picked, 0))																			-- as not_picked
 			, sum(coalesce(p.total_picked,0)) 																					-- total_picked		int null
             , now()
@@ -84,16 +88,20 @@ BEGIN
 			, t.operator_id  
 			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
-			, sum(coalesce(v.pro_sold_out, 0))	/ (case when 
-															sum(coalesce(v.number_of_columns,0)) = 0
-															then sum(coalesce(v.pro_sold_out, 0))
-															else sum(coalesce(v.number_of_columns,0)) 
-                                                        end)											-- as before_percentage            
-			, sum(coalesce(v.pro_empty_after, 0))	/ (case when 
-															sum(coalesce(v.number_of_columns,0)) = 0
-															then sum(coalesce(v.pro_empty_after, 0))
-															else sum(coalesce(v.number_of_columns,0)) 
-                                                        end)											-- as before_percentage                                    
+			, sum(coalesce(v.pro_sold_out, 0))	/ coalesce((case 
+																when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_sold_out, 0)) = 0
+																	then 1
+																when sum(coalesce(v.number_of_columns,0)) = 0 
+																	then sum(coalesce(v.pro_sold_out, 0))
+																else sum(coalesce(v.number_of_columns,0)) 
+                                                        end), 1)											-- as before_percentage            
+			, sum(coalesce(v.pro_empty_after, 0))	/ coalesce((case 
+																	when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_empty_after, 0)) = 0
+																		then 1
+                                                                    when sum(coalesce(v.number_of_columns,0)) = 0     
+																		then sum(coalesce(v.pro_empty_after, 0))
+																	else sum(coalesce(v.number_of_columns,0)) 
+                                                        end),1)											-- as after_percentage 
             , sum(coalesce(v.not_picked, 0))																			-- as not_picked            
             , sum(coalesce(p.total_picked,0)) 																					-- total_picked		int null
             , now()
@@ -110,16 +118,20 @@ BEGIN
             , t.operator_id    
 			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
-			, sum(coalesce(v.pro_sold_out, 0))	/ (case when 
-															sum(coalesce(v.number_of_columns,0)) = 0
-															then sum(coalesce(v.pro_sold_out, 0))
-															else sum(coalesce(v.number_of_columns,0)) 
-                                                        end)											-- as before_percentage            
-			, sum(coalesce(v.pro_empty_after, 0))	/ (case when 
-															sum(coalesce(v.number_of_columns,0)) = 0
-															then sum(coalesce(v.pro_empty_after, 0))
-															else sum(coalesce(v.number_of_columns,0)) 
-                                                        end)											-- as before_percentage     
+			, sum(coalesce(v.pro_sold_out, 0))	/ coalesce((case 
+																when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_sold_out, 0)) = 0
+																	then 1
+																when sum(coalesce(v.number_of_columns,0)) = 0 
+																	then sum(coalesce(v.pro_sold_out, 0))
+																else sum(coalesce(v.number_of_columns,0)) 
+                                                        end), 1)											-- as before_percentage            
+			, sum(coalesce(v.pro_empty_after, 0))	/ coalesce((case 
+																	when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_empty_after, 0)) = 0
+																		then 1
+                                                                    when sum(coalesce(v.number_of_columns,0)) = 0     
+																		then sum(coalesce(v.pro_empty_after, 0))
+																	else sum(coalesce(v.number_of_columns,0)) 
+                                                        end),1)											-- as after_percentage     
             , sum(coalesce(v.not_picked, 0))																			-- as not_picked                        
             , sum(coalesce(p.total_picked,0)) 																					-- total_picked		int null
             , now()
