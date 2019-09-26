@@ -56,7 +56,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY ASC $columnsorting  limit $offset,$count"
+                    ORDER BY $columnsorting ASC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
@@ -105,7 +105,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY DESC $columnsorting limit $offset,$count"
+                    ORDER BY $columnsorting DESC limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
@@ -362,7 +362,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $columnsorting = static::distcollection;
                         break;
                     case 'address':
-                        $columnsorting = 'address_1';
+                        $columnsorting = static::address;
                         break;
                 }
                 $this->DeleteArrayFile($dataPOS);
@@ -415,7 +415,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $columnsorting = static::distcollection;
                         break;
                     case 'address':
-                        $columnsorting = 'address_1';
+                        $columnsorting = static::address;
                         break;
                 }
                 $this->DeleteArrayFile($dataPOS);

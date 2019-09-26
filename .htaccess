@@ -5,6 +5,7 @@ RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
 RewriteRule ^ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^.]+)$ $1.php [NC,L]
-
+RewriteCond %{REQUEST_METHOD} !POST [NC]
+ RewriteRule ^welcome_post.php - [PT]
 # If the requested resource doesn't exist, use index.html
 RewriteRule ^ /index.html
