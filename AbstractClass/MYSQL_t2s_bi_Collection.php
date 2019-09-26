@@ -18,7 +18,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
     const productGlobalKey = 'pro_id';
     const productCode = 'pro_code';
     const productDescription = 'pro_description';
-    const address = "address_1,address_2,city,state,zip";
+    const address = "address_1";
     const quantity = 'vvs_id';
 
 
@@ -56,7 +56,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY $columnsorting ASC limit $offset,$count"
+                    ORDER BY ASC $columnsorting  limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
@@ -105,7 +105,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     pos.address_1,pos.address_2,pos.city,pos.state,pos.zip FROM visits v
                     left join points_of_sale pos on pos.pos_id = v.pos_id
                     where CONVERT (v.visit_date,date) = $date
-                    ORDER BY $columnsorting DESC limit $offset,$count"
+                    ORDER BY DESC $columnsorting limit $offset,$count"
                 );
                 $row = mysqli_fetch_assoc($result);
                 if (!empty($result)) {
