@@ -50,10 +50,10 @@ class Job_StreamOut extends Threaded
                         $this->variable($json);
                         $this->StartXML = file_get_contents($json->Code->filepath);
                         $response = simplexml_load_file($json->Code->filepath);
-                        $response2 = $response->Table;
+/*                        $response2 = $response->Table;
                         $xml_parser = new Simple_Parser;
                         $xml_parser->parse($this->StartXML);
-                        $XmlString = $xml_parser->data['NEWDATASET']['0']['child']['TABLE'];
+                        $XmlString = $xml_parser->data['NEWDATASET']['0']['child']['TABLE'];*/
                         if (!empty($file) && isset($file)) {
                             $file = $this->DeleteArrayFile($file);
                         }

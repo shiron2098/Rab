@@ -42,28 +42,26 @@ class stockoutsPosCollection  extends MYSQL_t2s_bi_Collection
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $unixtime = strtotime($date);
-            $timemysql = date('Ymd', $unixtime);
+            $unixtimeMYSQL = strtotime($date);
+            $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_array_stockouts_collection($timemysql,$offset,$count,$sort);
             $dataCount= $this->daily_count_stockouts($timemysql);
             if ($data !== null) {
-                if ($data !== null) {
-                    $output = array(
-                        'date' => $date,
-                        'threndIntervalComparer' => static::month,
-                        'items' => $data,
-                        'totalCount' => $dataCount
-                    );
-                    echo json_encode($output);
-                } else {
-                    $output = array(
-                        'date' => $date,
-                        'threndIntervalComparer' => static::week,
-                        'items' => $data,
-                        'totalCount' => $dataCount
-                    );
-                    echo json_encode($output);
-                }
+                $output = array(
+                    'date' => $date,
+                    'threndIntervalComparer' => static::month,
+                    'items' => $data,
+                    'totalCount' => $dataCount
+                );
+                echo json_encode($output);
+            } else {
+                $output = array(
+                    'date' => $date,
+                    'threndIntervalComparer' => static::month,
+                    'items' => $data,
+                    'totalCount' => $dataCount
+                );
+                echo json_encode($output);
             }
         }
     }
