@@ -24,6 +24,7 @@ class CSVinsertProduct1 extends date
     private static $pro_code = null ;
     private static $paskagedata = null;
     private static $paskagedata2 = null;
+    private static $pro_id = null;
 
 
     public static function createCsvArray($xml)
@@ -53,6 +54,9 @@ class CSVinsertProduct1 extends date
                         break;
                     case 'changed_or_new':
                         static::$change_or_new = $value;
+                        break;
+                    case 'pro_id':
+                        static::$pro_id = $value;
                         break;
                 }
             }
@@ -151,6 +155,9 @@ class CSVinsertProduct1 extends date
                         if(!empty(static::$paskagedata2)) {
                             array_push(static::$array, static::$paskagedata2['0']);
                         }
+                        break;
+                   case 'Product_id':
+                       array_push(static::$array, static::$pro_id);
                         break;
                 }
             }

@@ -109,6 +109,14 @@ class Job_StreamOut extends Threaded
                                 $responselog = MYSQLDataOperator::VisitsOut($json2);
                             }
                         }
+            if($DataName == 'pos_users'){
+                $this->NameDataForProccesing = $DataName;
+                CSVinsertStart::InsertCsvFile($Path, $this->NameDataForProccesing);
+            }
+            if($DataName == 'products'){
+                $this->NameDataForProccesing = $DataName;
+                CSVinsertStart::InsertCsvFile($Path, $this->NameDataForProccesing);
+            }
              if ($DataName == 'product_sellouts') {
                    foreach ($DataXml as $dataArrayValue) {
                        $array = $dataArrayValue->attributes();
@@ -132,25 +140,6 @@ class Job_StreamOut extends Threaded
                     $responselog = MYSQLDataOperator::not_picked_OUT($json2);
                 }
             }
-
-            $this->NameDataForProccesing = $DataName;
-            $DataXmlJson = json_encode($DataXml);
-            $DataXmlObject = json_decode($DataXmlJson);
-            foreach ($DataXmlObject as $DataXmlCompleteObject) {
-                if (!empty($DataXmlCompleteObject->batch_id) && isset($DataXmlCompleteObject->batch_id)) {
-                    $this->batch_id = $DataXmlCompleteObject->batch_id;
-                    switch ($this->NameDataForProccesing) {
-                        case 'Product':
-                            $responselog = MYSQLDataOperator::ProductOut($DataXmlCompleteObject);
-                            break;
-                        case 'POS':
-                            $responselog = MYSQLDataOperator::Points_of_saleOut($DataXmlCompleteObject);
-                            break;
-                    }
-                } else {
-                    break;
-                }
-            }
         }
             if (!empty($responselog) && isset($responselog)) {
                 if ($responselog === true) {
@@ -158,14 +147,6 @@ class Job_StreamOut extends Threaded
                     MYSQLDataOperator::LogL2D($this->id_operator, $this->command, $this->StartXML, $this->batch_id);
                     MYSQLDataOperator::InsertTableT2s_dashboard($this->batch_id);
                 }
-            }
-            switch ($this->NameDataForProccesing) {
-                case 'product':
-                    CSVinsertStart::InsertCsvFile($Path, $this->NameDataForProccesing);
-                    break;
-                case 'T2S_POS_Info_WbStore':
-                    CSVinsertStart::InsertCsvFile($Path, $this->NameDataForProccesing);
-                    break;
             }
         unlink(__DIR__ . '/' . $Path);
     }

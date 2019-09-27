@@ -39,7 +39,7 @@ class CSVinsertProduct2 extends Date
         $data2 = file_get_contents(self::$pathtofileproduct2);
         static::$package = $xml->packages;
         static::$packageforprice = $xml->packages->package;
-        static::$price = $xml->packages->package->prices;
+        static::$price = $xml->packages->package->xml_prices;
         static::$array = [];
         static::$arraycolumn = explode(',', $data2);
         $data = json_encode($xml->attributes());
@@ -165,7 +165,7 @@ class CSVinsertProduct2 extends Date
                 if (!empty($paskagedatafinish)) {
                     $full = static::pkp();
                     $attribute = $paskagedatafinish->attributes();
-                        static::$price = $paskagedatafinish->prices;
+                        static::$price = $paskagedatafinish->xml_prices;
                         $array = $attribute['package'];
                         if (static::$price) {
                             $price = static::price(static::$price);

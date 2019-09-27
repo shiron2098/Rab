@@ -2,7 +2,7 @@
 -- select * from tmp_visit_dates
 
 
-use t2s_dashboard;
+use t2s_bi_dashboard;
 
 drop procedure if exists usp_update_missed_stops ;
 
