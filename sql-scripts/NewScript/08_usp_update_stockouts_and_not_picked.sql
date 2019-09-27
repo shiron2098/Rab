@@ -10,7 +10,7 @@ CREATE PROCEDURE usp_update_stockouts_and_not_picked  (in param_batch_id varchar
 BEGIN
 
  Declare var_visit_date datetime;
- 
+
 	create temporary table tmp_visit_dates
     select    v.visit_date
 			, CONCAT(year(v.visit_date), lpad(MONTH(v.visit_date),2,'0'),lpad(day(v.visit_date),2,'0'))   as date_num
@@ -49,15 +49,15 @@ BEGIN
     from Daily_Stockouts_And_Not_Picked d
 		join tmp_visit_dates t
 			on d.date_num = t.date_num and d.operator_id = t.operator_id;
- 
+
  	insert into Monthly_Stockouts_And_Not_Picked
-    select 
+    select
 			  t.month_num																	-- date_num int(8) NULL
-            , t.operator_id  
-			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
+            , t.operator_id
+			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
-			, sum(coalesce(v.pro_sold_out, 0))	/ sum(v.number_of_columns)											-- as before_percentage            
-			, sum(coalesce(v.pro_empty_after, 0))	/ sum(v.number_of_columns)											-- as after_percentage                        
+			, sum(coalesce(v.pro_sold_out, 0))	/ sum(v.number_of_columns)											-- as before_percentage
+			, sum(coalesce(v.pro_empty_after, 0))	/ sum(v.number_of_columns)											-- as after_percentage
             , sum(coalesce(v.not_picked, 0))																			-- as not_picked
 			, sum(coalesce(p.total_picked,0)) 																					-- total_picked		int null
             , now()
@@ -65,19 +65,19 @@ BEGIN
 			join tmp_visit_months t
 				on v.month_num = t.month_num and v.operator_id = t.operator_id
             left outer join not_picked_products p
-				on v.vvs_id = p.vvs_id 
+				on v.vvs_id = p.vvs_id
 		group by t.month_num, t.operator_id;
 
 	insert into Weekly_Stockouts_And_Not_Picked
-    select 
+    select
 			  t.week_num																	-- date_num int(8) NULL
 			, t.operator_id
 		  , sum(coalesce(v.pro_sold_out,0))
-			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
+			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
-			, sum(coalesce(v.pro_sold_out, 0))	/ sum(v.number_of_columns)											-- as before_percentage            
-			, sum(coalesce(v.pro_empty_after, 0))	/ sum(v.number_of_columns)											-- as before_percentage                                    
-            , sum(coalesce(v.not_picked, 0))																			-- as not_picked            
+			, sum(coalesce(v.pro_sold_out, 0))	/ sum(v.number_of_columns)											-- as before_percentage
+			, sum(coalesce(v.pro_empty_after, 0))	/ sum(v.number_of_columns)											-- as before_percentage
+            , sum(coalesce(v.not_picked, 0))																			-- as not_picked
             , sum(coalesce(p.total_picked,0)) 																					-- total_picked		int null
             , now()
 		from visits v
@@ -86,16 +86,16 @@ BEGIN
             left outer join not_picked_products p
 				on v.vvs_id = p.vvs_id
 		group by t.week_num, t.operator_id;
-    
+
 	insert into Daily_Stockouts_And_Not_Picked
-    select 
+    select
 			  t.date_num																	-- date_num int(8) NULL
-            , t.operator_id    
-			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
+            , t.operator_id
+			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
-			, sum(coalesce(v.pro_sold_out, 0))	/ sum(v.number_of_columns)											-- as before_percentage            
-			, sum(coalesce(v.pro_empty_after, 0))	/ sum(v.number_of_columns)											-- as before_percentage     
-            , sum(coalesce(v.not_picked, 0))																			-- as not_picked                        
+			, sum(coalesce(v.pro_sold_out, 0))	/ sum(v.number_of_columns)											-- as before_percentage
+			, sum(coalesce(v.pro_empty_after, 0))	/ sum(v.number_of_columns)											-- as before_percentage
+            , sum(coalesce(v.not_picked, 0))																			-- as not_picked
             , sum(coalesce(p.total_picked,0)) 																					-- total_picked		int null
             , now()
 		from visits v

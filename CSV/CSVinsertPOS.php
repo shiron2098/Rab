@@ -48,6 +48,9 @@ class CSVinsertPOS extends Date
     private static $pos_id = null;
     private static $next_delivery_date = null;
 
+    private static $pos_code = null;
+    private static $ocs_tax_exampt = null;
+    private static $user_control_record = null;
 
     public static function createCsvArray($xml)
     {
@@ -63,10 +66,10 @@ class CSVinsertPOS extends Date
         $data2 = file_get_contents(self::$pathtofilepos);
         static::$array = [];
         static::$arraycolumn = explode(',', $data2);
-        $data = json_encode($xml->attributes());
+/*        $data = json_encode($xml->attributes());
         $jsondecode = json_decode($data, true);
-        foreach ($jsondecode as $xmlstring) {
-            foreach ($xmlstring as $key => $value) {
+        foreach ($jsondecode as $xmlstring) {*/
+            foreach ($xml as $key => $value) {
                 switch ($key) {
                     case 'user_email':
                         static::$user_email = $value;
@@ -74,7 +77,7 @@ class CSVinsertPOS extends Date
                     case 'customer_name':
                         static::$costumer_name = $value;
                         break;
-                    case 'POS_Price':
+                    case 'price_pos_id':
                         static::$pos_price = $value;
                         break;
                     case 'last_name':
@@ -151,9 +154,17 @@ class CSVinsertPOS extends Date
                         static::$pos_id = $value2;
                         break;
 
+                    case 'pos_code':
+                        static::$pos_code = $value;
+                        break;
+                    case 'ocs_tax_exampt':
+                        static::$ocs_tax_exampt =$value;
+                        break;
+                    case 'user_control_record':
+                        static::$user_control_record =$value;
+                        break;
                 }
             }
-        }
         return static::$arraycolumn;
     }
 
@@ -162,32 +173,14 @@ class CSVinsertPOS extends Date
         if (!empty(static::$arraycolumn) && isset(self::$arraycolumn)) {
             foreach (static::$arraycolumn as $item) {
                 switch ($item) {
-                    case 'id':
-                        array_push(static::$array, static::null);
-                        break;
                     case 'user_login':
                         array_push(static::$array, static::$user_email);
                         break;
                     case 'user_pass':
                         array_push(static::$array, static::user_pass);
                         break;
-                    case 'user_nicename':
-                        array_push(static::$array, static::$costumer_name);
-                        break;
                     case 'user_email':
                         array_push(static::$array, static::$user_email);
-                        break;
-                    case 'user_url':
-                        array_push(static::$array, "");
-                        break;
-                    case 'user_registered':
-                        array_push(static::$array, '');
-                        break;
-                    case 'user_activation_key':
-                        array_push(static::$array, '');
-                        break;
-                    case 'user_status':
-                        array_push(static::$array, static::null);
                         break;
                     case 'display_name':
                         array_push(static::$array, static::$costumer_name);
@@ -195,47 +188,14 @@ class CSVinsertPOS extends Date
                     case 'meta_wp_ocs_user_role':
                         array_push(static::$array, static::$pos_price);
                         break;
-                    case 'meta_wp_ocs_user_level':
-                        array_push(static::$array, static::null);
-                        break;
-                    case 'meta_dismissed_wp_pointers':
-                        array_push(static::$array, '');
-                        break;
                     case 'meta_last_name':
                         array_push(static::$array, static::$last_name);
                         break;
                     case 'meta_paying_customer':
                         array_push(static::$array, static::meta_paying_customer);
                         break;
-                    case 'meta_nickname':
-                        array_push(static::$array, static::$costumer_name);
-                        break;
                     case 'meta_first_name':
                         array_push(static::$array, static::$first_name);
-                        break;
-                    case 'meta_description':
-                        array_push(static::$array, static::$costumer_name);
-                        break;
-                    case 'meta_rich_editing':
-                        array_push(static::$array, static::meta_rich_editing);
-                        break;
-                    case 'meta_comment_shortcuts':
-                        array_push(static::$array, static::meta_comment_shortcuts);
-                        break;
-                    case 'meta_admin_color':
-                        array_push(static::$array, static::meta_admin_color);
-                        break;
-                    case 'meta_use_ssl':
-                        array_push(static::$array, static::meta_use_ssl);
-                        break;
-                    case 'meta_show_admin_bar_front':
-                        array_push(static::$array, static::meta_show_admin_bar_front);
-                        break;
-                    case 'meta__money_spent':
-                        array_push(static::$array, "");
-                        break;
-                    case 'meta__order_count':
-                        array_push(static::$array, "");
                         break;
                     case 'meta_billing_first_name':
                         array_push(static::$array, static::$billing_first_name);
@@ -297,15 +257,6 @@ class CSVinsertPOS extends Date
                     case 'meta_shipping_postcode':
                         array_push(static::$array, static::$ship_to_zip);
                         break;
-                    case 'meta_sesssion_tokens':
-                        array_push(static::$array, "");
-                        break;
-                    case 'meta__woocommerce_persistent_cart':
-                        array_push(static::$array, "");
-                        break;
-                    case 'meta_manageedit-shop_ordercolumnshidden':
-                        array_push(static::$array, "");
-                        break;
                     case 'next_del_date':
                         array_push(static::$array, static::$next_delivery_date);
                         break;
@@ -314,6 +265,15 @@ class CSVinsertPOS extends Date
                         break;
                     case 'vmax_id':
                         array_push(static::$array, static::$pos_id);
+                        break;
+                    case 'Pos_Code':
+                        array_push(static::$array, static::$pos_code);
+                        break;
+                    case 'ocs_tax_exampt':
+                        array_push(static::$array, static::$ocs_tax_exampt);
+                        break;
+                    case 'user_control_record':
+                        array_push(static::$array, static::$user_control_record);
                         break;
                 }
             }

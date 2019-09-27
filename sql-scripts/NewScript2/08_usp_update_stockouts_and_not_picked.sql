@@ -2,7 +2,7 @@
 -- select * from tmp_visit_dates
 
 
-use t2s_dashboard;
+use t2s_bi_dashboard;
 
 drop procedure if exists usp_update_stockouts_and_not_picked ;
 
@@ -85,8 +85,9 @@ BEGIN
 	insert into Weekly_Stockouts_And_Not_Picked
     select 
 			  t.week_num																	-- date_num int(8) NULL
-			, t.operator_id  
-			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
+			, t.operator_id
+			, sum(coalesce(v.pro_sold_out, 0))
+			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
 			, sum(coalesce(v.pro_sold_out, 0))	/ coalesce((case 
 																when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_sold_out, 0)) = 0

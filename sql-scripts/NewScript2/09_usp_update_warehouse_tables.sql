@@ -2,13 +2,13 @@
 -- select * from tmp_visit_dates
 
 
-use t2s_dashboard;
+use t2s_bi_dashboard;
 
 drop procedure if exists usp_update_warehouse_tables;
 
 delimiter $$
 
-CREATE PROCEDURE usp_update_warehouse_tables (in param_batch_id int)
+CREATE PROCEDURE usp_update_warehouse_tables (in param_batch_id varchar(60))
 BEGIN
 	call usp_update_average_collections(param_batch_id);
     call usp_update_collection_distribution(param_batch_id);
