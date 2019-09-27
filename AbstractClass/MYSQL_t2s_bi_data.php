@@ -153,4 +153,55 @@ class MYSQL_t2s_bi_data extends MYSQLDataOperator
         }
         return $file;
     }
+    protected function daily_count_stockouts($date)
+    {
+        static::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "SELECT p.pro_code as productCode,p.pro_description as productDescription,pos.pos_code as posCode,pos.pos_description as posDescription,pos.cus_code as customerCode,pos.cus_description as customerDescription from sold_out_products s
+	                          inner join products p
+		                      on s.pro_id = p.pro_id
+                              inner join points_of_sale  pos
+		                          on s.pos_id = pos.pos_id
+                                where CONVERT (s.visit_date,date) = $date
+                              group by s.pro_id,s.pos_id"
+        );
+        $array = $result->num_rows;
+        return $array;
+    }
+    protected function daily_count_revenue($date)
+    {
+        static::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                         ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
+                         ,p.address_1,p.address_2,p.city,p.state,p.zip
+                              from visits v
+                           inner join points_of_sale  p
+	                      on v.pos_id = p.pos_id
+                            where v.collect = 'Yes'
+                    and CONVERT (v.visit_date,date) = $date"
+        );
+        $array = $result->num_rows;
+        return $array;
+    }
+    protected function daily_count_destribution($date,$minsales,$maxsales)
+    {
+        static::DbconnectT2S_BI();
+        $result = mysqli_query(
+            MYSQLDataOperator::$linkConnectT2S,
+            "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                                    ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
+                                    ,p.address_1,p.address_2,p.city,p.state,p.zip
+                                    from visits v
+                                    inner join points_of_sale  p
+		                            on v.pos_id = p.pos_id
+                                    where v.collect = 'Yes'
+                    and CONVERT (v.visit_date,date) = $date
+                    and coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00)  between $minsales and $maxsales"
+        );
+        $array = $result->num_rows;
+        return $array;
+    }
 }

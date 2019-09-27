@@ -17,7 +17,7 @@ class stockoutsPosCollection  extends MYSQL_t2s_bi_Collection
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_array_stockouts_collection($timemysql,$offset,$count,$sort);
-            $dataCount= $this->daily_count_POS($timemysql);
+            $dataCount= $this->daily_count_stockouts($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
@@ -45,7 +45,7 @@ class stockoutsPosCollection  extends MYSQL_t2s_bi_Collection
             $unixtime = strtotime($date);
             $timemysql = date('Ymd', $unixtime);
             $data = $this->daily_array_stockouts_collection($timemysql,$offset,$count,$sort);
-            $dataCount= $this->daily_count_POS($timemysql);
+            $dataCount= $this->daily_count_stockouts($timemysql);
             if ($data !== null) {
                 if ($data !== null) {
                     $output = array(

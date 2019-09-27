@@ -369,7 +369,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode,p.pos_id as posGlobalKey
                          ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                          ,p.address_1,p.address_2,p.city,p.state,p.zip
                               from visits v
@@ -385,6 +385,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
                         $dataPOS = array(
                             'posCode' => $data['posCode'],
+                            'posGlobalKey' => $data['posGlobalKey'],
                             'posDescription' => $data['posDescription'],
                             'customerCode' => $data['customerCode'],
                             'customerDescription' => $data['customerDescription'],
@@ -422,7 +423,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode,p.pos_id as posGlobalKey
                          ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                          ,p.address_1,p.address_2,p.city,p.state,p.zip
                               from visits v
@@ -438,6 +439,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
                         $dataPOS = array(
                             'posCode' => $data['posCode'],
+                            'posGlobalKey' => $data['posGlobalKey'],
                             'posDescription' => $data['posDescription'],
                             'customerCode' => $data['customerCode'],
                             'customerDescription' => $data['customerDescription'],
@@ -485,7 +487,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     static::DbconnectT2S_BI();
                     $result = mysqli_query(
                         MYSQLDataOperator::$linkConnectT2S,
-                        "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                        "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode,p.pos_id as posGlobalKey
                                     ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                                     ,p.address_1,p.address_2,p.city,p.state,p.zip
                                     from visits v
@@ -501,7 +503,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode,p.pos_id as posGlobalKey
                                     ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                                     ,p.address_1,p.address_2,p.city,p.state,p.zip
                                     from visits v
@@ -517,7 +519,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                 static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode
+                    "select coalesce(actual_Sales_Bills, 0.00) + coalesce(actual_Sales_Coins, 0.00) as collection,p.pos_code as posCode,p.pos_id as posGlobalKey
                                     ,p.pos_description as posDescription,p.cus_code as customerCode,p.cus_description as customerDescription
                                     ,p.address_1,p.address_2,p.city,p.state,p.zip
                                     from visits v
@@ -535,6 +537,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                         $stringAdress = $data['zip'] . ',' . $data['state'] . ',' . $data['city'] . ',' . $data['address_1'] . ',' . $data['address_2'];
                         $dataPOS = array(
                             'posCode' => $data['posCode'],
+                            'posGlobalKey' => $data['posGlobalKey'],
                             'posDescription' => $data['posDescription'],
                             'customerCode' => $data['customerCode'],
                             'customerDescription' => $data['customerDescription'],

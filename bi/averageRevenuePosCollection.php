@@ -17,7 +17,7 @@ class averageRevenuePosCollection  extends MYSQL_t2s_bi_Collection
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_array_revenue_collection($timemysql,$offset,$count,$sort);
-            $dataCount= $this->daily_count_POS($timemysql);
+            $dataCount= $this->daily_count_revenue($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
@@ -45,7 +45,7 @@ class averageRevenuePosCollection  extends MYSQL_t2s_bi_Collection
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
             $data = $this->daily_array_revenue_collection($timemysql,$offset,$count,$sort);
-            $dataCount= $this->daily_count_POS($timemysql);
+            $dataCount= $this->daily_count_revenue($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
