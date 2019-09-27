@@ -26,7 +26,7 @@ class revenue extends MYSQL_t2s_bi_calendar
             $trashhold = $this->daily_avg_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'date' => (string)$data['date_num'],
+                    'date' => (string)$timemysql,
                     'averageRevenue' => (string)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
                     'minRevenue' => (string)$data['min_collect'],
@@ -41,15 +41,15 @@ class revenue extends MYSQL_t2s_bi_calendar
                 echo json_encode($output);
             } else {
                 $output = array(
-                    'date' => (string)$data['date_num'],
+                    'date' => (string)$timemysql,
                     'averageRevenue' => (string)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
                     'minRevenue' => (string)$data['min_collect'],
                     'minAverageRevenueTrend' => (string)$this->upordown['1'],
                     'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
-                    'averageRevenueCollection' => $datarevenue,
-                    'levelAverageRevenueByThreshold' => $trashhold['value'],
+                    'averageRevenueCollection' => array(),
+                    'levelAverageRevenueByThreshold' => array(),
                     /*'date' => $trashhold['date'],*/
                     'threndIntervalComparer' => static::week,
                 );
@@ -72,7 +72,7 @@ class revenue extends MYSQL_t2s_bi_calendar
             $trashhold = $this->daily_avg_CALENDAR($timemysql);
             if ($data !== null) {
                 $output = array(
-                    'date' => (string)$data['date_num'],
+                    'date' => (string)$timemysql,
                     'averageRevenue' => (string)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
                     'minRevenue' => (string)$data['min_collect'],
@@ -87,17 +87,15 @@ class revenue extends MYSQL_t2s_bi_calendar
                 echo json_encode($output);
             } else {
                 $output = array(
-                    'date' => (string)$data['date_num'],
+                    'date' => (string)$timemysql,
                     'averageRevenue' => (string)$data['average_collect'],
                     'averageRevenueTrend' => (string)$this->upordown['0'],
-                    'minRevenue' => (string)$data['min_collect'],
-                    'minAverageRevenueTrend' => (string)$this->upordown['1'],
                     'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
-                    'averageRevenueCollection' => $datarevenue,
-                    'levelAverageRevenueByThreshold' => $trashhold['value'],
+                    'averageRevenueCollection' => array(),
+                    'levelAverageRevenueByThreshold' => array(),
                     /*'date' => $trashhold['date'],*/
-                    'threndIntervalComparer' => static::week,
+                    'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
             }

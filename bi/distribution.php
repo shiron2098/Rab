@@ -30,22 +30,22 @@ class distribution extends MYSQL_t2s_bi_calendar
                     'threndIntervalComparer' => static::week,
                     'salesDistributionCollection' => $this->upordown
                 );
+                echo json_encode($output);
+            } else {
+                $output = array(
+                    'date' => $date,
+                    'threndIntervalComparer' => static::week,
+                    'salesDistributionCollection' => array()
+                );
+                echo json_encode($output);
             }
-            echo json_encode($output);
-        } else {
-            $output = array(
-                'date' => $date,
-                'threndIntervalComparer' => static::week,
-                'salesDistributionCollection' => $this->upordown
-            );
         }
-        echo json_encode($output);
     }
     private function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
+            $unixtimeAVG = strtotime($date . '-' . $this->int . 'days');
             $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
@@ -58,14 +58,14 @@ class distribution extends MYSQL_t2s_bi_calendar
                     'salesDistributionCollection' => $this->upordown
                 );
                 echo json_encode($output);
+            } else {
+                $output = array(
+                    'date' => $date,
+                    'threndIntervalComparer' => static::month,
+                    'salesDistributionCollection' => array()
+                );
+                echo json_encode($output);
             }
-        } else {
-            $output = array(
-                'date' => $date,
-                'threndIntervalComparer' => static::month,
-                'salesDistributionCollection' => $this->upordown
-            );
-            echo json_encode($output);
         }
     }
     public function start()

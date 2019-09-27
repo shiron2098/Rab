@@ -29,7 +29,7 @@ class items extends MYSQL_t2s_bi_calendar
                     'percentOfProducts'=> (string) $data['after_not_picked'],
                     'levelNumberOfProductsByThreshold' => $trashhold['value'],
                     'trend' => (string) $this->upordown['0'],
-                    'date' => $trashhold['date'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
@@ -39,7 +39,7 @@ class items extends MYSQL_t2s_bi_calendar
                     'percentOfProducts'=> (string) $data['after_not_picked'],
                     'levelNumberOfProductsByThreshold' => $trashhold['value'],
                     'trend' => (string) $this->upordown['0'],
-                    'date' => $trashhold['date'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);

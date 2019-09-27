@@ -32,7 +32,7 @@ class stockouts extends MYSQL_t2s_bi_calendar
                     'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
                     'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
                     'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
@@ -44,7 +44,7 @@ class stockouts extends MYSQL_t2s_bi_calendar
                     'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
                     'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
                     'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
@@ -70,7 +70,7 @@ class stockouts extends MYSQL_t2s_bi_calendar
                     'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
                     'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
                     'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
@@ -82,7 +82,7 @@ class stockouts extends MYSQL_t2s_bi_calendar
                     'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
                     'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
                     'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
