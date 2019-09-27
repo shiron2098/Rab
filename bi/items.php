@@ -34,7 +34,15 @@ class items extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(items)");
+                $output = array(
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'trend' => (string) $this->upordown['0'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::week,
+                );
+                echo json_encode($output);
             }
         }
     }
@@ -60,7 +68,15 @@ class items extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(items)");
+                $output = array(
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'trend' => (string) $this->upordown['0'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::month,
+                );
+                echo json_encode($output);
             }
         }
     }

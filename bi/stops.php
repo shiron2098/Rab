@@ -35,7 +35,17 @@ class stops extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stops)");
+                $output = array(
+                    'totalScheduledStopsNumber' => (string)$data['scheduled_stops'],
+                    'missedStopsNumber' => (string)$data['missed_stops'],
+                    'missedStopsTrend' => (string)$this->upordown['0'],
+                    'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
+                    'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
+                    'levelMissedStopsNumberByThreshold' => $trashhold['value'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::week,
+                );
+                echo json_encode($output);
             }
         }
     }
@@ -63,7 +73,17 @@ class stops extends MYSQL_t2s_bi_calendar
                     );
                     echo json_encode($output);
                 } else {
-                    echo json_encode("no correct date(stops)");
+                    $output = array(
+                        'totalScheduledStopsNumber' => (string)$data['scheduled_stops'],
+                        'missedStopsNumber' => (string)$data['missed_stops'],
+                        'missedStopsTrend' => (string)$this->upordown['0'],
+                        'outOfScheduleStopsNumber' => (string)$data['out_of_schedule_stops'],
+                        'outOfScheduleStopsTrend' => (string)$this->upordown['1'],
+                        'levelMissedStopsNumberByThreshold' => $trashhold['value'],
+                        'date' => $trashhold['date'],
+                        'threndIntervalComparer' => static::month,
+                    );
+                    echo json_encode($output);
                 }
             }
         }

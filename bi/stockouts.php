@@ -37,7 +37,17 @@ class stockouts extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stockout)");
+                $output = array(
+                    'beforeVisitNumberOfProducts' => (string)$data['before_stockouts'],
+                    'beforeVisitPercentOfProducts' => (string)$data['before_percentage'],
+                    'beforeVisitTrend' => (string) $this->upordown['0'],
+                    'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
+                    'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
+                    'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::week,
+                );
+                echo json_encode($output);
             }
         }
     }
@@ -65,7 +75,17 @@ class stockouts extends MYSQL_t2s_bi_calendar
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(stockout)");
+                $output = array(
+                    'beforeVisitNumberOfProducts' => (string)$data['before_stockouts'],
+                    'beforeVisitPercentOfProducts' => (string)$data['before_percentage'],
+                    'beforeVisitTrend' => (string) $dataavg['0'],
+                    'afterVisitNumberOfProducts' => (string)$data['after_stockouts'],
+                    'afterVisitPercentOfProducts' => (string)$data['after_percentage'],
+                    'levelBeforeVisitNumberOfProductsByThreshold' => $trashhold['value'],
+                    'date' => $trashhold['date'],
+                    'threndIntervalComparer' => static::month,
+                );
+                echo json_encode($output);
             }
         }
     }

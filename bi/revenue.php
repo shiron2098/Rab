@@ -35,12 +35,25 @@ class revenue extends MYSQL_t2s_bi_calendar
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
                     'averageRevenueCollection' => $datarevenue,
                     'levelAverageRevenueByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
+                    /*'date' => $trashhold['date'],*/
                     'threndIntervalComparer' => static::week,
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(revenue)");
+                $output = array(
+                    'date' => (string)$data['date_num'],
+                    'averageRevenue' => (string)$data['average_collect'],
+                    'averageRevenueTrend' => (string)$this->upordown['0'],
+                    'minRevenue' => (string)$data['min_collect'],
+                    'minAverageRevenueTrend' => (string)$this->upordown['1'],
+                    'maxRevenue' => (string)$data['max_collect'],
+                    'maxAverageRevenueTrend' => (string)$this->upordown['2'],
+                    'averageRevenueCollection' => $datarevenue,
+                    'levelAverageRevenueByThreshold' => $trashhold['value'],
+                    /*'date' => $trashhold['date'],*/
+                    'threndIntervalComparer' => static::week,
+                );
+                echo json_encode($output);
             }
         }
     }
@@ -68,12 +81,25 @@ class revenue extends MYSQL_t2s_bi_calendar
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
                     'averageRevenueCollection' => $datarevenue,
                     'levelAverageRevenueByThreshold' => $trashhold['value'],
-                    'date' => $trashhold['date'],
+                    /*'date' => $trashhold['date'],*/
                     'threndIntervalComparer' => static::month,
                 );
                 echo json_encode($output);
             } else {
-                echo json_encode("no correct date(revenue)");
+                $output = array(
+                    'date' => (string)$data['date_num'],
+                    'averageRevenue' => (string)$data['average_collect'],
+                    'averageRevenueTrend' => (string)$this->upordown['0'],
+                    'minRevenue' => (string)$data['min_collect'],
+                    'minAverageRevenueTrend' => (string)$this->upordown['1'],
+                    'maxRevenue' => (string)$data['max_collect'],
+                    'maxAverageRevenueTrend' => (string)$this->upordown['2'],
+                    'averageRevenueCollection' => $datarevenue,
+                    'levelAverageRevenueByThreshold' => $trashhold['value'],
+                    /*'date' => $trashhold['date'],*/
+                    'threndIntervalComparer' => static::week,
+                );
+                echo json_encode($output);
             }
         }
     }
