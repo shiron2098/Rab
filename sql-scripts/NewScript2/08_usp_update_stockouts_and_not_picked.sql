@@ -56,7 +56,7 @@ BEGIN
     select 
 			  t.month_num																	-- date_num int(8) NULL
             , t.operator_id  
-			, sum(coalesce(v.pro_sold_out, 0))																		-- as before_stockouts   
+			, sum(coalesce(v.pro_sold_out, 0))																	-- as before_stockouts
 			, sum(coalesce(v.pro_empty_after, 0))																		-- as after_stockouts
 			, sum(coalesce(v.pro_sold_out, 0))	/ coalesce((case 
 																when sum(coalesce(v.number_of_columns,0)) = 0 and sum(coalesce(v.pro_sold_out, 0)) = 0
