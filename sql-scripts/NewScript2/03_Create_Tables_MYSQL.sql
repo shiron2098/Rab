@@ -105,8 +105,8 @@ CREATE TABLE IF NOT EXISTS visits (     -- for this table command: get_vvs_bi   
  ,week_num			int				-- 201923
  ,month_num			int				-- 201910
  ,pos_id            varchar(32) null
- ,vvs_id			int null
- ,pro_id			int null
+ ,vvs_id			varchar(32) null
+ ,pro_id			varchar(32) null
  ,created_dt        datetime null
  ,batch_id          varchar(60) null
  ,record_timestamp	timestamp default now()
@@ -122,9 +122,9 @@ CREATE TABLE IF NOT EXISTS visits (     -- for this table command: get_vvs_bi   
  ,date_num			int				-- 20191123
  ,week_num			int				-- 201923
  ,month_num			int				-- 201910
- ,pos_id            int null   
- ,vvs_id               int null
- ,pro_id			int null
+ ,pos_id            varchar(32) null
+ ,vvs_id               varchar(32) null
+ ,pro_id			varchar(32) null
  ,not_picked        int null          -- number of items not picked (when added < pre-kit number in service order)
  ,total_picked      int null          -- total number of picked items from sco
  ,created_dt        datetime null
