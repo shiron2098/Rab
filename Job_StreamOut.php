@@ -140,6 +140,24 @@ class Job_StreamOut extends Threaded
                     $responselog = MYSQLDataOperator::not_picked_OUT($json2);
                 }
             }
+            $this->NameDataForProccesing = $DataName;
+            $DataXmlJson = json_encode($DataXml);
+            $DataXmlObject = json_decode($DataXmlJson);
+            foreach ($DataXmlObject as $DataXmlCompleteObject) {
+                if (!empty($DataXmlCompleteObject->batch_id) && isset($DataXmlCompleteObject->batch_id)) {
+                    $this->batch_id = $DataXmlCompleteObject->batch_id;
+                    switch ($this->NameDataForProccesing) {
+                        case 'Product':
+                            $responselog = MYSQLDataOperator::ProductOut($DataXmlCompleteObject);
+                            break;
+                        case 'POS':
+                            $responselog = MYSQLDataOperator::Points_of_saleOut($DataXmlCompleteObject);
+                            break;
+                    }
+                } else {
+                    break;
+                }
+            }
         }
             if (!empty($responselog) && isset($responselog)) {
                 if ($responselog === true) {
@@ -214,7 +232,7 @@ foreach($DataResponseOperator as $operator) {
     if ($operator['streams_response'] == 0) {
         $my = new Job_StreamOut();
         Job_StreamOut::$operator = $operator;
- /*$my->DataXmlConverter('49719418458-02-27 23:33:37');*/
+/* $my->DataXmlConverter('49738231075-03-18 12:43:07');*/
      $my->Run();
     }
 

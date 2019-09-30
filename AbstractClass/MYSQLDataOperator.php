@@ -114,13 +114,14 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
      */
     public static function VisitsOut($response)
     {
-
+        $unixtime = strtotime($response->visit_date);
+        $visitdatewhere = date('Ymd', $unixtime);
         MYSQLDataOperator::DbconnectT2S_BI();
-        if (isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins)&&isset($response->total_picked)) {
+        if (isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins) && isset($response->total_picked)) {
             $result = mysqli_query(
                 MYSQLDataOperator::$linkConnectT2S,
-                "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,not_picked,created_dt,batch_id) 
-                               values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "','" . $response->vvs_id . "','" . $response->scheduled . "',
+                "insert into visits (operator_id,pos_id,visit_date,date_num,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,not_picked,created_dt,batch_id) 
+                               values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $visitdatewhere . "','" . $response->week_num . "','" . $response->month_num . "','" . $response->vvs_id . "','" . $response->scheduled . "',
                                '" . $response->serviced . "','" . $response->collect . "','" . $response->actual_Sales_Bills . "','" . $response->actual_Sales_Coins . "',
                                '" . $response->number_of_columns_before . "','" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "',
                                '" . $response->col_empty_after . "','" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
@@ -137,12 +138,11 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                 Log::logtextL2D($text, MYSQLDataOperator::Visits);
                 return $result;
             }
-        }
-        elseif(isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins)&& !isset($response->total_picked)){
+        } elseif (isset($response->actual_Sales_Bills) && isset($response->actual_Sales_Coins) && !empty($response->actual_Sales_Bills) && !empty($response->actual_Sales_Coins) && !isset($response->total_picked)) {
             $result = mysqli_query(
                 MYSQLDataOperator::$linkConnectT2S,
-                "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,created_dt,batch_id) 
-                               values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "','" . $response->vvs_id . "','" . $response->scheduled . "',
+                "insert into visits (operator_id,pos_id,visit_date,date_num,week_num,month_num,vvs_id,scheduled,serviced,collect,actual_Sales_Bills,actual_Sales_Coins,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,created_dt,batch_id) 
+                               values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $visitdatewhere . "','" . $response->week_num . "','" . $response->month_num . "','" . $response->vvs_id . "','" . $response->scheduled . "',
                                '" . $response->serviced . "','" . $response->collect . "','" . $response->actual_Sales_Bills . "','" . $response->actual_Sales_Coins . "',
                                '" . $response->number_of_columns_before . "','" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "',
                                '" . $response->col_empty_after . "','" . $response->created_dt . "','" . $response->batch_id . "')"
@@ -159,12 +159,12 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                 Log::logtextL2D($text, MYSQLDataOperator::Visits);
                 return $result;
             }
-            }else {
-            if(isset($response->total_picked)&&isset($response->pro_empty_after)) {
+        } else {
+            if (isset($response->total_picked) && isset($response->pro_empty_after)) {
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,pro_empty_after,not_picked,created_dt,batch_id)
-                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
+                    "insert into visits (operator_id,pos_id,visit_date,date_num,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,pro_empty_after,not_picked,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $visitdatewhere . "','" . $response->week_num . "','" . $response->month_num . "',
                                            '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns_before . "',
                                            '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
                                            '" . $response->pro_empty_after . "','" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
@@ -181,11 +181,11 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
                     return $result;
                 }
-            }else if (isset($response->total_picked)){
+            } else if (isset($response->total_picked)) {
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,not_picked,created_dt,batch_id)
-                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
+                    "insert into visits (operator_id,pos_id,visit_date,date_num,week_num,month_num,vvs_id,scheduled,serviced,collect,number_of_columns,col_sold_out,pro_sold_out,col_empty_after,not_picked,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $visitdatewhere . "','" . $response->week_num . "','" . $response->month_num . "',
                                            '" . $response->vvs_id . "','" . $response->scheduled . "','" . $response->serviced . "','" . $response->collect . "','" . $response->number_of_columns_before . "',
                                            '" . $response->col_sold_out_before . "','" . $response->pro_sold_out_before . "','" . $response->col_empty_after . "',
                                            '" . $response->total_picked . "','" . $response->created_dt . "','" . $response->batch_id . "')"
@@ -202,11 +202,11 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
                     return $result;
                 }
-            }else if(isset($response->visit_date)&&isset($response->week_num)&&isset($response->month_num)&&isset($response->scheduled)&&isset($response->serviced)){
+            } else if (isset($response->visit_date) && isset($response->week_num) && isset($response->month_num) && isset($response->scheduled) && isset($response->serviced)) {
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
-                    "insert into visits (operator_id,pos_id,visit_date,week_num,month_num,scheduled,serviced,created_dt,batch_id)
-                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $response->week_num . "','" . $response->month_num . "',
+                    "insert into visits (operator_id,pos_id,visit_date,date_num,week_num,month_num,scheduled,serviced,created_dt,batch_id)
+                                           values ('" . $response->operator_id . "','" . $response->pos_id . "','" . $response->visit_date . "','" . $visitdatewhere . "','" . $response->week_num . "','" . $response->month_num . "',
                                          '" . $response->scheduled . "','" . $response->serviced . "',
                                            '" . $response->created_dt . "','" . $response->batch_id . "')"
                 );
@@ -222,7 +222,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
                     return $result;
                 }
-            }else {
+            }/*else {
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
                     "insert into visits (operator_id,pos_id,created_dt,batch_id)
@@ -240,7 +240,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                     Log::logtextL2D($text, MYSQLDataOperator::Visits);
                     return $result;
                 }
-            }
+            }*/
         }
     }
     public static function Product_sold_OUT($response){
@@ -252,7 +252,7 @@ abstract class MYSQLDataOperator implements mysql_insert_interface
                                          '" . $response->vvs_id . "','" . $response->pro_id . "',
                                            '" . $response->created_dt . "','" . $response->batch_id . "')"
         );
-        if ($result === true) {
+       if ($result === true) {
             $text = 'String product_sold_out insert successfully #' . MYSQLDataOperator::InsertidrowsT2S();
             Log::logtextL2D($text, MYSQLDataOperator::product_sold_out);
             MYSQLDataOperator::$boollog = true;
