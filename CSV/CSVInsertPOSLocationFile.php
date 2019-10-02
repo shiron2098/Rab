@@ -97,6 +97,9 @@ class CSVInsertPOSLocationFile extends Date
                 case 'next_delivery_date':
                     static::$next_delivery_date = $value;
                     break;
+                case 'changed_or_new':
+                    static::$changed_or_new = $value;
+                    break;
                 case 'pos_id':
                     $value2 = str_replace(';', ':', $value);
                     static::$pos_id = $value2;
