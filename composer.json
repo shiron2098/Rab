@@ -7,8 +7,7 @@
     "ext-mysqli": "*",
     "ext-xml": "*",
     "ext-json": "*",
-    "ext-simplexml": "*",
-    "firebase/php-jwt": "^5.0"
+    "ext-simplexml": "*"
     },
     "autoload": {
       "psr-0": {

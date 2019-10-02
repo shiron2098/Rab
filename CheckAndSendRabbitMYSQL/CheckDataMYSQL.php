@@ -6,8 +6,6 @@ require_once __DIR__ . '/RabbitSendSqlTakeInDbMYSQL.php';
 class CheckDataMYSQL extends RabbitSendSqlTakeInDbMYSQL
 {
 
-    const NoConnect = 'No connect to database';
-
 
     public  $checkrowstime;
     protected $jobcheckrowtime;

@@ -27,7 +27,7 @@ class date
             'meta_billing_postcode','meta_shipping_first_name','meta_shipping_last_name','meta_shipping_company','meta_shipping_country','meta_shipping_address_1','meta_shipping_address_2','meta_shipping_city',
             'meta_shipping_state','meta_shipping_postcode','next_del_date','vmax_type','vmax_id','Pos_Code','ocs_tax_exampt','user_control_record',
              ""];
-        static::$arrayCsvPRODUCT = ['post_title','post_excerpt','post_status','sku','downloadable','visibility','stock_status','manage_stock','tax_status','tax_class','tax:product_type','attribute:Package Size','attribute_data:Package Size','attribute_default:Package Size','Product_id',""];
+        static::$arrayCsvPRODUCT = ['post_title','post_excerpt','post_status','sku','downloadable','visibility','stock_status','manage_stock','tax_status','tax_class','attribute:Package Size','attribute_data:Package Size','attribute_default:Package Size','Product_id',""];
         static::$arrayCsvPRODUCT2 = ['parent_sku','post_status','sku','stock_status','tax_class','meta:attribute_package-size','meta:_enable_role_based_price','meta:_role_based_price',""];
         static::$arrayCsvLOCATIONFILE = ['user_login','user_email','ocs_address_name','first_name','last_name','company','address_1','address_2','city','state','zip','country','shipping_email','default','Delivery Date'
         ,'Pos Code','ocs_tax_exampt','vmax_id','changed_or_new','user_control_record',""];

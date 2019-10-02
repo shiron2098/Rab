@@ -1,1 +1,0 @@
-ALTER TABLE "user".users DROP CONSTRAINT IF EXISTS u_user_users_email;

@@ -1,2 +1,0 @@
-CREATE UNIQUE INDEX IF NOT EXISTS ixu_user_users_email ON "user".users (LOWER(email) varchar_pattern_ops);
-CREATE INDEX IF NOT EXISTS ix_user_users_organizationglobalkey ON "user".users (organization_global_key varchar_pattern_ops);

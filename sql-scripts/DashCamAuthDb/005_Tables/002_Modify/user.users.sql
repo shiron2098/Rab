@@ -1,5 +1,0 @@
-ALTER TABLE "user".users ADD COLUMN IF NOT EXISTS create_datetime_utc TIMESTAMP(4) NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC');
-ALTER TABLE "user".users ADD COLUMN IF NOT EXISTS update_datetime_utc TIMESTAMP(4) NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC');
-
-ALTER TABLE "user".users DROP COLUMN IF EXISTS create_datetime;
-ALTER TABLE "user".users DROP COLUMN IF EXISTS update_datetime;
