@@ -226,14 +226,17 @@ class Job_StreamOut extends Threaded
 }
 
 
-$CreateTask = new CreateTask();
-$DataResponseOperator = $CreateTask->SelectToDbOperatorsStreamsOut();
-foreach($DataResponseOperator as $operator) {
-    if ($operator['streams_response'] == 0) {
-        $my = new Job_StreamOut();
-        Job_StreamOut::$operator = $operator;
-/* $my->DataXmlConverter('49738231075-03-18 12:43:07');*/
-     $my->Run();
-    }
+                /*pcntl_waitpid($childid, $status);*/
+    $CreateTask = new CreateTask();
+    $DataResponseOperator = $CreateTask->SelectToDbOperatorsStreamsOut();
+/*    $new_id = pcntl_fork();
+    $ok=pcntl_waitpid($new_id, $status);*/
+    foreach ($DataResponseOperator as $operator) {
+        if ($operator['streams_response'] == 0) {
+            $my = new Job_StreamOut();
+            Job_StreamOut::$operator = $operator;
+            /* $my->DataXmlConverter('49738231075-03-18 12:43:07');*/
+            $my->Run();
+        }
 
 }
