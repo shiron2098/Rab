@@ -15,7 +15,7 @@ class RegisterUsers extends MYSQL
     public function RegisterData($json_obj){
         if(isset($json_obj->email)&&!empty($json_obj->email)&&isset($json_obj->password)&&!empty($json_obj->password)){
           $hashed_password = password_hash( $json_obj->password, PASSWORD_DEFAULT );
-       $pdo=$this->DbConnectAuthencation();
+            $pdo=$this->DbConnectAuthencation();
             $data = [
                 'email' => $json_obj->email,
                 'password_hash' => $hashed_password,
