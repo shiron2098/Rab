@@ -39,7 +39,7 @@ class Login extends MYSQL
                     $stmt = $this->pdo->prepare($sql);
                     $stmt->execute([$last, $json_obj->email]);
                     }
-                    $jwt = $this->CheckTokenKey($guild);
+                    $jwt = $this->CreateTokenKey($guild);
                     if(!empty($jwt)){
                         $output = array(
                             'access_token' => $jwt,
@@ -54,7 +54,7 @@ class Login extends MYSQL
             }
         }
     }
-    private function CheckTokenKey($guild){
+    private function CreateTokenKey($guild){
         $key = $guild;
         $time = strtotime('+1 hour',time());
         $token = array(
@@ -84,12 +84,12 @@ class Login extends MYSQL
     "iss" => $_SERVER['SERVER_NAME'],
     "ext" => strtotime('+1 hour',time())
 );
-$jwt = JWT::encode($token, '78c125d6-5466-4f2b-b753-637d27760230');
-$decoded = JWT::decode($jwt, '78c125d6-5466-4f2b-b753-637d27760230', array('HS256'));
+$jwt = JWT::encode($token, '78c125d6-5466-4f2b-b753-637d27760230');*/
+$decoded = JWT::decode('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIxMjcuMC4wLjEiLCJleHQiOmZhbHNlfQ.QVJ3Jv3zx4mx10nBxxDsr-KjhIcAX8XKNq6ITotqMEw', '78c125d6-5466-4f2b-b753-637d27760230', array('HS256'));
 $decoded_array = (array) $decoded;
 JWT::$leeway = 3600; // $leeway in seconds
 print_r($decoded);
-exit();*/
+exit();
 
 
 $json_str = file_get_contents('php://input');
