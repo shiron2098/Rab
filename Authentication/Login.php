@@ -23,7 +23,7 @@ class Login extends MYSQL
         if (isset($json_obj->email) && !empty($json_obj->email) && isset($json_obj->password) && !empty($json_obj->password)) {
             $this->pdo = $this->DbConnectAuthencation();
             $stmt = $this->pdo->prepare("SELECT email,password_hash,user_id FROM users WHERE email=?");
-            $stmt->execute(array('repik@mail.ru'));
+            $stmt->execute(array($json_obj->email));
             $DATE = $stmt->fetchAll(PDO::FETCH_OBJ);
             foreach ($DATE as $emailandpass) {
                 $password = password_verify($json_obj->password, $emailandpass->password_hash);
