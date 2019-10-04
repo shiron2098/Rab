@@ -5,8 +5,8 @@ include_once __DIR__ . '/../AbstractClass/Rabbimq.php';
 abstract class MYSQL
 {
     const host = '127.0.0.1';
-    const user = 'shiro';
-    const password = '2479465';
+    const user = 'ret';
+    const password = '123';
     const database = 'daws2';
     const Changednew = "not changed";
 

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users
     email                   VARCHAR(200)     NOT NULL unique ,
     first_name              VARCHAR(200)         NULL,
     last_name               VARCHAR(200)         NULL,
+    work_phone            VARCHAR(200)         NULL unique ,
     mobile_phone            VARCHAR(200)         NULL unique ,
     password_hash           VARCHAR(100)     NOT NULL,
     create_datetime_utc     TIMESTAMP    default now(),
