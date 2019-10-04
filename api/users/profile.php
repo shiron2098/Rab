@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/protectedaut.php';
+require_once __DIR__ . '/../authentication/protectedaut.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
