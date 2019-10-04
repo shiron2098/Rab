@@ -499,7 +499,7 @@ class MYSQL_t2s_bi_Collection extends MYSQL_t2s_bi_calendar
                     ORDER BY $columnsorting ASC limit $offset,$count"
                     );
                 } else if (isset($minsales) && !isset($maxsales) && empty($maxsales) || $minsales == '0'){
-                    $this->maxsales ='9999999';
+                    $this->maxsales ='999999999999999999999';
                     static::DbconnectT2S_BI();
                 $result = mysqli_query(
                     MYSQLDataOperator::$linkConnectT2S,
