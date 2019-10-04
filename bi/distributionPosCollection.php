@@ -10,6 +10,20 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
     private $interval;
     private $int;
 
+    public function AUT(){
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+        $this->selectkey($authHeader);
+        if($_SESSION['AUT'] === true){
+            $json_str = file_get_contents('php://input');
+            $json_obj = json_decode($json_str);
+            $this->start($json_obj);
+        }else
+        {
+            http_response_code(403);
+        }
+    }
+
+
     public function Week($date, $int, $offset, $count,$sort,$minsales,$maxsales)
     {
         if (!empty($date) && isset($date)) {
@@ -91,9 +105,7 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 }
-$json_str = file_get_contents('php://input');
-$json_obj = json_decode($json_str);
 
 $start = new distributionPosCollection();
 /*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
-$start->start($json_obj);
+$start->AUT();

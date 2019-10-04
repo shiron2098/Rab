@@ -10,7 +10,20 @@ class averageRevenuePosCollection  extends MYSQL_t2s_bi_Collection
     private $interval;
     private $int;
 
-    public function Week($date, $int, $offset, $count,$sort)
+    public function AUT(){
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+        $this->selectkey($authHeader);
+        if($_SESSION['AUT'] === true){
+            $json_str = file_get_contents('php://input');
+            $json_obj = json_decode($json_str);
+            $this->start($json_obj);
+        }else
+        {
+            http_response_code(403);
+        }
+    }
+
+    private function Week($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
@@ -66,7 +79,7 @@ class averageRevenuePosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 
-    public function start($post)
+    private function start($post)
     {
         try {
             if (isset($post->trendIntervalComparer) && !EMPTY($post->trendIntervalComparer) && isset($post->date) && !empty($post->date) && isset($post->offset) && isset($post->count)) {
@@ -88,9 +101,8 @@ class averageRevenuePosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 }
-$json_str = file_get_contents('php://input');
-$json_obj = json_decode($json_str);
 
 $start = new averageRevenuePosCollection();
+$start->AUT();
 /*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
-$start->start($json_obj);
+/*$start->start($json_obj);*/

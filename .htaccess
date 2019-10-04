@@ -7,3 +7,4 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^.]+)$ $1.php [NC,L]
 # If the requested resource doesn't exist, use index.html
 RewriteRule ^ /index.html
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1

@@ -1,4 +1,4 @@
-/*create database Authentication;*/
+/*create database authentication;*/
 
 
 use Authentication;

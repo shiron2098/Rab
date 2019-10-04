@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../AbstractClass/MYSQL.php';
 
-class RegisterUsers extends MYSQL
+class registerusers extends MYSQL
 {
     public function __construct()
     {
@@ -29,5 +29,5 @@ class RegisterUsers extends MYSQL
 }
 $json_str = file_get_contents('php://input');
 $json_obj = json_decode($json_str);
-$a= new RegisterUsers();
+$a= new registerusers();
 $a->RegisterData($json_obj);
