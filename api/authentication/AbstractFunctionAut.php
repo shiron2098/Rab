@@ -63,6 +63,7 @@ abstract class AbstractFunctionAut extends MYSQL
                         if (!empty($jwt)) {
                             $output = array(
                                 'access_token' => $jwt,
+                                'userGlobalKey' => $_SESSION['USERID'],
                             );
                             echo json_encode($output);
                         } else {
