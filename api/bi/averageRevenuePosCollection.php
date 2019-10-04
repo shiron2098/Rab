@@ -1,9 +1,9 @@
 <?php
-header("Content-Type: application/json");
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_Collection.php';
+header('Content-type: application/json');
+require_once __DIR__ . '/../../AbstractClass/MYSQL_t2s_bi_Collection.php';
 
 
-class stopsPosCollection  extends MYSQL_t2s_bi_Collection
+class averageRevenuePosCollection  extends MYSQL_t2s_bi_Collection
 {
     const week = '45';
     const month = '180';
@@ -23,15 +23,14 @@ class stopsPosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 
-
-    public function Week($date, $int, $offset, $count, $sort)
+    private function Week($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_array_stops_collection($timemysql, $offset, $count, $sort);
-            $dataCount = $this->daily_count_POS($timemysql);
+            $data = $this->daily_array_revenue_collection($timemysql,$offset,$count,$sort);
+            $dataCount= $this->daily_count_revenue($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
@@ -52,14 +51,14 @@ class stopsPosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 
-    private function Months($date, $int, $offset, $count, $sort)
+    private function Months($date, $int, $offset, $count,$sort)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
             $unixtimeMYSQL = strtotime($date);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_array_stops_collection($timemysql, $offset, $count, $sort);
-            $dataCount = $this->daily_count_POS($timemysql);
+            $data = $this->daily_array_revenue_collection($timemysql,$offset,$count,$sort);
+            $dataCount= $this->daily_count_revenue($timemysql);
             if ($data !== null) {
                 $output = array(
                     'date' => $date,
@@ -80,7 +79,7 @@ class stopsPosCollection  extends MYSQL_t2s_bi_Collection
         }
     }
 
-    public function start($post)
+    private function start($post)
     {
         try {
             if (isset($post->trendIntervalComparer) && !EMPTY($post->trendIntervalComparer) && isset($post->date) && !empty($post->date) && isset($post->offset) && isset($post->count)) {
@@ -103,6 +102,7 @@ class stopsPosCollection  extends MYSQL_t2s_bi_Collection
     }
 }
 
-$start = new stopsPosCollection();
-/*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
+$start = new averageRevenuePosCollection();
 $start->AUT();
+/*$start->Week('20030508',45,0,20,$sorting = ['pos_id','ascending']);*/
+/*$start->start($json_obj);*/

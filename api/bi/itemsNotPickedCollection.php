@@ -1,6 +1,6 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_Collection.php';
+require_once __DIR__ . '/../../AbstractClass/MYSQL_t2s_bi_Collection.php';
 
 
 class itemsNotPickedCollection  extends MYSQL_t2s_bi_Collection

@@ -1,6 +1,6 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
+require_once __DIR__ . '/../../AbstractClass/MYSQL_t2s_bi_calendar.php';
 
 
 class stockouts extends MYSQL_t2s_bi_calendar

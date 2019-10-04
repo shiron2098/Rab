@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 /*require_once __DIR__ . '/../AbstractClass/login.php';*/
 require_once __DIR__ . '/AbstractFunctionAut.php';
 

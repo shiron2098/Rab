@@ -1,9 +1,9 @@
 <?php
 header('Content-type: application/json');
-require_once __DIR__ . '/../AbstractClass/MYSQL_t2s_bi_calendar.php';
+require_once __DIR__ . '/../../AbstractClass/MYSQL_t2s_bi_calendar.php';
 
 
-class distribution extends MYSQL_t2s_bi_calendar
+class items extends MYSQL_t2s_bi_calendar
 {
     const week = '45';
     const month = '180';
@@ -11,7 +11,6 @@ class distribution extends MYSQL_t2s_bi_calendar
     private $upordown;
     private $interval;
     private $int;
-
 
     public function AUT(){
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
@@ -26,56 +25,69 @@ class distribution extends MYSQL_t2s_bi_calendar
         }
     }
 
-    public function Week($date,$int)
+    private function Week($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $unixtimeAVG = strtotime($date . '-' . $this->int . 'days');
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_collection_distribution($timemysql);
-            $this->upordown = $this->daily_distribution_AVG($timemysql, $timemysqlfinishavg);
-            $this->daily_distribution_CALENDAR($timemysql);
+            $this->upordown = $this->daily_items_AVG($timemysql,$timemysqlfinishavg);
+            $data = $this->daily_stockouts_and_not_picked($timemysql);
+            $trashhold =  $this->daily_items_CALENDAR($date);
             if ($data !== null) {
                 $output = array(
-                    'date' => $date,
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'trend' => (string) $this->upordown['0'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::week,
-                    'salesDistributionCollection' => $this->upordown
                 );
                 echo json_encode($output);
             } else {
                 $output = array(
-                    'date' => $date,
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'trend' => (string) $this->upordown['0'],
+                    'date' => $timemysql,
                     'threndIntervalComparer' => static::week,
-                    'salesDistributionCollection' => array()
                 );
                 echo json_encode($output);
             }
         }
     }
-    private function Months($date,$int)
+    public function Months($date,$int)
     {
         if (!empty($date) && isset($date)) {
             $this->int = $int;
-            $unixtimeAVG = strtotime($date . '-' . $this->int . 'days');
-            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
+            $unixtimeAVG = strtotime($date . '-'.$this->int . 'days');
             $unixtimeMYSQL = strtotime($date);
+            $timemysqlfinishavg = date('Ymd', $unixtimeAVG);
             $timemysql = date('Ymd', $unixtimeMYSQL);
-            $data = $this->daily_collection_distribution($timemysql);
-            $this->upordown = $this->daily_distribution_AVG($timemysql, $timemysqlfinishavg);
+            $this->upordown = $this->daily_items_AVG($timemysql,$timemysqlfinishavg);
+            $data = $this->daily_stockouts_and_not_picked($timemysql);
+            $trashhold =  $this->daily_items_CALENDAR($date);
             if ($data !== null) {
                 $output = array(
-                    'date' => $date,
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'trend' => (string) $this->upordown['0'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::month,
-                    'salesDistributionCollection' => $this->upordown
                 );
                 echo json_encode($output);
             } else {
                 $output = array(
-                    'date' => $date,
+                    'numberOfProducts' => (string) $data['not_picked'],
+                    'percentOfProducts'=> (string) $data['after_not_picked'],
+                    'levelNumberOfProductsByThreshold' => $trashhold['value'],
+                    'trend' => (string) $this->upordown['0'],
+                    'date' => $trashhold['date'],
                     'threndIntervalComparer' => static::month,
-                    'salesDistributionCollection' => array()
                 );
                 echo json_encode($output);
             }
@@ -94,7 +106,8 @@ class distribution extends MYSQL_t2s_bi_calendar
                     break;
             }
         }
+
     }
 }
-$start = new distribution();
+$start = new items();
 $start->AUT();
