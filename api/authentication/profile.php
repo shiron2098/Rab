@@ -30,10 +30,10 @@ class profile extends protectedaut
     }
     public function start($post)
     {
-        if (isset($post->email) && !EMPTY($post->email) && isset($post->FirstName) && !EMPTY($post->FirstName)&& isset($post->LastName) && !EMPTY($post->LastName)&&
-            isset($post->WorkPhone) && !empty($post->WorkPhone) && !empty($post->MobilePhone) && isset($post->MobilePhone)&& isset($post->password)&&!empty($post->current_password) && isset($post->current_password)) {
+        if (isset($post->email) && !EMPTY($post->email) && isset($post->firstname) && !EMPTY($post->firstname)&& isset($post->lastname) && !EMPTY($post->lastname)&&
+            isset($post->workphone) && !empty($post->workphone) && !empty($post->mobilephone) && isset($post->mobilephone)&& isset($post->newpassword)&&!empty($post->currentpassword) && isset($post->currentpassword)) {
             if (filter_var($post->email, FILTER_VALIDATE_EMAIL)) {
-                if ($text = $this->validate_password($post->password) === true) {
+                if ($text = $this->validate_password($post->newpassword) === true) {
                     $this->updateusers($post);
                 } else {
                     echo json_encode('not correct new password');
@@ -52,16 +52,16 @@ class profile extends protectedaut
         );
         $stmt->execute(array($_SESSION['USERID']));
         $password_hash = $stmt->fetchColumn();
-        $password = password_verify($post->current_password, $password_hash);
+        $password = password_verify($post->currentpassword, $password_hash);
         if($password === true) {
             try {
-                $hashed_password = password_hash($post->password, PASSWORD_DEFAULT);
+                $hashed_password = password_hash($post->newpassword, PASSWORD_DEFAULT);
                 $data = [
                     'email' => $post->email,
-                    'first_name' => $post->FirstName,
-                    'last_name' => $post->LastName,
-                    'work_phone' => $post->WorkPhone,
-                    'mobile_phone' => $post->MobilePhone,
+                    'first_name' => $post->firstname,
+                    'last_name' => $post->lastname,
+                    'work_phone' => $post->workphone,
+                    'mobile_phone' => $post->mobilephone,
                     'password_hash' => $hashed_password,
                     'user_id' => $_SESSION['USERID'],
                 ];
@@ -88,6 +88,8 @@ class profile extends protectedaut
     }
 
 }
-$arr =(object)['email' =>'repik@mail.ru','FirstName' => 'repik','LastName' => 'repikivich','WorkPhone' => '+375254352233','MobilePhone' => '+375253335566','password'=>'Admin321','current_password'=>'Admin123'];
+/*$arr =(object)['email' =>'repik@mail.ru','FirstName' => 'repik','LastName' => 'repikivich','WorkPhone' => '+375254352233','MobilePhone' => '+375253335566','password'=>'Admin321','current_password'=>'Admin123'];
 $a=new profile();
-$a->start($arr);
+$a->start($arr);*/
+$start = new profile();
+$start->AUT();
