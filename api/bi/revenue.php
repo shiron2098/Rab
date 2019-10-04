@@ -16,9 +16,7 @@ class revenue extends MYSQL_t2s_bi_calendar
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
         $this->selectkey($authHeader);
         if($_SESSION['AUT'] === true){
-            $json_str = file_get_contents('php://input');
-            $json_obj = json_decode($json_str);
-            $this->start($json_obj);
+            $this->start();
         }else
         {
             http_response_code(403);
@@ -62,7 +60,7 @@ class revenue extends MYSQL_t2s_bi_calendar
                     'maxRevenue' => (string)$data['max_collect'],
                     'maxAverageRevenueTrend' => (string)$this->upordown['2'],
                     'averageRevenueCollection' => array(),
-                    'levelAverageRevenueByThreshold' => array(),
+                    'levelAverageRevenueByThreshold' => $trashhold['value'],
                     /*'date' => $trashhold['date'],*/
                     'threndIntervalComparer' => static::week,
                 );
