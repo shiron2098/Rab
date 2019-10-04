@@ -10,16 +10,20 @@ class distributionPosCollection  extends MYSQL_t2s_bi_Collection
     private $interval;
     private $int;
 
-    public function AUT(){
+    public function AUT()
+    {
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
         $this->selectkey($authHeader);
-        if($_SESSION['AUT'] === true){
-            $json_str = file_get_contents('php://input');
-            $json_obj = json_decode($json_str);
-            $this->start($json_obj);
-        }else
-        {
-            http_response_code(403);
+        if (!empty($authHeader)) {
+            if ($_SESSION['AUT'] === true) {
+                $json_str = file_get_contents('php://input');
+                $json_obj = json_decode($json_str);
+                $this->start($json_obj);
+            } else {
+                http_response_code(403);
+            }
+        } else {
+            http_response_code(401);
         }
     }
 
