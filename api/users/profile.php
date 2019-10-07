@@ -20,7 +20,11 @@ class profile extends protectedaut
             if ($_SESSION['AUT'] === true) {
                 $json_str = file_get_contents('php://input');
                 $json_obj = json_decode($json_str);
-                $this->start($json_obj);
+                if(!empty($json_obj)) {
+                    $this->start($json_obj);
+                }else{
+                    $this->selectdate($_SESSION['USERID']);
+                }
             } else {
                 http_response_code(403);
             }
@@ -85,6 +89,16 @@ class profile extends protectedaut
         else if (!preg_match("/^[a-zA-Z0-9\!@#\/\$%\^&\*\(\)\[\]\{\}\-=_\+\.,'\"<>\?]+$/", $field))
             return "В пароле недопустимые символы";
         return true;
+    }
+    private function selectdate($id){
+        $this->pdo = $this->DbConnectAuthencation();
+        $stmt = $this->pdo->prepare("SELECT email as email,first_name as firstName,last_name as lastName,work_phone as workPhone,mobile_phone as mobilePhone FROM users u
+                                      where user_id=?"
+        );
+        $stmt->execute(array($_SESSION['USERID']));
+        $profile = $stmt->fetchAll(PDO::FETCH_OBJ);
+        foreach($profile as $date);
+        echo json_encode($date);
     }
 
 }
