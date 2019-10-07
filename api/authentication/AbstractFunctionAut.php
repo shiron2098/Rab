@@ -12,6 +12,11 @@ use \Firebase\JWT\JWT;
 
 abstract class AbstractFunctionAut extends MYSQL
 {
+
+    const userglobalkey = '25634567834DF97345345BNRGH8345235NHWRT8564XZX8DS8234KGDAFGARE89JYTJETBFSGBS';
+
+
+
     private $user;
     private $password;
     protected $pdo;
@@ -93,11 +98,12 @@ abstract class AbstractFunctionAut extends MYSQL
                             }
 
                         }
-                            $this->guild = $this->guid();
-                            $jwt = $this->CreateTokenKey($this->guild, $json_obj);
-                            if (!empty($jwt)) {
+                            $jwtRefresh = $this->CreateTokenKeyRefresh($this->guild, $json_obj);
+                            $jwtAccess = $this->CreateTokenKeyAcess();
+                            if (!empty($jwtRefresh)) {
                                 $output = array(
-                                    'access_token' => $jwt,
+                                    'accessToken' => $jwtAccess,
+                                    'refreshToken' => $jwtRefresh,
                                     'userGlobalKey' => (string)$_SESSION['USERID'],
                                 );
                                 echo json_encode($output);
@@ -114,22 +120,38 @@ abstract class AbstractFunctionAut extends MYSQL
         }
     }
 
-    protected function CreateTokenKey($guild, $json_obj)
+    protected function CreateTokenKeyRefresh($guild, $json_obj)
     {
-        $stmt = $this->pdo->prepare("SELECT token_key FROM users u
+        $this->pdo = $this->DbConnectAuthencation();
+        $keymysql = null;
+        if(isset($json_obj->email)) {
+            $stmt = $this->pdo->prepare("SELECT token_key FROM users u
                                       join refresh_tokens r on r.id = u.user_id
                                       where email=?"
-        );
-        $stmt->execute(array($json_obj->email));
-        $keymysql = $stmt->fetchColumn();
+            );
+            $stmt->execute(array($json_obj->email));
+            $keymysql = $stmt->fetchColumn();
+        }else if (isset($json_obj->id)) {
+            try {
+                $sql = "update refresh_tokens set token_key=? where id =?";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(array($guild, $json_obj->id));
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+        }
         if (!empty($keymysql)) {
-            return $this->token($keymysql);
+            return $this->refreshToken($keymysql);
         } else {
-            return $this->token($guild);
+            return $this->refreshToken($guild);
         }
     }
+     protected function CreateTokenKeyAcess()
+     {
+         return $this->token(self::userglobalkey);
+     }
 
-    private function guid()
+    protected function guid()
     {
         if (function_exists('com_create_guid') === true)
             return trim(com_create_guid(), '{}');
@@ -142,8 +164,18 @@ abstract class AbstractFunctionAut extends MYSQL
 
     protected function token($key)
     {
-
-        $time = strtotime('+1 hour', time());
+        $time = strtotime('+1 min', time());
+        $token = array(
+            "iss" => $_SERVER['SERVER_NAME'],
+            "ext" => $time,
+            "id" => $_SESSION['USERID'],
+        );
+        JWT::$leeway = 3600; // $leeway in seconds
+        $jwt = JWT::encode($token, $key);
+        return $jwt;
+    }
+    protected function refreshToken($key){
+        $time = strtotime('+24 hour', time());
         $token = array(
             "iss" => $_SERVER['SERVER_NAME'],
             "ext" => $time,

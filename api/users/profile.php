@@ -47,7 +47,12 @@ class profile extends protectedaut
                 echo 'not correct email';
             }
         }else if(isset($post->email) && !EMPTY($post->email)&&!empty($post->currentPassword) && isset($post->currentPassword)){
-            $this->updateusersinf($post);
+            if (filter_var($post->email, FILTER_VALIDATE_EMAIL)) {
+                $this->updateusersinf($post);
+            }else {
+                http_response_code(422);
+                echo 'not correct email';
+            }
         }
 
 

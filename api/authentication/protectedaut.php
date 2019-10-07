@@ -20,13 +20,13 @@ class protectedaut extends AbstractFunctionAut
     public function selectkey($auttoken)
     {
         $_SESSION['AUT'] = false;
-        $data = $this->tokenkey();
-        if ($data === true) {
+/*        $data = $this->tokenkey();
+        if ($data === true) {*/
             $this->checktoken($auttoken);
-        }
+
     }
 
-    private function tokenkey()
+/*    private function tokenkey()
     {
         $this->pdo = $this->DbConnectAuthencation();
         $stmt = $this->pdo->prepare("SELECT token_key FROM users u
@@ -40,21 +40,20 @@ class protectedaut extends AbstractFunctionAut
         } else {
             http_response_code(401);
         }
-    }
+    }*/
 
     private function checktoken($token)
     {
 
-
         $arr = explode(" ", $token);
         $jwt = $arr[1];
         try {
-            $decoded = JWT::decode($jwt, $this->secret_key, array('HS256'));
+            $decoded = JWT::decode($jwt, self::userglobalkey, array('HS256'));
             if ($decoded->ext > time()) {
                 $_SESSION['AUT'] = true;
             } else {
                 $_SESSION['AUT'] = false;
-                http_response_code(401);
+                http_response_code(403);
             }
 
         } catch (Exception $e) {
