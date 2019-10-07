@@ -34,8 +34,7 @@ class profile extends protectedaut
     }
     public function start($post)
     {
-        if (isset($post->email) && !EMPTY($post->email) && isset($post->firstname) && !EMPTY($post->firstname)&& isset($post->lastname) && !EMPTY($post->lastname)&&
-            isset($post->workphone) && !empty($post->workphone) && !empty($post->mobilephone) && isset($post->mobilephone)&& isset($post->newpassword)&&!empty($post->currentpassword) && isset($post->currentpassword)) {
+        if (isset($post->email) && !EMPTY($post->email)&& isset($post->newPassword)&& empty($post->newPassword)&&!empty($post->currentPassword) && isset($post->currentPassword)) {
             if (filter_var($post->email, FILTER_VALIDATE_EMAIL)) {
                 if ($text = $this->validate_password($post->newpassword) === true) {
                     $this->updateusers($post);
@@ -45,6 +44,8 @@ class profile extends protectedaut
             } else {
                 echo json_encode('not correct email');
             }
+        }else if(isset($post->email) && !EMPTY($post->email)&&!empty($post->currentPassword) && isset($post->currentPassword)){
+            $this->updateusersinf($post);
         }
 
 
@@ -80,6 +81,38 @@ class profile extends protectedaut
             echo json_encode('not correct current_password');
         }
     }
+    private function updateusersinf($post){
+        $this->pdo = $this->DbConnectAuthencation();
+        $data=$this->selectupdate($_SESSION['USERID']);
+        if(empty($post->firstName)){
+          $post->firstName = $data->firstName;
+        }
+        if(empty($post->lastName)){
+            $post->lastName = $data->lastName;
+        }
+        if(empty($post->workPhone)){
+            $post->workPhone = $data->workPhone;
+        }
+        if(empty($post->mobilePhone)){
+            $post->mobilePhone = $data->mobilePhone;
+        }
+        try {
+            $data = [
+                'email' => $post->email,
+                'first_name' => $post->firstName,
+                'last_name' => $post->lastName,
+                'work_phone' => $post->workPhone,
+                'mobile_phone' => $post->mobilePhone,
+                'user_id' => $_SESSION['USERID'],
+            ];
+            $sql = "update users set email= :email, first_name= :first_name,last_name=:last_name,work_phone= :work_phone,mobile_phone=:mobile_phone,update_datetime_utc=now() where user_id= :user_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($data);
+            echo json_encode('Data update successfully');
+        }catch (PDOException $e){
+            json_encode('error update to save data');
+        }
+    }
     function validate_password($field)
     {
         if ($field == "")
@@ -99,6 +132,16 @@ class profile extends protectedaut
         $profile = $stmt->fetchAll(PDO::FETCH_OBJ);
         foreach($profile as $date);
         echo json_encode($date);
+    }
+    private function selectupdate($id){
+        $this->pdo = $this->DbConnectAuthencation();
+        $stmt = $this->pdo->prepare("SELECT email as email,first_name as firstName,last_name as lastName,work_phone as workPhone,mobile_phone as mobilePhone FROM users u
+                                      where user_id=?"
+        );
+        $stmt->execute(array($_SESSION['USERID']));
+        $profile = $stmt->fetchAll(PDO::FETCH_OBJ);
+        foreach($profile as $date);
+        return $date;
     }
 
 }
