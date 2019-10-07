@@ -23,7 +23,7 @@ class profile extends protectedaut
                 if(!empty($json_obj)) {
                     $this->start($json_obj);
                 }else{
-                    $this->selectdate($_SESSION['USERID']);
+                    $this->selectdate();
                 }
             } else {
                 http_response_code(403);
@@ -61,7 +61,7 @@ class profile extends protectedaut
         $password_hash = $stmt->fetchColumn();
         $password = password_verify($post->currentPassword, $password_hash);
         if($password === true) {
-            $data=$this->selectupdate($_SESSION['USERID']);
+            $data=$this->selectupdate();
             if(empty($post->firstName)){
                 $post->firstName = $data->firstName;
             }
@@ -100,7 +100,7 @@ class profile extends protectedaut
     }
     private function updateusersinf($post){
         $this->pdo = $this->DbConnectAuthencation();
-        $data=$this->selectupdate($_SESSION['USERID']);
+        $data=$this->selectupdate();
         if(empty($post->firstName)){
           $post->firstName = $data->firstName;
         }
@@ -127,7 +127,8 @@ class profile extends protectedaut
             $stmt->execute($data);
             echo json_encode('Data update successfully');
         }catch (PDOException $e){
-            json_encode('error update to save data');
+            http_response_code(422);
+            echo 'error update to save data';
         }
     }
     function validate_password($field)
@@ -140,7 +141,7 @@ class profile extends protectedaut
             return "В пароле недопустимые символы";
         return true;
     }
-    private function selectdate($id){
+    private function selectdate(){
         $this->pdo = $this->DbConnectAuthencation();
         $stmt = $this->pdo->prepare("SELECT email as email,first_name as firstName,last_name as lastName,work_phone as workPhone,mobile_phone as mobilePhone FROM users u
                                       where user_id=?"
@@ -150,7 +151,7 @@ class profile extends protectedaut
         foreach($profile as $date);
         echo json_encode($date);
     }
-    private function selectupdate($id){
+    private function selectupdate(){
         $this->pdo = $this->DbConnectAuthencation();
         $stmt = $this->pdo->prepare("SELECT email as email,first_name as firstName,last_name as lastName,work_phone as workPhone,mobile_phone as mobilePhone FROM users u
                                       where user_id=?"
