@@ -7,6 +7,9 @@ class registerusers extends MYSQL
 {
     public function __construct()
     {
+        if(!empty($_SESSION['USERID'])&&isset($_SESSION['USERID'])){
+            unset($_SESSION['USERID']);
+        }
         if(empty($_SESSION['USERID'])&&!isset($_SESSION['USERID'])) {
            ECHO $_SESSION['USERID'] = rand(1, 10000);
         }
@@ -16,13 +19,29 @@ class registerusers extends MYSQL
         if(isset($json_obj->email)&&!empty($json_obj->email)&&isset($json_obj->password)&&!empty($json_obj->password)){
           $hashed_password = password_hash( $json_obj->password, PASSWORD_DEFAULT );
             $pdo=$this->DbConnectAuthencation();
-            $data = [
+            try{
+                $data = [
+                    'email' => $json_obj->email,
+                    'password_hash' => $hashed_password,
+                ];
+                $sql = "INSERT INTO users (email,password_hash) VALUES (:email,:password_hash)";
+                $stmt= $pdo->prepare($sql);
+                $stmt->execute($data);
+                if( !$stmt ){
+                    throw new Exception('Query Failed');
+                }
+            }
+            catch(Exception $e){
+                echo $e->getMessage();
+            }
+/*            $data = [
                 'email' => $json_obj->email,
+                'user_id' =>  23123,
                 'password_hash' => $hashed_password,
             ];
-            $sql = "INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)";
+            $sql = "INSERT INTO users (email,user_id,password_hash) VALUES (:email,:user_id,:password_hash)";
             $stmt= $pdo->prepare($sql);
-            $stmt->execute($data);
+            $stmt->execute($data);*/
         /*   echo $token = bin2hex(openssl_random_pseudo_bytes(64));*/
         }
     }

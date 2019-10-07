@@ -18,7 +18,6 @@ class login extends AbstractFunctionAut
     }
 }
 
-$arr =(object)['email' =>'repik@mail.ru','password'=>'q1w2e3'];
 $json_str = file_get_contents('php://input');
 $json_obj = json_decode($json_str);
 $_SESSION['AUT'] = false;

@@ -15,14 +15,23 @@ abstract class AbstractFunctionAut extends MYSQL
     private $user;
     private $password;
     protected $pdo;
+    private $guild;
     private $lastid;
 
     public function check($obj)
     {
         if (!empty($obj) || !empty($obj->email) && !empty($obj->password)) {
+            try{
             $this->pdo = $this->DbConnectAuthencation();
             $stmt = $this->pdo->prepare("SELECT user_id FROM users WHERE email=?");
             $stmt->execute(array($obj->email));
+                if( !$stmt ){
+                    throw new Exception('Query Failed');
+                }
+            }
+            catch(Exception $e){
+                echo $e->getMessage();
+            }
             $userid = $stmt->fetchColumn();
             if (!empty($userid)) {
                 $_SESSION['USERID']=$userid;
@@ -42,33 +51,59 @@ abstract class AbstractFunctionAut extends MYSQL
     {
         if (isset($json_obj->email) && !empty($json_obj->email) && isset($json_obj->password) && !empty($json_obj->password)) {
             $this->pdo = $this->DbConnectAuthencation();
+            try{
             $stmt = $this->pdo->prepare("SELECT email,password_hash,user_id FROM users WHERE email=?");
             $stmt->execute(array($json_obj->email));
+                if( !$stmt ){
+                    throw new Exception('Query Failed');
+                }
+            }
+            catch(Exception $e){
+                echo $e->getMessage();
+            }
             $DATE = $stmt->fetchAll(PDO::FETCH_OBJ);
             if (!empty($DATE)) {
                 foreach ($DATE as $emailandpass) {
                     $password = password_verify($json_obj->password, $emailandpass->password_hash);
                     if ($json_obj->email === $emailandpass->email && $password === true) {
                         /*$token = bin2hex(openssl_random_pseudo_bytes(64));*/
-                        if ($emailandpass->user_id === null) {
-                            $guild = $this->guid();
+                        if (empty($emailandpass->user_id)) {
+                            $this->guild = $this->guid();
+                            try{
                             $sql = "INSERT INTO refresh_tokens (id,token_key) VALUES (?,?)";
                             $stmt = $this->pdo->prepare($sql);
-                            $stmt->execute([$_SESSION['USERID'], $guild]);
+                            $stmt->execute([$_SESSION['USERID'], $this->guild]);
+                                if( !$stmt ){
+                                    throw new Exception('Query Failed');
+                                }
+                            }
+                            catch(Exception $e){
+                                echo $e->getMessage();
+                            }
+                            try{
                             $sql = "update users set user_id=? where email =?";
                             $stmt = $this->pdo->prepare($sql);
                             $stmt->execute([$_SESSION['USERID'], $json_obj->email]);
+                                if( !$stmt ){
+                                    throw new Exception('Query Failed');
+                                }
+                            }
+                            catch(Exception $e){
+                                echo $e->getMessage();
+                            }
+
                         }
-                        $jwt = $this->CreateTokenKey($guild, $json_obj);
-                        if (!empty($jwt)) {
-                            $output = array(
-                                'access_token' => $jwt,
-                                'userGlobalKey' =>(string)$_SESSION['USERID'],
-                            );
-                            echo json_encode($output);
-                        } else {
-                            header('http/1.0 401 Unauthorized');
-                        }
+                            $this->guild = $this->guid();
+                            $jwt = $this->CreateTokenKey($this->guild, $json_obj);
+                            if (!empty($jwt)) {
+                                $output = array(
+                                    'access_token' => $jwt,
+                                    'userGlobalKey' => (string)$_SESSION['USERID'],
+                                );
+                                echo json_encode($output);
+                            } else {
+                                header('http/1.0 401 Unauthorized');
+                            }
                     } else {
                         header('http/1.0 401 Unauthorized');
                     }
