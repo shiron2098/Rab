@@ -34,15 +34,17 @@ class profile extends protectedaut
     }
     public function start($post)
     {
-        if (isset($post->email) && !EMPTY($post->email)&& isset($post->newPassword)&& empty($post->newPassword)&&!empty($post->currentPassword) && isset($post->currentPassword)) {
+        if (isset($post->email) && !EMPTY($post->email)&& isset($post->newPassword)&&!empty($post->newPassword)&&!empty($post->currentPassword) && isset($post->currentPassword)) {
             if (filter_var($post->email, FILTER_VALIDATE_EMAIL)) {
-                if ($text = $this->validate_password($post->newpassword) === true) {
+                if ($text = $this->validate_password($post->newPassword) === true) {
                     $this->updateusers($post);
                 } else {
-                    echo json_encode('not correct new password');
+                    http_response_code(422);
+                    echo 'not correct new password';
                 }
             } else {
-                echo json_encode('not correct email');
+                http_response_code(422);
+                echo 'not correct email';
             }
         }else if(isset($post->email) && !EMPTY($post->email)&&!empty($post->currentPassword) && isset($post->currentPassword)){
             $this->updateusersinf($post);
@@ -57,16 +59,29 @@ class profile extends protectedaut
         );
         $stmt->execute(array($_SESSION['USERID']));
         $password_hash = $stmt->fetchColumn();
-        $password = password_verify($post->currentpassword, $password_hash);
+        $password = password_verify($post->currentPassword, $password_hash);
         if($password === true) {
+            $data=$this->selectupdate($_SESSION['USERID']);
+            if(empty($post->firstName)){
+                $post->firstName = $data->firstName;
+            }
+            if(empty($post->lastName)){
+                $post->lastName = $data->lastName;
+            }
+            if(empty($post->workPhone)){
+                $post->workPhone = $data->workPhone;
+            }
+            if(empty($post->mobilePhone)){
+                $post->mobilePhone = $data->mobilePhone;
+            }
             try {
-                $hashed_password = password_hash($post->newpassword, PASSWORD_DEFAULT);
+                $hashed_password = password_hash($post->newPassword, PASSWORD_DEFAULT);
                 $data = [
                     'email' => $post->email,
-                    'first_name' => $post->firstname,
-                    'last_name' => $post->lastname,
-                    'work_phone' => $post->workphone,
-                    'mobile_phone' => $post->mobilephone,
+                    'first_name' => $post->firstName,
+                    'last_name' => $post->lastName,
+                    'work_phone' => $post->workPhone,
+                    'mobile_phone' => $post->mobilePhone,
                     'password_hash' => $hashed_password,
                     'user_id' => $_SESSION['USERID'],
                 ];
@@ -75,10 +90,12 @@ class profile extends protectedaut
                 $stmt->execute($data);
                 echo json_encode('Data update successfully');
             }catch (PDOException $e){
-                json_encode('error update to save data');
+                http_response_code(422);
+                echo 'error update to save data';
             }
         }else{
-            echo json_encode('not correct current_password');
+            http_response_code(422);
+            echo 'not correct current_password';
         }
     }
     private function updateusersinf($post){
