@@ -11,7 +11,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 
-class refreshauti extends AbstractFunctionAut
+class refresh extends AbstractFunctionAut
 {
     public function fieldToken($jsonObj)
     {
@@ -65,5 +65,5 @@ class refreshauti extends AbstractFunctionAut
 
 $json_str = file_get_contents('php://input');
 $json_obj = json_decode($json_str);
-$a= new refreshauti();
+$a= new refresh();
 $a->fieldToken($json_obj);

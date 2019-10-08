@@ -23,8 +23,6 @@ class Job extends Threaded
                  $request = new RequestProcessor();
                    $request->UpdateOperStreamsUp($this->idstreams, Job::$operator['id'],$this->bool);
                  $request->read_job_from_queue(Job::$operator);
-/*                printf("%s is JobStreams #%lu\n", __CLASS__, Thread::getCurrentThreadId());
-                echo Thread::getCurrentThreadId();*/
     }
 }
 
