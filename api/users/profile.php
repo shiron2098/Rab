@@ -59,11 +59,7 @@ class profile extends protectedaut
     }
     private function updateusers($post){
         $this->pdo = $this->DbConnectAuthencation();
-        $stmt = $this->pdo->prepare("SELECT password_hash FROM users u
-                                      where user_id=?"
-        );
-        $stmt->execute(array($_SESSION['USERID']));
-        $password_hash = $stmt->fetchColumn();
+        $password_hash = $this->selectPasswordHash();
         $password = password_verify($post->currentPassword, $password_hash);
         if($password === true) {
             $data=$this->selectupdate();
@@ -106,34 +102,38 @@ class profile extends protectedaut
     private function updateusersinf($post){
         $this->pdo = $this->DbConnectAuthencation();
         $data=$this->selectupdate();
-        if(empty($post->firstName)){
-          $post->firstName = $data->firstName;
-        }
-        if(empty($post->lastName)){
-            $post->lastName = $data->lastName;
-        }
-        if(empty($post->workPhone)){
-            $post->workPhone = $data->workPhone;
-        }
-        if(empty($post->mobilePhone)){
-            $post->mobilePhone = $data->mobilePhone;
-        }
-        try {
-            $data = [
-                'email' => $post->email,
-                'first_name' => $post->firstName,
-                'last_name' => $post->lastName,
-                'work_phone' => $post->workPhone,
-                'mobile_phone' => $post->mobilePhone,
-                'user_id' => $_SESSION['USERID'],
-            ];
-            $sql = "update users set email= :email, first_name= :first_name,last_name=:last_name,work_phone= :work_phone,mobile_phone=:mobile_phone,update_datetime_utc=now() where user_id= :user_id";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
-            echo json_encode('Data update successfully');
-        }catch (PDOException $e){
-            http_response_code(422);
-            echo 'error update to save data';
+        $password_hash = $this->selectPasswordHash();
+        $password = password_verify($post->currentPassword, $password_hash);
+        if($password === true) {
+            if (empty($post->firstName)) {
+                $post->firstName = $data->firstName;
+            }
+            if (empty($post->lastName)) {
+                $post->lastName = $data->lastName;
+            }
+            if (empty($post->workPhone)) {
+                $post->workPhone = $data->workPhone;
+            }
+            if (empty($post->mobilePhone)) {
+                $post->mobilePhone = $data->mobilePhone;
+            }
+            try {
+                $data = [
+                    'email' => $post->email,
+                    'first_name' => $post->firstName,
+                    'last_name' => $post->lastName,
+                    'work_phone' => $post->workPhone,
+                    'mobile_phone' => $post->mobilePhone,
+                    'user_id' => $_SESSION['USERID'],
+                ];
+                $sql = "update users set email= :email, first_name= :first_name,last_name=:last_name,work_phone= :work_phone,mobile_phone=:mobile_phone,update_datetime_utc=now() where user_id= :user_id";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute($data);
+                echo json_encode('Data update successfully');
+            } catch (PDOException $e) {
+                http_response_code(422);
+                echo 'error update to save data';
+            }
         }
     }
     function validate_password($field)
@@ -165,6 +165,17 @@ class profile extends protectedaut
         $profile = $stmt->fetchAll(PDO::FETCH_OBJ);
         foreach($profile as $date);
         return $date;
+    }
+    private function selectPasswordHash()
+    {
+            $this->pdo = $this->DbConnectAuthencation();
+            $stmt = $this->pdo->prepare("SELECT password_hash FROM users u
+                                      where user_id=?"
+            );
+            $stmt->execute(array($_SESSION['USERID']));
+            $password_hash = $stmt->fetchColumn();
+            return $password_hash;
+
     }
 
 }
