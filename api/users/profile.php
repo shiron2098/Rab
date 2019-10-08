@@ -132,11 +132,11 @@ class profile extends protectedaut
                 echo json_encode('Data update successfully');
             } catch (PDOException $e) {
                 http_response_code(422);
-                echo 'current password is wrong';
+                echo 'error update to save data';
             }
         }else{
             http_response_code(422);
-            echo 'not correct current_password';
+            echo 'current password is wrong';
         }
     }
     function validate_password($field)
