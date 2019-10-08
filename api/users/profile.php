@@ -134,6 +134,9 @@ class profile extends protectedaut
                 http_response_code(422);
                 echo 'current password is wrong';
             }
+        }else{
+            http_response_code(422);
+            echo 'not correct current_password';
         }
     }
     function validate_password($field)
