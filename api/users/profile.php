@@ -96,7 +96,7 @@ class profile extends protectedaut
             }
         }else{
             http_response_code(422);
-            echo 'not correct current_password';
+            echo 'current password is wrong';
         }
     }
     private function updateusersinf($post){
@@ -132,7 +132,7 @@ class profile extends protectedaut
                 echo json_encode('Data update successfully');
             } catch (PDOException $e) {
                 http_response_code(422);
-                echo 'error update to save data';
+                echo 'current password is wrong';
             }
         }
     }

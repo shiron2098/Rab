@@ -164,7 +164,7 @@ abstract class AbstractFunctionAut extends MYSQL
 
     protected function token($key)
     {
-        $time = strtotime('+1 min', time());
+        $time = strtotime('+10 min', time());
         $token = array(
             "iss" => $_SERVER['SERVER_NAME'],
             "ext" => $time,
@@ -175,7 +175,7 @@ abstract class AbstractFunctionAut extends MYSQL
         return $jwt;
     }
     protected function refreshToken($key){
-        $time = strtotime('+24 hour', time());
+        $time = strtotime('+20 min', time());
         $token = array(
             "iss" => $_SERVER['SERVER_NAME'],
             "ext" => $time,
